@@ -18,14 +18,17 @@ namespace Loto_App
 
     public partial class StartPage : Page
     {
-        public StartPage()
+        private readonly MainWindow _mainWindow;
+
+        public StartPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new FirstStepPage());
+            _mainWindow.NavigateToFirstStepPage();
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)

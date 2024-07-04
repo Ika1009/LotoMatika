@@ -15,22 +15,51 @@ using System.Windows.Shapes;
 
 namespace Loto_App
 {
-    /// <summary>
-    /// Interaction logic for FirstStepPage.xaml
-    /// </summary>
     public partial class FirstStepPage : Page
     {
-        public FirstStepPage()
+        private readonly MainWindow _mainWindow;
+
+        public FirstStepPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
         }
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
-            // Here, you would handle the selection from the ComboBox
-            // and navigate to the next step based on the selected game.
-            // For this example, we'll just navigate to a placeholder SecondStepPage.
+            ComboBoxItem selectedGame = (ComboBoxItem)LotoGamesComboBox.SelectedItem;
+            if (selectedGame != null)
+            {
+                string selectedGameText = selectedGame.Content.ToString();
+                int maxNumber = 35;
 
-            //this.NavigationService.Navigate();
+                switch (selectedGameText)
+                {
+                    case "7 od 35 (Hrvatska)":
+                        maxNumber = 35;
+                        break;
+                    case "6 od 45 (Hrvatska)":
+                        maxNumber = 45;
+                        break;
+                    case "7 od 39 (Srbija)":
+                        maxNumber = 39;
+                        break;
+                    case "6 od 44 (Slovenija)":
+                        maxNumber = 44;
+                        break;
+                    case "6 od 39 (BiH)":
+                        maxNumber = 39;
+                        break;
+                    case "7 od 37 (Makedonija)":
+                        maxNumber = 37;
+                        break;
+                }
+
+                _mainWindow.NavigateToSecondStepPage(maxNumber);
+            }
+            else
+            {
+                MessageBox.Show("Molimo vas da odaberete loto igru.", "Upozorenje", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }

@@ -11,15 +11,27 @@ using System.Windows.Shapes;
 
 namespace Loto_App
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-            MainFrame.NavigationService.Navigate(new StartPage());
+            MainFrame.Navigate(new StartPage(this));
+        }
+
+        public void NavigateToFirstStepPage()
+        {
+            MainFrame.Navigate(new FirstStepPage(this));
+        }
+
+        public void NavigateToSecondStepPage(int maxNumber)
+        {
+            MainFrame.Navigate(new SecondStepPage(maxNumber));
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
