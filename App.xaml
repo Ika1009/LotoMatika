@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:Loto_App"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <DropShadowEffect x:Key="ShadowEffect"
+                          BlurRadius="5"
+                          ShadowDepth="2"
+                          Direction="320"
+                          Color="Black"/>
     </Application.Resources>
 </Application>

@@ -19,6 +19,7 @@ namespace Loto_App
         public MainWindow()
         {
             InitializeComponent();
+            MainFrame.NavigationService.Navigate(new StartPage());
         }
     }
 }

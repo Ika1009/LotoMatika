@@ -1,0 +1,94 @@
+﻿<Page x:Class="Loto_App.StartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Loto_App"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Početna Stranica">
+    <Page.Background>
+        <SolidColorBrush Color="#FFB3B3"/>
+    </Page.Background>
+    <Grid>
+        <TextBlock Text="Dobro došli! Nalazite se na početnoj stranici softvera za izradu loto kombinacija, koji ste dobili uz knjigu. Da biste započeli, kliknite na gumb ispod."
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="0,65,0,0"
+                   TextWrapping="Wrap"
+                   FontSize="20"
+                   FontWeight="DemiBold"
+                   Foreground="Black"
+                   Background="WhiteSmoke"
+                   Padding="20"
+                   TextAlignment="Center" Width="698">
+            <TextBlock.Effect>
+                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Direction="320" Color="Black"/>
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Button Content="ZAPOČNI!"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0,100,0,0"
+                Width="150"
+                Height="50"
+                Background="#FF6666"
+                Foreground="White"
+                FontSize="16"
+                FontWeight="DemiBold"
+                Click="StartButton_Click">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        CornerRadius="20">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="320" Color="Black"/>
+            </Button.Effect>
+        </Button>
+
+        <Button Content="IZAĐI IZ SOFTVERA"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="10"
+                Width="150"
+                Height="50"
+                Background="#FF6666"
+                Foreground="White"
+                FontSize="12"
+                FontWeight="DemiBold"
+                Click="ExitButton_Click">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        CornerRadius="20">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="320" Color="Black"/>
+            </Button.Effect>
+        </Button>
+    </Grid>
+</Page>
