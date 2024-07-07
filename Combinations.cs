@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Komb
+namespace Loto_App
 {
-    class Program
+    public class Combinations
     {
         static int _indeks_min(int[] niz, int duzina_niza)  //NALAZENJE NAJMANJEG CLANA NIZA
         {
