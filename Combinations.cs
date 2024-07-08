@@ -204,7 +204,7 @@ namespace Loto_App
             return red;
         }
 
-        static void Main(string[] args)
+        static void Mainara(string[] args)
         {
             string biranje_moda = Console.ReadLine();  //BIRANJE MODA
             if (biranje_moda == "neke")
