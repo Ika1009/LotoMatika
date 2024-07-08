@@ -17,30 +17,33 @@ namespace Loto_App
 {
     public partial class SecondStepPage : Page
     {
-        private int maxDeselectCount = 5;
-        private int deselectCount = 0;
+        private int maxNumbersToExclude = 5;
+        private List<int> excludedNumbers = [];
+        private readonly MainWindow _mainWindow;
 
-        public SecondStepPage(int maxNumber)
+        public SecondStepPage(MainWindow mainWindow, int totalNumbers)
         {
             InitializeComponent();
-            InitializeNumbers(maxNumber);
+            _mainWindow = mainWindow;
+            AddNumberButtons(totalNumbers);
         }
 
-        private void InitializeNumbers(int maxNumber)
+        private void AddNumberButtons(int totalNumbers)
         {
-            NumberGrid.Columns = (maxNumber > 35) ? 6 : 5; // Adjust columns for larger sets
-            for (int i = 1; i <= maxNumber; i++)
+            for (int i = 1; i <= totalNumbers; i++)
             {
-                Button numberButton = new Button
+                Button numberButton = new ()
                 {
                     Content = i.ToString(),
-                    Width = 50,
-                    Height = 50,
+                    Width = 35,
+                    Height = 35,
                     Margin = new Thickness(5),
-                    Background = Brushes.LightGray,
+                    Background = Brushes.White,
                     Foreground = Brushes.Black,
-                    FontWeight = FontWeights.Bold
+                    FontWeight = FontWeights.Bold,
+                    Tag = i
                 };
+
                 numberButton.Click += NumberButton_Click;
                 NumberGrid.Children.Add(numberButton);
             }
@@ -49,34 +52,34 @@ namespace Loto_App
         private void NumberButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
+            int number = (int)button.Tag;
 
-            if (button != null)
+            if (excludedNumbers.Contains(number))
             {
-                if (button.Background != Brushes.Gray)
+                excludedNumbers.Remove(number);
+                button.Background = Brushes.White;
+                button.Content = number.ToString();
+            }
+            else
+            {
+                if (excludedNumbers.Count < maxNumbersToExclude)
                 {
-                    if (deselectCount < maxDeselectCount)
-                    {
-                        button.Background = Brushes.Gray;
-                        button.Content = "X";
-                        deselectCount++;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Možete odabrati najviše 5 brojeva.", "Upozorenje", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
+                    excludedNumbers.Add(number);
+                    button.Background = Brushes.Gray;
+                    button.Content = "X";
                 }
                 else
                 {
-                    button.Background = Brushes.LightGray;
-                    button.Content = button.Content.ToString().Replace("X", button.Content.ToString());
-                    deselectCount--;
+                    MessageBox.Show("Možete izabrati maksimalno 5 brojeva za isključivanje.");
                 }
             }
         }
 
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
-            // Ovdje možete dodati kod za prelazak na sljedeći korak
+            _mainWindow.NavigateToThirdStepPage(excludedNumbers);
+            // Implementirajte prelaz na sledeći korak, prosleđivanjem excludedNumbers liste
         }
     }
+
 }

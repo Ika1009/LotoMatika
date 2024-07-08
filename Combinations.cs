@@ -220,7 +220,7 @@ namespace Komb
             return red;
         }
 
-        static void main(string[] args)
+        static void Mainara(string[] args)
         {
             string biranje_moda = Console.ReadLine();  //BIRANJE MODA
             if (biranje_moda == "neke")
