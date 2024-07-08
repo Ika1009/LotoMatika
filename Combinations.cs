@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.Design;
 
-namespace Loto_App
+namespace Komb
 {
-    public class Combinations
+    class Program
     {
         static int _indeks_min(int[] niz, int duzina_niza)  //NALAZENJE NAJMANJEG CLANA NIZA
         {
@@ -67,6 +65,23 @@ namespace Loto_App
         {
             for (int i = 0; i < duzina_niza; i++)
                 if (niz[i] % 2 != 0)
+                    return i;
+
+            return -1;
+        }
+
+        static int _indeks_mali(int[] niz, int duzina_niza, int granica_malih)  //NALAZENJE PRVOG PARNOG CLANA NIZA
+        {
+            for (int i = 0; i < duzina_niza; i++)
+                if (niz[i] <= granica_malih)
+                    return i;
+
+            return -1;
+        }
+        static int _indeks_veliki(int[] niz, int duzina_niza, int granica_malih)  //NALAZENJE PRVOG PARNOG CLANA NIZA
+        {
+            for (int i = 0; i < duzina_niza; i++)
+                if (niz[i] > granica_malih)
                     return i;
 
             return -1;
@@ -175,6 +190,7 @@ namespace Loto_App
         {
             int broj_malih = 0;
             for (int i = 0; i < duzina_niza; i++)
+
                 if (niz[i] <= granica_malih)
                     broj_malih++;
 
@@ -204,7 +220,7 @@ namespace Loto_App
             return red;
         }
 
-        static void Main(string[] args)
+        static void main(string[] args)
         {
             string biranje_moda = Console.ReadLine();  //BIRANJE MODA
             if (biranje_moda == "neke")
@@ -213,17 +229,89 @@ namespace Loto_App
                 int duzina_kombinacije = int.Parse(Console.ReadLine());
                 int broj_kombinacija = int.Parse(Console.ReadLine());
 
-                int broj_brojeva = broj_kombinacija * duzina_kombinacije;   //STVARANJE BROJEVA
-                int[][] brojevi = new int[15400000][];
-                for (int i = 0; i < broj_kombinacija; i++)
+                int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
+                if (duzina_kombinacije == 6)
                 {
-                    brojevi[i] = new int[7];
-                    for (int j = 0; j < duzina_kombinacije; j++)
-                        brojevi[i][j] = (i * duzina_kombinacije + j) % broj_loptica + 1;
+                    if (broj_loptica == 39)
+                        granica_malih = 19;
+                    else if (broj_loptica == 44)
+                        granica_malih = 22;
+                    else if (broj_loptica == 45)
+                        granica_malih = 22;
                 }
-                brojevi[broj_kombinacija - 1][duzina_kombinacije - 1] = 2;  ////////////////////////////////////////PRIVREMENO DOK SE NE RESI VRSTA UZETIH BROJEVA
+                else if (duzina_kombinacije == 7)
+                {
+                    if (broj_loptica == 35)
+                        granica_malih = 17;
+                    else if (broj_loptica == 37)
+                        granica_malih = 18;
+                    else if (broj_loptica == 39)
+                        granica_malih = 19;
+                }
 
-                Random random = new Random();  //MESANJE BROJEVA
+                bool[] upotrebljeni_brojevi = new bool[broj_loptica];    //LISTA UPOTREBLJENIH BROJEVA
+                for (int i = 0; i < broj_loptica; i++)
+                    upotrebljeni_brojevi[i] = false;
+
+                int ukupan_broj_parnih = 0; //STVARANJE BROJEVA
+                int ukupan_broj_neparnih = 0;
+                int ukupan_broj_malih = 0;
+                int ukupan_broj_velikih = 0;
+                int broj_brojeva = broj_kombinacija * duzina_kombinacije;
+                int[][] brojevi = new int[15400000][];
+                for (int i = 0; i < (broj_brojeva / broj_loptica * broj_loptica); i++)
+                {
+                    if ((i % broj_loptica + 1) % 2 == 0)
+                        ukupan_broj_parnih++;
+                    else if ((i % broj_loptica + 1) % 2 != 0)
+                        ukupan_broj_neparnih++;
+                    if ((i % broj_loptica + 1) <= granica_malih)
+                        ukupan_broj_malih++;
+                    else if ((i % broj_loptica + 1) > granica_malih)
+                        ukupan_broj_velikih++;
+                    if ((i % broj_loptica) % duzina_kombinacije == 0)
+                        brojevi[i / duzina_kombinacije] = new int[7];
+                    brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = i % broj_loptica + 1;
+                }
+                int trenutni_broj = 1;
+                bool broj_nadjen = false;
+                for (int i = (broj_brojeva / broj_loptica * broj_loptica); i < broj_brojeva; i++)
+                {
+                    broj_nadjen = false;
+                    while (broj_nadjen == false)
+                    {
+                        if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
+                            trenutni_broj++;
+                        else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else
+                        {
+                            broj_nadjen = true;
+                            upotrebljeni_brojevi[(trenutni_broj % broj_loptica) - 1] = true;
+                        }
+                        if (trenutni_broj > broj_loptica)
+                            trenutni_broj = 1;
+                    }
+                    if (trenutni_broj % 2 == 0)
+                        ukupan_broj_parnih++;
+                    else if (trenutni_broj % 2 != 0)
+                        ukupan_broj_neparnih++;
+                    if (trenutni_broj <= granica_malih)
+                        ukupan_broj_malih++;
+                    else if (trenutni_broj > granica_malih)
+                        ukupan_broj_velikih++;
+                    if (i % duzina_kombinacije == 0)
+                        brojevi[i / duzina_kombinacije] = new int[7];
+                    brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
+                }
+
+                /*Random random = new Random();  //MESANJE BROJEVA
                 for (int i = broj_brojeva - 1; i > 0; i--)
                 {
                     int j = random.Next(0, i + 1);
@@ -318,10 +406,7 @@ namespace Loto_App
                     }
                 }
 
-                int nova_suma1; //RESAVANJE PARNIH
-                int nova_suma2;
-                int nasumicni_element;
-                bool svi_parni_su_dobri = false;
+                bool svi_parni_su_dobri = false;    //RESAVANJE PARNIH
                 while (!svi_parni_su_dobri)
                 {
                     svi_parni_su_dobri = true;
@@ -334,12 +419,37 @@ namespace Loto_App
                                 if (broj_parnih_brojeva_kombinacija[j] > _broj_parnih(brojevi[j], duzina_kombinacije))
                                 {
                                     int temp = brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)];
-                                    brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)] = brojevi[i][_indeks_neparni(brojevi[j], duzina_kombinacije)];
-                                    brojevi[i][_indeks_neparni(brojevi[j], duzina_kombinacije)] = temp;
+                                    brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)] = brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)];
+                                    brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)] = temp;
                                 }
                         }
                     }
-                }   //////////////////////////////////////NE RADI (BESKONACNA PETLJA), OTKRI STO
+                }
+
+                int brojac = 0;
+                bool svi_mali_su_dobri = false; //RESAVANJE MALIH
+                while (!svi_mali_su_dobri)
+                {
+                    brojac++;
+                    svi_mali_su_dobri = true;
+                    for (int i = 0; i < broj_kombinacija; i++)
+                    {
+                        if (broj_malih_brojeva_kombinacija[i] < _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
+                        {
+                            svi_mali_su_dobri = false;
+                            for (int j = 0; (j < broj_kombinacija) && (broj_malih_brojeva_kombinacija[i] < _broj_malih(brojevi[i], duzina_kombinacije, granica_malih)); j++)
+                                if (broj_malih_brojeva_kombinacija[j] > _broj_malih(brojevi[j], duzina_kombinacije, granica_malih)
+                                && ((brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] % 2) == (brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] % 2)))
+                                {
+                                    int temp = brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)];
+                                    brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] = brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)];
+                                    brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] = temp;
+                                }
+                        }
+                    }
+                    if (brojac == 1000)
+                        break;
+                }*/
 
                 /*bool svi_duplikati_su_dobri = false;    //RESAVANJE DUPLIKATA
                 while (!svi_duplikati_su_dobri)
@@ -658,8 +768,13 @@ namespace Loto_App
                     Console.Write((i + 1) + ":\t");    //REDNI BROJEVI
 
                     for (int j = 0; j < duzina_kombinacije; j++)    //KOMBINACIJE
+                    {
+                        if (brojevi[i][j] % 2 == 0)
+                            Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write(brojevi[i][j] + "\t");
-                    Console.Write("\t");
+                        Console.ResetColor();
+                    }
+                    Console.Write("\n");
 
                     /*if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
                         Console.Write("\t-1\t");
@@ -676,9 +791,9 @@ namespace Loto_App
                     else
                         Console.Write(razlike_kombinacija[i] + "\n");*/
 
-                    Console.Write(broj_parnih_brojeva_kombinacija[i] + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
+                    /*Console.Write(broj_parnih_brojeva_kombinacija[i] + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
 
-                    Console.Write(broj_malih_brojeva_kombinacija[i] + "\n");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
+                    Console.Write(broj_malih_brojeva_kombinacija[i] + "\n");   //BROJ MALIH BROJEVA U KOMBINACIJAMA*/
                 }
             }
             else if (biranje_moda == "sve")
