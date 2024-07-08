@@ -19,10 +19,12 @@ namespace Loto_App
     {
         private int maxNumbersToExclude = 5;
         private List<int> excludedNumbers = [];
+        private readonly MainWindow _mainWindow;
 
-        public SecondStepPage(int totalNumbers)
+        public SecondStepPage(MainWindow mainWindow, int totalNumbers)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
             AddNumberButtons(totalNumbers);
         }
 
@@ -75,6 +77,7 @@ namespace Loto_App
 
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
+            _mainWindow.NavigateToThirdStepPage(excludedNumbers);
             // Implementirajte prelaz na sledeći korak, prosleđivanjem excludedNumbers liste
         }
     }

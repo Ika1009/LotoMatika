@@ -1,18 +1,13 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Loto_App
 {
     public partial class MainWindow : Window
     {
+        private int maxNumber;
+        List<int> excludedNumbers;
+        List<int> favoriteNumbers;
+        double? favoriteUsage;
         public MainWindow()
         {
             InitializeComponent();
@@ -26,7 +21,36 @@ namespace Loto_App
 
         public void NavigateToSecondStepPage(int maxNumber)
         {
-            MainFrame.Navigate(new SecondStepPage(maxNumber));
+            this.maxNumber = maxNumber;
+            MainFrame.Navigate(new SecondStepPage(this, maxNumber));
+        }
+
+        public void NavigateToThirdStepPage(List<int> excludedNumbers)
+        {
+            this.excludedNumbers = excludedNumbers;
+            MainFrame.Navigate(new ThirdStepPage(this, maxNumber, excludedNumbers));
+        }
+
+        public void NavigateToFourthStepPage(List<int> favoriteNumbers)
+        {
+            this.favoriteNumbers = favoriteNumbers;
+            MainFrame.Navigate(new FourthStepPage(this));
+        }
+
+        public void NavigateToFifthStepPage(double? favoriteUsage)
+        {
+            this.favoriteUsage = favoriteUsage;
+            MainFrame.Navigate(new FifthStepPage(this));
+        }
+
+        public void NavigateToSixthStepPage()
+        {
+            MainFrame.Navigate(new SixthStepPage(this));
+        }
+
+        public void NavigateToSeventhStepPage()
+        {
+            MainFrame.Navigate(new SeventhStepPage(this, 0, 0));
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
