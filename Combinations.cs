@@ -269,7 +269,7 @@ namespace Komb
                         ukupan_broj_malih++;
                     else if ((i % broj_loptica + 1) > granica_malih)
                         ukupan_broj_velikih++;
-                    if ((i % broj_loptica) % duzina_kombinacije == 0)
+                    if (i % duzina_kombinacije == 0)
                         brojevi[i / duzina_kombinacije] = new int[7];
                     brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = i % broj_loptica + 1;
                 }
@@ -311,7 +311,7 @@ namespace Komb
                     brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
                 }
 
-                /*Random random = new Random();  //MESANJE BROJEVA
+                Random random = new Random();  //MESANJE BROJEVA
                 for (int i = broj_brojeva - 1; i > 0; i--)
                 {
                     int j = random.Next(0, i + 1);
@@ -406,9 +406,23 @@ namespace Komb
                     }
                 }
 
-                bool svi_parni_su_dobri = false;    //RESAVANJE PARNIH
+                int brojac_parni = 0;   //RESAVANJE PARNIH
+                int broj_dobrih_parnih1 = 0;
+                int broj_dobrih_parnih2 = 0;
+                bool svi_parni_su_dobri = false;
                 while (!svi_parni_su_dobri)
                 {
+                    if (brojac_parni % 3 == 0)
+                    {
+                        broj_dobrih_parnih1 = broj_dobrih_parnih2;
+                        broj_dobrih_parnih2 = 0;
+                        for (int i = 0; i < broj_kombinacija; i++)
+                            if (broj_parnih_brojeva_kombinacija[i] == _broj_parnih(brojevi[i], duzina_kombinacije))
+                                broj_dobrih_parnih2++;
+                        if (broj_dobrih_parnih2 <= broj_dobrih_parnih1)
+                            break;
+                    }
+
                     svi_parni_su_dobri = true;
                     for (int i = 0; i < broj_kombinacija; i++)
                     {
@@ -424,13 +438,27 @@ namespace Komb
                                 }
                         }
                     }
+
+                    brojac_parni++;
                 }
 
-                int brojac = 0;
-                bool svi_mali_su_dobri = false; //RESAVANJE MALIH
+                int brojac_mali = 0;    //RESAVANJE MALIH
+                int broj_dobrih_malih1 = 0;
+                int broj_dobrih_malih2 = 0;
+                bool svi_mali_su_dobri = false;
                 while (!svi_mali_su_dobri)
                 {
-                    brojac++;
+                    if (brojac_mali % 3 == 0)
+                    {
+                        broj_dobrih_malih1 = broj_dobrih_malih2;
+                        broj_dobrih_malih2 = 0;
+                        for (int i = 0; i < broj_kombinacija; i++)
+                            if (broj_malih_brojeva_kombinacija[i] == _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
+                                broj_dobrih_malih2++;
+                        if (broj_dobrih_malih2 <= broj_dobrih_malih1)
+                            break;
+                    }
+
                     svi_mali_su_dobri = true;
                     for (int i = 0; i < broj_kombinacija; i++)
                     {
@@ -447,13 +475,27 @@ namespace Komb
                                 }
                         }
                     }
-                    if (brojac == 1000)
-                        break;
-                }*/
 
-                /*bool svi_duplikati_su_dobri = false;    //RESAVANJE DUPLIKATA
+                    brojac_mali++;
+                }
+
+                int brojac_dupli = 0;    //RESAVANJE DUPLIKATA
+                int broj_dobrih_duplih1 = 0;
+                int broj_dobrih_duplih2 = 0;
+                bool svi_duplikati_su_dobri = false;
                 while (!svi_duplikati_su_dobri)
                 {
+                    if (brojac_dupli % 3 == 0)
+                    {
+                        broj_dobrih_duplih1 = broj_dobrih_duplih2;
+                        broj_dobrih_duplih2 = 0;
+                        for (int i = 0; i < broj_kombinacija; i++)
+                            if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)
+                                broj_dobrih_duplih2++;
+                        if (broj_dobrih_duplih2 <= broj_dobrih_duplih1)
+                            break;
+                    }
+
                     svi_duplikati_su_dobri = true;
                     for (int i = 0; i < broj_kombinacija; i++)
                     {
@@ -462,7 +504,9 @@ namespace Komb
                             svi_duplikati_su_dobri = false;
                             for (int j = 0; (j < broj_kombinacija) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
                             {
-                                if (!_poseduje_element(brojevi[j], duzina_kombinacije, _indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)))
+                                if (!_poseduje_element(brojevi[j], duzina_kombinacije, _indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica))
+                                && ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] % 2) == (brojevi[j][0] % 2))
+                                && (((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] <= granica_malih) && (brojevi[j][0] <= granica_malih)) || ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] > granica_malih) && (brojevi[j][0] > granica_malih))))
                                 {
                                     int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
                                     brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][0];
@@ -471,6 +515,8 @@ namespace Komb
                             }
                         }
                     }
+
+                    brojac_dupli++;
                 }
 
                 int[] sume_kombinacija = new int[15400000]; //STVARANJE SUMA
@@ -520,12 +566,26 @@ namespace Komb
                     }
                 }
 
-                int nova_suma1; //RESAVANJE SUMA
+                int brojac_suma = 0;   //RESAVANJE SUMA
+                int broj_dobrih_suma1 = 0;
+                int broj_dobrih_suma2 = 0;
+                int nova_suma1;
                 int nova_suma2;
                 int nasumicni_element;
                 bool sve_sume_su_dobre = false;
                 while (!sve_sume_su_dobre)
                 {
+                    if (brojac_suma % 3 <= 0)
+                    {
+                        broj_dobrih_suma1 = broj_dobrih_suma2;
+                        broj_dobrih_suma2 = 0;
+                        for (int i = 0; i < broj_kombinacija; i++)
+                            if ((sume_kombinacija[i] >= suma_min) && (sume_kombinacija[i] >= suma_min))
+                                broj_dobrih_suma2++;
+                        if (broj_dobrih_suma2 <= broj_dobrih_suma1)
+                            break;
+                    }
+
                     sve_sume_su_dobre = true;
                     for (int i = 0; i < broj_kombinacija; i++)
                     {
@@ -542,7 +602,9 @@ namespace Komb
                                     && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
                                     && (nova_suma1 > sume_kombinacija[i])
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
-                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k]))
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
                                     {
                                         int temp = brojevi[i][nasumicni_element];
                                         brojevi[i][nasumicni_element] = brojevi[j][k];
@@ -565,7 +627,9 @@ namespace Komb
                                     && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
                                     && (nova_suma1 < sume_kombinacija[i])
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
-                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k]))
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
                                     {
                                         int temp = brojevi[i][nasumicni_element];
                                         brojevi[i][nasumicni_element] = brojevi[j][k];
@@ -576,6 +640,8 @@ namespace Komb
                                 }
                         }
                     }
+
+                    brojac_suma++;
                 }
 
                 int[] razlike_kombinacija = new int[15400000]; //STVARANJE RAZLIKA
@@ -620,13 +686,27 @@ namespace Komb
                     }
                 }
 
-                int nova_razlika1; //RESAVANJE RAZLIKA
+                int brojac_razlika = 0;    //RESAVANJE RAZLIKA
+                int broj_dobrih_razlika1 = 0;
+                int broj_dobrih_razlika2 = 0;
+                int nova_razlika1;
                 int nova_razlika2;
                 int[] privremena_kombinacija2 = new int[7];
                 int izabran_broj;
                 bool sve_razlike_su_dobre = false;
                 while (!sve_razlike_su_dobre)
                 {
+                    if (brojac_razlika % 3 <= 0)
+                    {
+                        broj_dobrih_razlika1 = broj_dobrih_razlika2;
+                        broj_dobrih_razlika2 = 0;
+                        for (int i = 0; i < broj_kombinacija; i++)
+                            if ((razlike_kombinacija[i] >= razlika_min) && (razlike_kombinacija[i] >= razlika_min))
+                                broj_dobrih_razlika2++;
+                        if (broj_dobrih_razlika2 <= broj_dobrih_razlika1)
+                            break;
+                    }
+
                     sve_razlike_su_dobre = true;
                     for (int i = 0; i < broj_kombinacija; i++)
                     {
@@ -653,7 +733,9 @@ namespace Komb
                                         && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)])
                                         && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                         && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
-                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max))
+                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                        && ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                        && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
                                         {
                                             sume_kombinacija[i] = nova_suma1;
                                             sume_kombinacija[j] = nova_suma2;
@@ -681,7 +763,9 @@ namespace Komb
                                         && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)])
                                         && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                         && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
-                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max))
+                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                        && ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                        && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
                                         {
                                             sume_kombinacija[i] = nova_suma1;
                                             sume_kombinacija[j] = nova_suma2;
@@ -718,7 +802,9 @@ namespace Komb
                                         && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)])
                                         && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                         && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
-                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max))
+                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                        && ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                        && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
                                         {
                                             sume_kombinacija[i] = nova_suma1;
                                             sume_kombinacija[j] = nova_suma2;
@@ -746,7 +832,9 @@ namespace Komb
                                         && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)])
                                         && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                         && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
-                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max))
+                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                        && ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                        && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
                                         {
                                             sume_kombinacija[i] = nova_suma1;
                                             sume_kombinacija[j] = nova_suma2;
@@ -761,7 +849,9 @@ namespace Komb
                                 }
                         }
                     }
-                }*/
+
+                    brojac_razlika++;
+                }
 
                 for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
                 {
@@ -774,9 +864,9 @@ namespace Komb
                         Console.Write(brojevi[i][j] + "\t");
                         Console.ResetColor();
                     }
-                    Console.Write("\n");
+                    Console.Write("\t");
 
-                    /*if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
+                    if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
                         Console.Write("\t-1\t");
                     else
                         Console.Write("\t" + brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] + "\t");
@@ -789,11 +879,11 @@ namespace Komb
                     if ((razlike_kombinacija[i] > razlika_max) || (razlike_kombinacija[i] < razlika_min))   //RAZLIKA NAJMANJEG I NAJVECEG
                         Console.Write("-1\n");
                     else
-                        Console.Write(razlike_kombinacija[i] + "\n");*/
+                        Console.Write(razlike_kombinacija[i] + "\t");
 
-                    /*Console.Write(broj_parnih_brojeva_kombinacija[i] + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
+                    Console.Write((broj_parnih_brojeva_kombinacija[i] == _broj_parnih(brojevi[i], duzina_kombinacije)) + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
 
-                    Console.Write(broj_malih_brojeva_kombinacija[i] + "\n");   //BROJ MALIH BROJEVA U KOMBINACIJAMA*/
+                    Console.Write((broj_malih_brojeva_kombinacija[i] == _broj_malih(brojevi[i], duzina_kombinacije, granica_malih)) + "\n");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
                 }
             }
             else if (biranje_moda == "sve")
@@ -1018,7 +1108,7 @@ namespace Komb
                     /*if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
                         Console.Write("-1\t");
                     else
-                        Console.Write("brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] + "\t");
+                        Console.Write(brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] + "\t");
 
                     if ((sume_kombinacija[i] > suma_max) || (sume_kombinacija[i] < suma_min))   //DA LI JE SUMA U OPSEGU
                         Console.Write("-1\t");
