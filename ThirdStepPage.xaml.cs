@@ -33,10 +33,10 @@ namespace Loto_App
                     Button numberButton = new Button
                     {
                         Content = i.ToString(),
-                        Width = 60,
-                        Height = 60,
-                        Margin = new Thickness(10),
-                        Background = Brushes.Gray,
+                        Width = 35,
+                        Height = 35,
+                        Margin = new Thickness(5),
+                        Background = Brushes.White,
                         Foreground = Brushes.Black,
                         FontWeight = FontWeights.Bold,
                         Tag = i
@@ -74,6 +74,8 @@ namespace Loto_App
 
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
+            YesButton.Visibility = Visibility.Hidden;
+            NoButton.Visibility = Visibility.Hidden;
             QuestionText.Text = "Možete izabrati najviše do 2 favorit broja.";
             NumberGrid.Visibility = Visibility.Visible;
             NextStepButton.Visibility = Visibility.Visible;

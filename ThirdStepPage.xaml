@@ -26,7 +26,8 @@
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
                     Margin="0,100,0,0">
-            <Button Content="DA" 
+            <Button x:Name="YesButton"
+                    Content="DA" 
                     Width="100" 
                     Height="50" 
                     Background="LightGreen" 
@@ -34,7 +35,8 @@
                     FontWeight="Bold"
                     Margin="20"
                     Click="YesButton_Click"/>
-            <Button Content="NE" 
+            <Button x:Name="NoButton"
+                    Content="NE" 
                     Width="100" 
                     Height="50" 
                     Background="LightCoral" 
@@ -45,11 +47,11 @@
         </StackPanel>
 
         <UniformGrid x:Name="NumberGrid"
-                     Rows="7"
-                     Columns="5"
+                     Rows="5"
+                     Columns="10"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     Margin="20,200,20,20"
+                     Margin="20,70,20,70"
                      Visibility="Collapsed">
             <!-- Brojevi će biti dodani programatski -->
         </UniformGrid>
