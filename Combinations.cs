@@ -406,6 +406,61 @@ namespace Loto_App
                     }
                 }
 
+                bool[] tabela_skupovi = new bool[0];    //TABELE SKUPOVI, SUSEDNI I ZADNJE CIFRE
+                bool[] tabela_susedni = new bool[0];
+                bool[] tabela_zadnje_cifre = new bool[0];
+                if (duzina_kombinacije == 6)
+                {
+                    tabela_skupovi = new bool[] { false, true, false, true, false, true, false, true, false, true };
+                    tabela_susedni = new bool[] { false, true, false, true, false, false, true, false, true, false };
+                    tabela_zadnje_cifre = new bool[] { false, true, false, true, false, false, true, false, true, false };
+                }
+                else if (duzina_kombinacije == 7)
+                {
+                    tabela_skupovi = new bool[] { false, true, false, true, false, true, false, true, false, true };
+                    tabela_susedni = new bool[] { false, true, false, true, false, false, true, false, true, false };
+                    tabela_zadnje_cifre = new bool[] { false, true, false, true, true, false, true, false, true, true };
+                }
+                bool[] petoskupovna_kombinacija = new bool[15400000];
+                bool[] sa_susednima_kombinacija = new bool[15400000];
+                bool[] sa_zadnjim_ciframa_kombinacija = new bool[15400000];
+                int biracka_pozicija_skupovi = random.Next(0, 10);
+                int biracka_pozicija_susedni = random.Next(0, 10);
+                int biracka_pozicija_zadnje_cifre = random.Next(0, 10);
+                petoskupovna_kombinacija[0] = tabela_skupovi[biracka_pozicija_skupovi];
+                biracka_pozicija_skupovi++;
+                if (biracka_pozicija_skupovi == 10)
+                    biracka_pozicija_skupovi = 0;
+                sa_susednima_kombinacija[0] = tabela_susedni[biracka_pozicija_susedni];
+                biracka_pozicija_susedni++;
+                if (biracka_pozicija_susedni == 10)
+                    biracka_pozicija_susedni = 0;
+                sa_zadnjim_ciframa_kombinacija[0] = tabela_zadnje_cifre[biracka_pozicija_zadnje_cifre];
+                biracka_pozicija_zadnje_cifre++;
+                if (biracka_pozicija_zadnje_cifre == 10)
+                    biracka_pozicija_zadnje_cifre = 0;
+                for (int i = 1; i < broj_kombinacija; i++)
+                {
+                    if ((broj_parnih_brojeva_kombinacija[i] != broj_parnih_brojeva_kombinacija[i - 1]) || (broj_malih_brojeva_kombinacija[i] != broj_malih_brojeva_kombinacija[i - 1]))
+                    {
+                        biracka_pozicija_skupovi = random.Next(0, 10);
+                        biracka_pozicija_susedni = random.Next(0, 10);
+                        biracka_pozicija_zadnje_cifre = random.Next(0, 10);
+                    }
+                    petoskupovna_kombinacija[i] = tabela_skupovi[biracka_pozicija_skupovi];
+                    biracka_pozicija_skupovi++;
+                    if (biracka_pozicija_skupovi == 10)
+                        biracka_pozicija_skupovi = 0;
+                    sa_susednima_kombinacija[i] = tabela_susedni[biracka_pozicija_susedni];
+                    biracka_pozicija_susedni++;
+                    if (biracka_pozicija_susedni == 10)
+                        biracka_pozicija_susedni = 0;
+                    sa_zadnjim_ciframa_kombinacija[i] = tabela_zadnje_cifre[biracka_pozicija_zadnje_cifre];
+                    biracka_pozicija_zadnje_cifre++;
+                    if (biracka_pozicija_zadnje_cifre == 10)
+                        biracka_pozicija_zadnje_cifre = 0;
+                }
+
                 int brojac_parni = 0;   //RESAVANJE PARNIH
                 int broj_dobrih_parnih1 = 0;
                 int broj_dobrih_parnih2 = 0;
@@ -859,14 +914,14 @@ namespace Loto_App
 
                     for (int j = 0; j < duzina_kombinacije; j++)    //KOMBINACIJE
                     {
-                        if (brojevi[i][j] % 2 == 0)
-                            Console.ForegroundColor = ConsoleColor.Green;
+                        //if (brojevi[i][j] % 2 == 0)
+                        //Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write(brojevi[i][j] + "\t");
-                        Console.ResetColor();
+                        //Console.ResetColor();
                     }
                     Console.Write("\t");
 
-                    if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
+                    /*if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
                         Console.Write("\t-1\t");
                     else
                         Console.Write("\t" + brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] + "\t");
@@ -879,11 +934,15 @@ namespace Loto_App
                     if ((razlike_kombinacija[i] > razlika_max) || (razlike_kombinacija[i] < razlika_min))   //RAZLIKA NAJMANJEG I NAJVECEG
                         Console.Write("-1\n");
                     else
-                        Console.Write(razlike_kombinacija[i] + "\t");
+                        Console.Write(razlike_kombinacija[i] + "\t");*/
 
-                    Console.Write((broj_parnih_brojeva_kombinacija[i] == _broj_parnih(brojevi[i], duzina_kombinacije)) + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
+                    Console.Write(broj_parnih_brojeva_kombinacija[i] + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
 
-                    Console.Write((broj_malih_brojeva_kombinacija[i] == _broj_malih(brojevi[i], duzina_kombinacije, granica_malih)) + "\n");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
+                    Console.Write(broj_malih_brojeva_kombinacija[i] + "\t");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
+
+                    Console.Write(petoskupovna_kombinacija[i] + "\t");  //POMOCNE OSOBINE KOMBINACIJA
+                    Console.Write(sa_susednima_kombinacija[i] + "\t");
+                    Console.Write(sa_zadnjim_ciframa_kombinacija[i] + "\n");
                 }
             }
             else if (biranje_moda == "sve")
