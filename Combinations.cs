@@ -142,7 +142,7 @@ namespace Loto_App
             return -1;
         }
 
-        static int _indeks_skupovi_visak(int[] niz, int duzina_niza, int velicina_skupa)  //NALAZENJE VISAK CLANA NIZA SKUPA
+        static int _indeks_skupovi_visak_4(int[] niz, int duzina_niza, int velicina_skupa)  //NALAZENJE VISAK CLANA NIZA SKUPA (4)
         {
             int[] skupovi = new int[5];
             for (int i = 0; i < 5; i++)
@@ -157,6 +157,31 @@ namespace Loto_App
             if (broj_praznih_skupova <= 1)
                 return -1;
             else if (broj_praznih_skupova > 1)
+                for (int i = 0; i < 5; i++)
+                    if (skupovi[i] > 1)
+                        skup_sa_viskom = i;
+            for (int i = 0; i < duzina_niza; i++)
+                if ((niz[i] > (skup_sa_viskom * velicina_skupa)) && (niz[i] <= ((skup_sa_viskom + 1) * velicina_skupa)))
+                    return i;
+
+            return -1;
+        }
+
+        static int _indeks_skupovi_visak_5(int[] niz, int duzina_niza, int velicina_skupa)  //NALAZENJE VISAK CLANA NIZA SKUPA (5)
+        {
+            int[] skupovi = new int[5];
+            for (int i = 0; i < 5; i++)
+                skupovi[i] = 0;
+            int broj_praznih_skupova = 0;
+            int skup_sa_viskom = -1;
+            for (int i = 0; i < duzina_niza; i++)
+                skupovi[(niz[i] - 1) / velicina_skupa]++;
+            for (int i = 0; i < 5; i++)
+                if (skupovi[i] == 0)
+                    broj_praznih_skupova++;
+            if (broj_praznih_skupova <= 0)
+                return -1;
+            else if (broj_praznih_skupova > 0)
                 for (int i = 0; i < 5; i++)
                     if (skupovi[i] > 1)
                         skup_sa_viskom = i;
@@ -195,6 +220,21 @@ namespace Loto_App
                     broj_malih++;
 
             return broj_malih;
+        }
+
+        static int _broj_skupova(int[] niz, int duzina_niza, int velicina_skupa)  //NALAZENJE VISAK CLANA NIZA SKUPA (5)
+        {
+            int[] skupovi = new int[5];
+            for (int i = 0; i < 5; i++)
+                skupovi[i] = 0;
+            int broj_skupova = 0;
+            for (int i = 0; i < duzina_niza; i++)
+                skupovi[(niz[i] - 1) / velicina_skupa]++;
+            for (int i = 0; i < 5; i++)
+                if (skupovi[i] > 0)
+                    broj_skupova++;
+
+            return broj_skupova;
         }
 
         static int _generisi_kombinacije(int[][] brojevi, int[] trenutna_kombinacija, int red, int trenutni_broj, int clan_kombinacije, int broj_loptica, int duzina_kombinacije)    //GENERACIJA SVIH KOMBINACIJA
@@ -421,6 +461,25 @@ namespace Loto_App
                     tabela_susedni = new bool[] { false, true, false, true, false, false, true, false, true, false };
                     tabela_zadnje_cifre = new bool[] { false, true, false, true, true, false, true, false, true, true };
                 }
+                int velicina_skupa = 0;
+                if (duzina_kombinacije == 6)
+                {
+                    if (broj_loptica == 39)
+                        velicina_skupa = 8;
+                    else if (broj_loptica == 44)
+                        velicina_skupa = 9;
+                    else if (broj_loptica == 45)
+                        velicina_skupa = 9;
+                }
+                else if (duzina_kombinacije == 7)
+                {
+                    if (broj_loptica == 35)
+                        velicina_skupa = 7;
+                    else if (broj_loptica == 37)
+                        velicina_skupa = 8;
+                    else if (broj_loptica == 39)
+                        velicina_skupa = 8;
+                }
                 bool[] petoskupovna_kombinacija = new bool[15400000];
                 bool[] sa_susednima_kombinacija = new bool[15400000];
                 bool[] sa_zadnjim_ciframa_kombinacija = new bool[15400000];
@@ -574,7 +633,125 @@ namespace Loto_App
                     brojac_dupli++;
                 }
 
-                int[] sume_kombinacija = new int[15400000]; //STVARANJE SUMA
+                int brojac_skupovi = 0;   //STVARANJE SKUPOVA
+                int broj_dobrih_skupova1 = 0;
+                int broj_dobrih_skupova2 = 0;
+                bool svi_skupovi_su_dobri = false;
+                int nasumicni_element;
+                int[] nova_kombinacija1 = new int[duzina_kombinacije];
+                int[] nova_kombinacija2 = new int[duzina_kombinacije];
+                while (!svi_skupovi_su_dobri)
+                {
+                    if (brojac_skupovi % 10 == 0)
+                    {
+                        broj_dobrih_skupova1 = broj_dobrih_skupova2;
+                        broj_dobrih_skupova2 = 0;
+                        for (int i = 0; i < broj_kombinacija; i++)
+                            if (!petoskupovna_kombinacija[i] && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
+                                broj_dobrih_skupova2++;
+                            else if (petoskupovna_kombinacija[i] && (_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
+                                broj_dobrih_skupova2++;
+                        if (broj_dobrih_skupova2 <= broj_dobrih_skupova1)
+                            break;
+                    }
+
+                    svi_skupovi_su_dobri = true;
+                    for (int i = 0; i < broj_kombinacija; i++)
+                    {
+                        if (!petoskupovna_kombinacija[i])   //CETVOROSKUPNI
+                        {
+                            if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4)  //UKLONI SKUP
+                            {
+                                svi_skupovi_su_dobri = false;
+                                for (int j = 0; (j < broj_kombinacija) && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); j++)
+                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); k++)
+                                    {
+                                        nasumicni_element = random.Next(0, duzina_kombinacije);
+                                        for (int l = 0; l < duzina_kombinacije; l++)
+                                        {
+                                            nova_kombinacija1[l] = brojevi[i][l];
+                                            nova_kombinacija2[l] = brojevi[j][l];
+                                        }
+                                        nova_kombinacija1[nasumicni_element] = brojevi[j][k];
+                                        nova_kombinacija2[k] = brojevi[i][nasumicni_element];
+                                        if ((_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) >= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                                        && (_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) == _broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa))
+                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
+                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                        && ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
+                                        && (((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                        {
+                                            int temp = brojevi[i][nasumicni_element];
+                                            brojevi[i][nasumicni_element] = brojevi[j][k];
+                                            brojevi[j][k] = temp;
+                                        }
+                                    }
+                            }
+                            else if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4) //DODAJ SKUP
+                            {
+
+                                svi_skupovi_su_dobri = false;
+                                for (int j = 0; (j < broj_kombinacija) && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); j++)
+                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); k++)
+                                    {
+                                        for (int l = 0; l < duzina_kombinacije; l++)
+                                        {
+                                            nova_kombinacija1[l] = brojevi[i][l];
+                                            nova_kombinacija2[l] = brojevi[j][l];
+                                        }
+                                        nova_kombinacija1[_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
+                                        nova_kombinacija2[k] = brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)];
+                                        if ((_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) == _broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa))
+                                        && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)])
+                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                        && ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
+                                        && (((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                        {
+                                            int temp = brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)];
+                                            brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
+                                            brojevi[j][k] = temp;
+                                        }
+                                    }
+                            }
+                        }
+                        else if (petoskupovna_kombinacija[i])   //PETOSKUPNI
+                        {
+                            if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5)  //DODAJ SKUP
+                            {
+                                svi_skupovi_su_dobri = false;
+                                for (int j = 0; (j < broj_kombinacija) && (_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); j++)
+                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); k++)
+                                    {
+                                        for (int l = 0; l < duzina_kombinacije; l++)
+                                        {
+                                            nova_kombinacija1[l] = brojevi[i][l];
+                                            nova_kombinacija2[l] = brojevi[j][l];
+                                        }
+                                        nova_kombinacija1[_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
+                                        nova_kombinacija2[k] = brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)];
+                                        if ((_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) == _broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa))
+                                        && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)])
+                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                        && ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
+                                        && (((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                        {
+                                            int temp = brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)];
+                                            brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
+                                            brojevi[j][k] = temp;
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                    for (int i = 0; i < 10; i++)
+                        Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\t");
+                    Console.WriteLine();
+                    brojac_skupovi++;
+                }
+
+                /*int[] sume_kombinacija = new int[15400000]; //STVARANJE SUMA
                 int suma;
                 for (int i = 0; i < broj_kombinacija; i++)
                 {
@@ -626,7 +803,6 @@ namespace Loto_App
                 int broj_dobrih_suma2 = 0;
                 int nova_suma1;
                 int nova_suma2;
-                int nasumicni_element;
                 bool sve_sume_su_dobre = false;
                 while (!sve_sume_su_dobre)
                 {
@@ -906,7 +1082,7 @@ namespace Loto_App
                     }
 
                     brojac_razlika++;
-                }
+                }*/
 
                 for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
                 {
@@ -936,13 +1112,15 @@ namespace Loto_App
                     else
                         Console.Write(razlike_kombinacija[i] + "\t");*/
 
-                    Console.Write(broj_parnih_brojeva_kombinacija[i] + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
+                    //Console.Write(broj_parnih_brojeva_kombinacija[i] + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
 
-                    Console.Write(broj_malih_brojeva_kombinacija[i] + "\t");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
+                    //Console.Write(broj_malih_brojeva_kombinacija[i] + "\t");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
 
                     Console.Write(petoskupovna_kombinacija[i] + "\t");  //POMOCNE OSOBINE KOMBINACIJA
-                    Console.Write(sa_susednima_kombinacija[i] + "\t");
-                    Console.Write(sa_zadnjim_ciframa_kombinacija[i] + "\n");
+                    //Console.Write(sa_susednima_kombinacija[i] + "\t");
+                    //Console.Write(sa_zadnjim_ciframa_kombinacija[i] + "\n");
+
+                    Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\n");
                 }
             }
             else if (biranje_moda == "sve")
@@ -1149,7 +1327,7 @@ namespace Loto_App
                     && (broj_malih_brojeva_kombinacija[i] <= mali_max) && (broj_malih_brojeva_kombinacija[i] >= mali_min)
                     && (_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) == -1)
                     && (_indeks_susedni(brojevi[i], duzina_kombinacije) == -1)
-                    && (_indeks_skupovi_visak(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
+                    && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
                     {
                         for (int j = 0; j < duzina_kombinacije; j++)
                             brojevi[red2][j] = brojevi[i][j];
