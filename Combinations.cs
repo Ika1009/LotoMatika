@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Xml;
 
 namespace Loto_App
 {
@@ -663,8 +664,8 @@ namespace Loto_App
                             if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4)  //UKLONI SKUP
                             {
                                 svi_skupovi_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); k++)
+                                for (int j = 0; (j < broj_kombinacija) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4); j++)
+                                    for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4); k++)
                                     {
                                         nasumicni_element = random.Next(0, duzina_kombinacije);
                                         for (int l = 0; l < duzina_kombinacije; l++)
@@ -674,12 +675,17 @@ namespace Loto_App
                                         }
                                         nova_kombinacija1[nasumicni_element] = brojevi[j][k];
                                         nova_kombinacija2[k] = brojevi[i][nasumicni_element];
+                                        int odrzan_broj_kombinacija;
+                                        if (petoskupovna_kombinacija[j])
+                                            odrzan_broj_kombinacija = 5;
+                                        else
+                                            odrzan_broj_kombinacija = 4;
                                         if ((_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) >= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
-                                        && (_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) == _broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa))
+                                        && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija))
                                         && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
                                         && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                        && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
+                                        && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
                                         {
                                             int temp = brojevi[i][nasumicni_element];
                                             brojevi[i][nasumicni_element] = brojevi[j][k];
@@ -691,8 +697,8 @@ namespace Loto_App
                             {
 
                                 svi_skupovi_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); k++)
+                                for (int j = 0; (j < broj_kombinacija) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4); j++)
+                                    for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4); k++)
                                     {
                                         for (int l = 0; l < duzina_kombinacije; l++)
                                         {
@@ -701,7 +707,12 @@ namespace Loto_App
                                         }
                                         nova_kombinacija1[_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
                                         nova_kombinacija2[k] = brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)];
-                                        if ((_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) == _broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa))
+                                        int odrzan_broj_kombinacija;
+                                        if (petoskupovna_kombinacija[j])
+                                            odrzan_broj_kombinacija = 5;
+                                        else
+                                            odrzan_broj_kombinacija = 4;
+                                        if ((Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija))
                                         && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
                                         && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)])
                                         && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
@@ -720,8 +731,8 @@ namespace Loto_App
                             if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5)  //DODAJ SKUP
                             {
                                 svi_skupovi_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa) != -1); k++)
+                                for (int j = 0; (j < broj_kombinacija) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5); j++)
+                                    for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5); k++)
                                     {
                                         for (int l = 0; l < duzina_kombinacije; l++)
                                         {
@@ -730,7 +741,12 @@ namespace Loto_App
                                         }
                                         nova_kombinacija1[_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
                                         nova_kombinacija2[k] = brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)];
-                                        if ((_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) == _broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa))
+                                        int odrzan_broj_kombinacija;
+                                        if (petoskupovna_kombinacija[j])
+                                            odrzan_broj_kombinacija = 5;
+                                        else
+                                            odrzan_broj_kombinacija = 4;
+                                        if ((Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija))
                                         && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
                                         && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)])
                                         && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
@@ -745,9 +761,7 @@ namespace Loto_App
                             }
                         }
                     }
-                    for (int i = 0; i < 10; i++)
-                        Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\t");
-                    Console.WriteLine();
+
                     brojac_skupovi++;
                 }
 
@@ -1120,7 +1134,12 @@ namespace Loto_App
                     //Console.Write(sa_susednima_kombinacija[i] + "\t");
                     //Console.Write(sa_zadnjim_ciframa_kombinacija[i] + "\n");
 
-                    Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\n");
+                    Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\t");
+
+                    if ((petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 5)) || (!petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 4)))    //PROVERA SKUPOVA
+                        Console.Write("+\n");
+                    else
+                        Console.Write("-\n");
                 }
             }
             else if (biranje_moda == "sve")
