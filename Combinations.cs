@@ -848,7 +848,7 @@ namespace Loto_App
                                             odrzan_broj_kombinacija_skupovi = 5;
                                         else
                                             odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((_broj_susednih(brojevi[i], duzina_kombinacije) <= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
+                                        if ((_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
                                         && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
                                         && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
                                         && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
@@ -1313,16 +1313,16 @@ namespace Loto_App
 
                     //Console.Write(broj_malih_brojeva_kombinacija[i] + "\t");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
 
-                    //Console.Write(petoskupovna_kombinacija[i] + "\t");  //POMOCNE OSOBINE KOMBINACIJA
-                    Console.Write(sa_susednima_kombinacija[i] + "\t");
-                    //Console.Write(sa_zadnjim_ciframa_kombinacija[i] + "\n");
+                    Console.Write(petoskupovna_kombinacija[i] + "\t");  //POMOCNE OSOBINE KOMBINACIJA
 
-                    //Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\t");
+                    Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\t");
 
-                    /*if ((petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 5)) || (!petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 4)))
-                        Console.Write("+\n");
+                    if ((petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 5)) || (!petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 4)))
+                        Console.Write("+\t");
                     else
-                        Console.Write("-\n");*/
+                        Console.Write("-\t");
+
+                    Console.Write(sa_susednima_kombinacija[i] + "\t");
 
                     Console.Write(_broj_susednih(brojevi[i], duzina_kombinacije) + "\t");
 
@@ -1330,6 +1330,8 @@ namespace Loto_App
                         Console.Write("+\n");
                     else
                         Console.Write("-\n");
+
+                    //Console.Write(sa_zadnjim_ciframa_kombinacija[i] + "\n");
                 }
             }
             else if (biranje_moda == "sve")
