@@ -396,120 +396,1000 @@ namespace Loto_App
             return red;
         }
 
-        static void Mainara(string[] args)
+        static void _resi_100_kombinacija(int[][] brojevi, int[] sume_kombinacija, int[] razlike_kombinacija, int pocetak, int kraj, int duzina_kombinacije, int broj_loptica, int granica_malih, int suma_min, int suma_max, int razlika_min, int razlika_max, int[] broj_parnih_brojeva_kombinacija, int[] broj_malih_brojeva_kombinacija, int velicina_skupa, bool[] petoskupovna_kombinacija, bool[] sa_susednima_kombinacija, bool[] sa_zadnjim_ciframa_kombinacija)
         {
-            string biranje_moda = Console.ReadLine();  //BIRANJE MODA
-            if (biranje_moda == "neke")
+            Random random = new Random();
+            int broj_kombinacija = kraj - pocetak + 1;
+
+            int brojac_parni = 0;   //RESAVANJE PARNIH
+            int broj_dobrih_parnih1 = 0;
+            int broj_dobrih_parnih2 = 0;
+            bool svi_parni_su_dobri = false;
+            while (!svi_parni_su_dobri)
             {
-                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
-                int duzina_kombinacije = int.Parse(Console.ReadLine());
-                int broj_kombinacija = int.Parse(Console.ReadLine());
-
-                int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
-                if (duzina_kombinacije == 6)
+                if (brojac_parni % 3 == 0)
                 {
-                    if (broj_loptica == 39)
-                        granica_malih = 19;
-                    else if (broj_loptica == 44)
-                        granica_malih = 22;
-                    else if (broj_loptica == 45)
-                        granica_malih = 22;
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    if (broj_loptica == 35)
-                        granica_malih = 17;
-                    else if (broj_loptica == 37)
-                        granica_malih = 18;
-                    else if (broj_loptica == 39)
-                        granica_malih = 19;
+                    broj_dobrih_parnih1 = broj_dobrih_parnih2;
+                    broj_dobrih_parnih2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if (broj_parnih_brojeva_kombinacija[i] == _broj_parnih(brojevi[i], duzina_kombinacije))
+                            broj_dobrih_parnih2++;
+                    if (broj_dobrih_parnih2 <= broj_dobrih_parnih1)
+                        break;
                 }
 
-                bool[] upotrebljeni_brojevi = new bool[broj_loptica];    //LISTA UPOTREBLJENIH BROJEVA
-                for (int i = 0; i < broj_loptica; i++)
-                    upotrebljeni_brojevi[i] = false;
-
-                int ukupan_broj_parnih = 0; //STVARANJE BROJEVA
-                int ukupan_broj_neparnih = 0;
-                int ukupan_broj_malih = 0;
-                int ukupan_broj_velikih = 0;
-                int broj_brojeva = broj_kombinacija * duzina_kombinacije;
-                int[][] brojevi = new int[15400000][];
-                for (int i = 0; i < (broj_brojeva / broj_loptica * broj_loptica); i++)
+                svi_parni_su_dobri = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
                 {
-                    if ((i % broj_loptica + 1) % 2 == 0)
-                        ukupan_broj_parnih++;
-                    else if ((i % broj_loptica + 1) % 2 != 0)
-                        ukupan_broj_neparnih++;
-                    if ((i % broj_loptica + 1) <= granica_malih)
-                        ukupan_broj_malih++;
-                    else if ((i % broj_loptica + 1) > granica_malih)
-                        ukupan_broj_velikih++;
-                    if (i % duzina_kombinacije == 0)
-                        brojevi[i / duzina_kombinacije] = new int[7];
-                    brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = i % broj_loptica + 1;
-                }
-                int trenutni_broj = 1;
-                bool broj_nadjen = false;
-                for (int i = (broj_brojeva / broj_loptica * broj_loptica); i < broj_brojeva; i++)
-                {
-                    broj_nadjen = false;
-                    while (broj_nadjen == false)
+                    if (broj_parnih_brojeva_kombinacija[i] < _broj_parnih(brojevi[i], duzina_kombinacije))
                     {
-                        if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
-                            trenutni_broj++;
-                        else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
-                            trenutni_broj++;
-                        else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
-                            trenutni_broj++;
-                        else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
-                            trenutni_broj++;
-                        else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
-                            trenutni_broj++;
-                        else
-                        {
-                            broj_nadjen = true;
-                            upotrebljeni_brojevi[(trenutni_broj % broj_loptica) - 1] = true;
-                        }
-                        if (trenutni_broj > broj_loptica)
-                            trenutni_broj = 1;
+                        svi_parni_su_dobri = false;
+                        for (int j = (pocetak - 1); (j < kraj) && (broj_parnih_brojeva_kombinacija[i] < _broj_parnih(brojevi[i], duzina_kombinacije)); j++)
+                            if (broj_parnih_brojeva_kombinacija[j] > _broj_parnih(brojevi[j], duzina_kombinacije))
+                            {
+                                int temp = brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)];
+                                brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)] = brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)];
+                                brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)] = temp;
+                            }
                     }
-                    if (trenutni_broj % 2 == 0)
-                        ukupan_broj_parnih++;
-                    else if (trenutni_broj % 2 != 0)
-                        ukupan_broj_neparnih++;
-                    if (trenutni_broj <= granica_malih)
-                        ukupan_broj_malih++;
-                    else if (trenutni_broj > granica_malih)
-                        ukupan_broj_velikih++;
-                    if (i % duzina_kombinacije == 0)
-                        brojevi[i / duzina_kombinacije] = new int[7];
-                    brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
                 }
 
-                Random random = new Random();  //MESANJE BROJEVA
-                for (int i = broj_brojeva - 1; i > 0; i--)
+                brojac_parni++;
+            }
+
+            int brojac_mali = 0;    //RESAVANJE MALIH
+            int broj_dobrih_malih1 = 0;
+            int broj_dobrih_malih2 = 0;
+            bool svi_mali_su_dobri = false;
+            while (!svi_mali_su_dobri)
+            {
+                if (brojac_mali % 3 == 0)
                 {
-                    int j = random.Next(0, i + 1);
-
-                    int red_i = i / duzina_kombinacije;
-                    int kolona_i = i % duzina_kombinacije;
-                    int red_j = j / duzina_kombinacije;
-                    int kolona_j = j % duzina_kombinacije;
-
-                    int temp = brojevi[red_i][kolona_i];
-                    brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
-                    brojevi[red_j][kolona_j] = temp;
+                    broj_dobrih_malih1 = broj_dobrih_malih2;
+                    broj_dobrih_malih2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if (broj_malih_brojeva_kombinacija[i] == _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
+                            broj_dobrih_malih2++;
+                    if (broj_dobrih_malih2 <= broj_dobrih_malih1)
+                        break;
                 }
 
-                int[][] tabela1 = new int[0][];    //TABELE PARNI/NEPARNI, MALI/VELIKI
-                int[] tabela_parni = new int[0];
-                int[] tabela_mali = new int[0];
-                int broj_slucajeva = 0;
-                if (duzina_kombinacije == 6)
+                svi_mali_su_dobri = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
                 {
-                    tabela1 = new int[][]
+                    if (broj_malih_brojeva_kombinacija[i] < _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
                     {
+                        svi_mali_su_dobri = false;
+                        for (int j = (pocetak - 1); (j < kraj) && (broj_malih_brojeva_kombinacija[i] < _broj_malih(brojevi[i], duzina_kombinacije, granica_malih)); j++)
+                            if (broj_malih_brojeva_kombinacija[j] > _broj_malih(brojevi[j], duzina_kombinacije, granica_malih)
+                            && ((brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] % 2) == (brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] % 2)))
+                            {
+                                int temp = brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)];
+                                brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] = brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)];
+                                brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] = temp;
+                            }
+                    }
+                }
+
+                brojac_mali++;
+            }
+
+            int brojac_dupli = 0;    //RESAVANJE DUPLIKATA
+            int broj_dobrih_duplih1 = 0;
+            int broj_dobrih_duplih2 = 0;
+            bool svi_duplikati_su_dobri = false;
+            while (!svi_duplikati_su_dobri)
+            {
+                if (brojac_dupli % 3 == 0)
+                {
+                    broj_dobrih_duplih1 = broj_dobrih_duplih2;
+                    broj_dobrih_duplih2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)
+                            broj_dobrih_duplih2++;
+                    if (broj_dobrih_duplih2 <= broj_dobrih_duplih1)
+                        break;
+                }
+
+                svi_duplikati_su_dobri = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
+                {
+                    if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)  //ZA VECE
+                    {
+                        svi_duplikati_su_dobri = false;
+                        for (int j = (pocetak - 1); (j < kraj) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
+                        {
+                            if (!_poseduje_element(brojevi[j], duzina_kombinacije, _indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica))
+                            && ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] % 2) == (brojevi[j][0] % 2))
+                            && (((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] <= granica_malih) && (brojevi[j][0] <= granica_malih)) || ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] > granica_malih) && (brojevi[j][0] > granica_malih))))
+                            {
+                                int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
+                                brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][0];
+                                brojevi[j][0] = temp;
+                            }
+                        }
+                    }
+                }
+
+                brojac_dupli++;
+            }
+
+            int brojac_skupovi = 0;   //STVARANJE SKUPOVA
+            int broj_dobrih_skupova1 = 0;
+            int broj_dobrih_skupova2 = 0;
+            bool svi_skupovi_su_dobri = false;
+            int nasumicni_element;
+            int[] nova_kombinacija1 = new int[duzina_kombinacije];
+            int[] nova_kombinacija2 = new int[duzina_kombinacije];
+            int odrzan_broj_kombinacija_skupovi;
+            while (!svi_skupovi_su_dobri)
+            {
+                if (brojac_skupovi % 5 == 0)
+                {
+                    broj_dobrih_skupova1 = broj_dobrih_skupova2;
+                    broj_dobrih_skupova2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if (!petoskupovna_kombinacija[i] && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
+                            broj_dobrih_skupova2++;
+                        else if (petoskupovna_kombinacija[i] && (_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
+                            broj_dobrih_skupova2++;
+                    if (broj_dobrih_skupova2 <= broj_dobrih_skupova1)
+                        break;
+                }
+
+                svi_skupovi_su_dobri = true;
+                for (int i = 0; i < broj_kombinacija; i++)
+                {
+                    if (!petoskupovna_kombinacija[i])   //CETVOROSKUPNI
+                    {
+                        if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4)  //UKLONI SKUP
+                        {
+                            svi_skupovi_su_dobri = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4); k++)
+                                {
+                                    nasumicni_element = random.Next(0, duzina_kombinacije);
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[nasumicni_element] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][nasumicni_element];
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) >= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                                    && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][nasumicni_element];
+                                        brojevi[i][nasumicni_element] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                        else if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4) //DODAJ SKUP
+                        {
+
+                            svi_skupovi_su_dobri = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4); k++)
+                                {
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)];
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)];
+                                        brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                    }
+                    else if (petoskupovna_kombinacija[i])   //PETOSKUPNI
+                    {
+                        if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5)  //DODAJ SKUP
+                        {
+                            svi_skupovi_su_dobri = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5); k++)
+                                {
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)];
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)];
+                                        brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                    }
+                }
+
+                brojac_skupovi++;
+            }
+
+            int brojac_susedni = 0;   //STVARANJE SUSEDNIH
+            int broj_dobrih_susednih1 = 0;
+            int broj_dobrih_susednih2 = 0;
+            bool svi_susedni_su_dobri = false;
+            int odrzan_broj_kombinacija_susedni;
+            while (!svi_susedni_su_dobri)
+            {
+                if (brojac_susedni % 5 == 0)
+                {
+                    broj_dobrih_susednih1 = broj_dobrih_susednih2;
+                    broj_dobrih_susednih2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if (sa_susednima_kombinacija[i] && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) == -1) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) != -1))
+                            broj_dobrih_susednih2++;
+                        else if (!sa_susednima_kombinacija[i] && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) == -1))
+                            broj_dobrih_susednih2++;
+                    if (broj_dobrih_susednih2 <= broj_dobrih_susednih1)
+                        break;
+                }
+
+                svi_susedni_su_dobri = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
+                {
+                    if (sa_susednima_kombinacija[i])   //JEDAN SUSEDNI
+                    {
+                        if (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) == -1)  //DODAJ SUSEDNOG
+                        {
+                            svi_susedni_su_dobri = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) == -1); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) == -1); k++)
+                                {
+                                    nasumicni_element = random.Next(0, duzina_kombinacije);
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[nasumicni_element] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][nasumicni_element];
+                                    if (sa_susednima_kombinacija[j])
+                                        odrzan_broj_kombinacija_susedni = 1;
+                                    else
+                                        odrzan_broj_kombinacija_susedni = 0;
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((_broj_susednih(brojevi[i], duzina_kombinacije) <= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
+                                    && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
+                                    && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][nasumicni_element];
+                                        brojevi[i][nasumicni_element] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                        else if (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) != -1) //UKLONI SUSEDNOG
+                        {
+
+                            svi_susedni_su_dobri = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) != -1); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) != -1); k++)
+                                {
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)];
+                                    if (sa_susednima_kombinacija[j])
+                                        odrzan_broj_kombinacija_susedni = 1;
+                                    else
+                                        odrzan_broj_kombinacija_susedni = 0;
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
+                                    && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
+                                    && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)];
+                                        brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                    }
+                    else if (!sa_susednima_kombinacija[i])   //NULA SUSEDNIH
+                    {
+                        if (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) != -1)  //UKLONI SUSEDNOG
+                        {
+                            svi_susedni_su_dobri = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) != -1); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) != -1); k++)
+                                {
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)];
+                                    if (sa_susednima_kombinacija[j])
+                                        odrzan_broj_kombinacija_susedni = 1;
+                                    else
+                                        odrzan_broj_kombinacija_susedni = 0;
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
+                                    && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
+                                    && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)];
+                                        brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                    }
+                }
+
+                brojac_susedni++;
+            }
+
+            int brojac_cifre = 0;   //STVARANJE ZADNJIH CIFARA
+            int broj_dobrih_cifara1 = 0;
+            int broj_dobrih_cifara2 = 0;
+            bool sve_cifre_su_dobre = false;
+            int odrzan_broj_kombinacija_cifre;
+            while (!sve_cifre_su_dobre)
+            {
+                if (brojac_cifre % 5 == 0)
+                {
+                    broj_dobrih_cifara1 = broj_dobrih_cifara2;
+                    broj_dobrih_cifara2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if (sa_zadnjim_ciframa_kombinacija[i] && (_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije) == -1) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) != -1))
+                            broj_dobrih_cifara2++;
+                        else if (!sa_zadnjim_ciframa_kombinacija[i] && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) == -1))
+                            broj_dobrih_cifara2++;
+                    if (broj_dobrih_cifara2 <= broj_dobrih_cifara1)
+                        break;
+                }
+
+                sve_cifre_su_dobre = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
+                {
+                    if (sa_zadnjim_ciframa_kombinacija[i])   //JEDNA CIFRA
+                    {
+                        if (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) == -1)  //DODAJ CIFRU
+                        {
+                            sve_cifre_su_dobre = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) == -1); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) == -1); k++)
+                                {
+                                    nasumicni_element = random.Next(0, duzina_kombinacije);
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[nasumicni_element] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][nasumicni_element];
+                                    if (sa_zadnjim_ciframa_kombinacija[j])
+                                        odrzan_broj_kombinacija_cifre = 1;
+                                    else
+                                        odrzan_broj_kombinacija_cifre = 0;
+                                    if (sa_susednima_kombinacija[j])
+                                        odrzan_broj_kombinacija_susedni = 1;
+                                    else
+                                        odrzan_broj_kombinacija_susedni = 0;
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) <= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
+                                    && (Math.Abs(_broj_zadnjih_cifara(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_cifre) >= Math.Abs(_broj_zadnjih_cifara(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_cifre))
+                                    && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
+                                    && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][nasumicni_element];
+                                        brojevi[i][nasumicni_element] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                        else if (_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije) != -1) //UKLONI CIFRU
+                        {
+
+                            sve_cifre_su_dobre = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije) != -1); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije) != -1); k++)
+                                {
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)];
+                                    if (sa_zadnjim_ciframa_kombinacija[j])
+                                        odrzan_broj_kombinacija_cifre = 1;
+                                    else
+                                        odrzan_broj_kombinacija_cifre = 0;
+                                    if (sa_susednima_kombinacija[j])
+                                        odrzan_broj_kombinacija_susedni = 1;
+                                    else
+                                        odrzan_broj_kombinacija_susedni = 0;
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) >= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
+                                    && (Math.Abs(_broj_zadnjih_cifara(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_cifre) >= Math.Abs(_broj_zadnjih_cifara(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_cifre))
+                                    && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
+                                    && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)];
+                                        brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                    }
+                    else if (!sa_zadnjim_ciframa_kombinacija[i])   //NULA CIFARA
+                    {
+                        if (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) != -1)  //UKLONI CIFRU
+                        {
+                            sve_cifre_su_dobre = false;
+                            for (int j = (pocetak - 1); (j < kraj) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) != -1); j++)
+                                for (int k = 0; (k < duzina_kombinacije) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) != -1); k++)
+                                {
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                    {
+                                        nova_kombinacija1[l] = brojevi[i][l];
+                                        nova_kombinacija2[l] = brojevi[j][l];
+                                    }
+                                    nova_kombinacija1[_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                    nova_kombinacija2[k] = brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)];
+                                    if (sa_zadnjim_ciframa_kombinacija[j])
+                                        odrzan_broj_kombinacija_cifre = 1;
+                                    else
+                                        odrzan_broj_kombinacija_cifre = 0;
+                                    if (sa_susednima_kombinacija[j])
+                                        odrzan_broj_kombinacija_susedni = 1;
+                                    else
+                                        odrzan_broj_kombinacija_susedni = 0;
+                                    if (petoskupovna_kombinacija[j])
+                                        odrzan_broj_kombinacija_skupovi = 5;
+                                    else
+                                        odrzan_broj_kombinacija_skupovi = 4;
+                                    if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) >= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
+                                    && (Math.Abs(_broj_zadnjih_cifara(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_cifre) >= Math.Abs(_broj_zadnjih_cifara(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_cifre))
+                                    && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
+                                    && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && ((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    {
+                                        int temp = brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)];
+                                        brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                    }
+                                }
+                        }
+                    }
+                }
+
+                brojac_cifre++;
+            }
+
+            int brojac_suma = 0;   //RESAVANJE SUMA
+            int broj_dobrih_suma1 = 0;
+            int broj_dobrih_suma2 = 0;
+            int nova_suma1;
+            int nova_suma2;
+            bool sve_sume_su_dobre = false;
+            while (!sve_sume_su_dobre)
+            {
+                if (brojac_suma % 3 <= 0)
+                {
+                    broj_dobrih_suma1 = broj_dobrih_suma2;
+                    broj_dobrih_suma2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if ((sume_kombinacija[i] >= suma_min) && (sume_kombinacija[i] >= suma_min))
+                            broj_dobrih_suma2++;
+                    if (broj_dobrih_suma2 <= broj_dobrih_suma1)
+                        break;
+                }
+
+                sve_sume_su_dobre = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
+                {
+                    if (sume_kombinacija[i] < suma_min)  //ZA MANJE
+                    {
+                        sve_sume_su_dobre = false;
+                        for (int j = (pocetak - 1); (j < kraj) && (sume_kombinacija[i] < suma_min); j++)
+                            for (int k = 0; (k < duzina_kombinacije) && (sume_kombinacija[i] < suma_min); k++)
+                            {
+                                nasumicni_element = random.Next(0, duzina_kombinacije);
+                                nova_suma1 = sume_kombinacija[i] - brojevi[i][nasumicni_element] + brojevi[j][k];
+                                nova_suma2 = sume_kombinacija[j] + brojevi[i][nasumicni_element] - brojevi[j][k];
+                                if ((nova_suma1 <= suma_max)
+                                && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                && (nova_suma1 > sume_kombinacija[i])
+                                && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
+                                && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
+                                && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                && (((brojevi[i][nasumicni_element] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
+                                && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                {
+                                    int temp = brojevi[i][nasumicni_element];
+                                    brojevi[i][nasumicni_element] = brojevi[j][k];
+                                    brojevi[j][k] = temp;
+                                    sume_kombinacija[i] = nova_suma1;
+                                    sume_kombinacija[j] = nova_suma2;
+                                }
+                            }
+                    }
+                    else if (sume_kombinacija[i] > suma_max)  //ZA VECE
+                    {
+                        sve_sume_su_dobre = false;
+                        for (int j = (pocetak - 1); (j < kraj) && (sume_kombinacija[i] > suma_max); j++)
+                            for (int k = 0; (k < duzina_kombinacije) && (sume_kombinacija[i] > suma_max); k++)
+                            {
+                                nasumicni_element = random.Next(0, duzina_kombinacije);
+                                nova_suma1 = sume_kombinacija[i] - brojevi[i][nasumicni_element] + brojevi[j][k];
+                                nova_suma2 = sume_kombinacija[j] + brojevi[i][nasumicni_element] - brojevi[j][k];
+                                if ((nova_suma1 >= suma_min)
+                                && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                && (nova_suma1 < sume_kombinacija[i])
+                                && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
+                                && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
+                                && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                && (((brojevi[i][nasumicni_element] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
+                                && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                {
+                                    int temp = brojevi[i][nasumicni_element];
+                                    brojevi[i][nasumicni_element] = brojevi[j][k];
+                                    brojevi[j][k] = temp;
+                                    sume_kombinacija[i] = nova_suma1;
+                                    sume_kombinacija[j] = nova_suma2;
+                                }
+                            }
+                    }
+                }
+
+                brojac_suma++;
+            }
+
+            int brojac_razlika = 0;    //RESAVANJE RAZLIKA
+            int broj_dobrih_razlika1 = 0;
+            int broj_dobrih_razlika2 = 0;
+            int nova_razlika1;
+            int nova_razlika2;
+            int[] privremena_kombinacija2 = new int[7];
+            int izabran_broj;
+            bool sve_razlike_su_dobre = false;
+            while (!sve_razlike_su_dobre)
+            {
+                if (brojac_razlika % 3 <= 0)
+                {
+                    broj_dobrih_razlika1 = broj_dobrih_razlika2;
+                    broj_dobrih_razlika2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if ((razlike_kombinacija[i] >= razlika_min) && (razlike_kombinacija[i] >= razlika_min))
+                            broj_dobrih_razlika2++;
+                    if (broj_dobrih_razlika2 <= broj_dobrih_razlika1)
+                        break;
+                }
+
+                sve_razlike_su_dobre = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
+                {
+                    if (razlike_kombinacija[i] < razlika_min)  //ZA MANJE
+                    {
+                        sve_razlike_su_dobre = false;
+                        for (int j = (pocetak - 1); (j < kraj) && (razlike_kombinacija[i] < razlika_min); j++)
+                            for (int k = 0; (k < duzina_kombinacije) && (razlike_kombinacija[i] < razlika_min); k++)
+                            {
+                                izabran_broj = random.Next(1, 3);
+                                if (izabran_broj == 1)  //SMANJUJE NAJMANJI
+                                {
+                                    nova_razlika1 = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                        privremena_kombinacija2[l] = brojevi[j][l];
+                                    privremena_kombinacija2[k] = brojevi[j][_indeks_min(brojevi[j], duzina_kombinacije)];
+                                    nova_razlika2 = privremena_kombinacija2[_indeks_max(privremena_kombinacija2, duzina_kombinacije)] - privremena_kombinacija2[_indeks_min(privremena_kombinacija2, duzina_kombinacije)];
+
+                                    nova_suma1 = sume_kombinacija[i] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] + brojevi[j][k];
+                                    nova_suma2 = sume_kombinacija[j] + brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
+                                    if ((nova_razlika1 <= razlika_max)
+                                    && (nova_razlika2 >= razlika_min) && (nova_razlika2 <= razlika_max)
+                                    && (nova_razlika1 > razlike_kombinacija[i])
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
+                                    && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                    && ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
+                                    && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                    {
+                                        sume_kombinacija[i] = nova_suma1;
+                                        sume_kombinacija[j] = nova_suma2;
+
+                                        int temp = brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
+                                        brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                        razlike_kombinacija[i] = nova_razlika1;
+                                        razlike_kombinacija[j] = nova_razlika2;
+                                    }
+                                }
+                                else if (izabran_broj == 2) //POVECAVA NAJVECI
+                                {
+                                    nova_razlika1 = brojevi[j][k] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                        privremena_kombinacija2[l] = brojevi[j][l];
+                                    privremena_kombinacija2[k] = brojevi[j][_indeks_max(brojevi[j], duzina_kombinacije)];
+                                    nova_razlika2 = privremena_kombinacija2[_indeks_max(privremena_kombinacija2, duzina_kombinacije)] - privremena_kombinacija2[_indeks_min(privremena_kombinacija2, duzina_kombinacije)];
+
+                                    nova_suma1 = sume_kombinacija[i] - brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] + brojevi[j][k];
+                                    nova_suma2 = sume_kombinacija[j] + brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
+                                    if ((nova_razlika1 <= razlika_max)
+                                    && (nova_razlika2 >= razlika_min) && (nova_razlika2 <= razlika_max)
+                                    && (nova_razlika1 > razlike_kombinacija[i])
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
+                                    && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                    && ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
+                                    && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                    {
+                                        sume_kombinacija[i] = nova_suma1;
+                                        sume_kombinacija[j] = nova_suma2;
+
+                                        int temp = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)];
+                                        brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                        razlike_kombinacija[i] = nova_razlika1;
+                                        razlike_kombinacija[j] = nova_razlika2;
+                                    }
+                                }
+                            }
+                    }
+                    else if (razlike_kombinacija[i] > razlika_max)  //ZA VECE
+                    {
+                        sve_razlike_su_dobre = false;
+                        for (int j = (pocetak - 1); (j < kraj) && (razlike_kombinacija[i] > razlika_max); j++)
+                            for (int k = 0; (k < duzina_kombinacije) && (razlike_kombinacija[i] > razlika_max); k++)
+                            {
+                                izabran_broj = random.Next(1, 3);
+                                if (izabran_broj == 1)  //POVECAVA NAJMANJI
+                                {
+                                    nova_razlika1 = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                        privremena_kombinacija2[l] = brojevi[j][l];
+                                    privremena_kombinacija2[k] = brojevi[j][_indeks_min(brojevi[j], duzina_kombinacije)];
+                                    nova_razlika2 = privremena_kombinacija2[_indeks_max(privremena_kombinacija2, duzina_kombinacije)] - privremena_kombinacija2[_indeks_min(privremena_kombinacija2, duzina_kombinacije)];
+
+                                    nova_suma1 = sume_kombinacija[i] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] + brojevi[j][k];
+                                    nova_suma2 = sume_kombinacija[j] + brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
+                                    if ((nova_razlika1 >= razlika_min)
+                                    && (nova_razlika2 >= razlika_min) && (nova_razlika2 <= razlika_max)
+                                    && (nova_razlika1 < razlike_kombinacija[i])
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
+                                    && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                    && ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
+                                    && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                    {
+                                        sume_kombinacija[i] = nova_suma1;
+                                        sume_kombinacija[j] = nova_suma2;
+
+                                        int temp = brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
+                                        brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                        razlike_kombinacija[i] = nova_razlika1;
+                                        razlike_kombinacija[j] = nova_razlika2;
+                                    }
+                                }
+                                else if (izabran_broj == 2) //SMANJUJE NAJVECI
+                                {
+                                    nova_razlika1 = brojevi[j][k] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
+                                    for (int l = 0; l < duzina_kombinacije; l++)
+                                        privremena_kombinacija2[l] = brojevi[j][l];
+                                    privremena_kombinacija2[k] = brojevi[j][_indeks_max(brojevi[j], duzina_kombinacije)];
+                                    nova_razlika2 = privremena_kombinacija2[_indeks_max(privremena_kombinacija2, duzina_kombinacije)] - privremena_kombinacija2[_indeks_min(privremena_kombinacija2, duzina_kombinacije)];
+
+                                    nova_suma1 = sume_kombinacija[i] - brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] + brojevi[j][k];
+                                    nova_suma2 = sume_kombinacija[j] + brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
+                                    if ((nova_razlika1 >= razlika_min)
+                                    && (nova_razlika2 >= razlika_min) && (nova_razlika2 <= razlika_max)
+                                    && (nova_razlika1 < razlike_kombinacija[i])
+                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)])
+                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                    && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
+                                    && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
+                                    && ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
+                                    && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
+                                    && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                    {
+                                        sume_kombinacija[i] = nova_suma1;
+                                        sume_kombinacija[j] = nova_suma2;
+
+                                        int temp = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)];
+                                        brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
+                                        brojevi[j][k] = temp;
+                                        razlike_kombinacija[i] = nova_razlika1;
+                                        razlike_kombinacija[j] = nova_razlika2;
+                                    }
+                                }
+                            }
+                    }
+                }
+
+                brojac_razlika++;
+            }
+        }
+
+        static void _neke_kombinacije()
+        {
+            int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
+            int duzina_kombinacije = int.Parse(Console.ReadLine());
+            int broj_kombinacija = int.Parse(Console.ReadLine());
+
+            int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
+            if (duzina_kombinacije == 6)
+            {
+                if (broj_loptica == 39)
+                    granica_malih = 19;
+                else if (broj_loptica == 44)
+                    granica_malih = 22;
+                else if (broj_loptica == 45)
+                    granica_malih = 22;
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                if (broj_loptica == 35)
+                    granica_malih = 17;
+                else if (broj_loptica == 37)
+                    granica_malih = 18;
+                else if (broj_loptica == 39)
+                    granica_malih = 19;
+            }
+
+            bool[] upotrebljeni_brojevi = new bool[broj_loptica];    //LISTA UPOTREBLJENIH BROJEVA
+            for (int i = 0; i < broj_loptica; i++)
+                upotrebljeni_brojevi[i] = false;
+
+            int ukupan_broj_parnih = 0; //STVARANJE BROJEVA
+            int ukupan_broj_neparnih = 0;
+            int ukupan_broj_malih = 0;
+            int ukupan_broj_velikih = 0;
+            int broj_brojeva = broj_kombinacija * duzina_kombinacije;
+            int[][] brojevi = new int[15400000][];
+            for (int i = 0; i < (broj_brojeva / broj_loptica * broj_loptica); i++)
+            {
+                if ((i % broj_loptica + 1) % 2 == 0)
+                    ukupan_broj_parnih++;
+                else if ((i % broj_loptica + 1) % 2 != 0)
+                    ukupan_broj_neparnih++;
+                if ((i % broj_loptica + 1) <= granica_malih)
+                    ukupan_broj_malih++;
+                else if ((i % broj_loptica + 1) > granica_malih)
+                    ukupan_broj_velikih++;
+                if (i % duzina_kombinacije == 0)
+                    brojevi[i / duzina_kombinacije] = new int[7];
+                brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = i % broj_loptica + 1;
+            }
+            int trenutni_broj = 1;
+            bool broj_nadjen = false;
+            for (int i = (broj_brojeva / broj_loptica * broj_loptica); i < broj_brojeva; i++)
+            {
+                broj_nadjen = false;
+                while (broj_nadjen == false)
+                {
+                    if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
+                        trenutni_broj++;
+                    else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
+                        trenutni_broj++;
+                    else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
+                        trenutni_broj++;
+                    else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
+                        trenutni_broj++;
+                    else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
+                        trenutni_broj++;
+                    else
+                    {
+                        broj_nadjen = true;
+                        upotrebljeni_brojevi[(trenutni_broj % broj_loptica) - 1] = true;
+                    }
+                    if (trenutni_broj > broj_loptica)
+                        trenutni_broj = 1;
+                }
+                if (trenutni_broj % 2 == 0)
+                    ukupan_broj_parnih++;
+                else if (trenutni_broj % 2 != 0)
+                    ukupan_broj_neparnih++;
+                if (trenutni_broj <= granica_malih)
+                    ukupan_broj_malih++;
+                else if (trenutni_broj > granica_malih)
+                    ukupan_broj_velikih++;
+                if (i % duzina_kombinacije == 0)
+                    brojevi[i / duzina_kombinacije] = new int[7];
+                brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
+            }
+
+            Random random = new Random();  //MESANJE BROJEVA
+            for (int i = broj_brojeva - 1; i > 0; i--)
+            {
+                int j = random.Next(0, i + 1);
+
+                int red_i = i / duzina_kombinacije;
+                int kolona_i = i % duzina_kombinacije;
+                int red_j = j / duzina_kombinacije;
+                int kolona_j = j % duzina_kombinacije;
+
+                int temp = brojevi[red_i][kolona_i];
+                brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
+                brojevi[red_j][kolona_j] = temp;
+            }
+
+            int suma_min = int.MinValue, suma_max = int.MaxValue;
+            if (duzina_kombinacije == 6)
+            {
+                if (broj_loptica == 39)
+                {
+                    suma_min = 79;
+                    suma_max = 159;
+                }
+                else if (broj_loptica == 44)
+                {
+                    suma_min = 100;
+                    suma_max = 179;
+                }
+                else if (broj_loptica == 45)
+                {
+                    suma_min = 100;
+                    suma_max = 179;
+                }
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                if (broj_loptica == 35)
+                {
+                    suma_min = 79;
+                    suma_max = 169;
+                }
+                else if (broj_loptica == 37)
+                {
+                    suma_min = 79;
+                    suma_max = 179;
+                }
+                else if (broj_loptica == 39)
+                {
+                    suma_min = 79;
+                    suma_max = 179;
+                }
+            }
+
+            int razlika_min = int.MinValue, razlika_max = int.MaxValue;
+            if (duzina_kombinacije == 6)
+            {
+                if (broj_loptica == 39)
+                {
+                    razlika_min = 23;
+                    razlika_max = 37;
+                }
+                else if (broj_loptica == 44)
+                {
+                    razlika_min = 24;
+                    razlika_max = 42;
+                }
+                else if (broj_loptica == 45)
+                {
+                    razlika_min = 25;
+                    razlika_max = 43;
+                }
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                if (broj_loptica == 35)
+                {
+                    razlika_min = 21;
+                    razlika_max = 33;
+                }
+                else if (broj_loptica == 37)
+                {
+                    razlika_min = 21;
+                    razlika_max = 35;
+                }
+                else if (broj_loptica == 39)
+                {
+                    razlika_min = 23;
+                    razlika_max = 37;
+                }
+            }
+
+            int[][] tabela1 = new int[0][];    //TABELE PARNI/NEPARNI, MALI/VELIKI
+            int[] tabela_parni = new int[0];
+            int[] tabela_mali = new int[0];
+            int broj_slucajeva = 0;
+            if (duzina_kombinacije == 6)
+            {
+                tabela1 = new int[][]
+                {
                         new int[] { 2, 1, 1, 1, 1, 1, 1, 1, 1 },
                         new int[] { 4, 2, 2, 2, 2, 2, 2, 2, 2 },
                         new int[] { 6, 3, 3, 3, 3, 3, 3, 3, 3 },
@@ -520,15 +1400,15 @@ namespace Loto_App
                         new int[] { 12, 10, 10, 10, 10, 7, 7, 7, 7 },
                         new int[] { 14, 11, 10, 11, 10, 9, 8, 9, 8 },
                         new int[] { 16, 12, 12, 12, 12, 9, 9, 9, 9 }
-                    };
-                    tabela_parni = new int[] { 3, 3, 3, 2, 2, 2, 4, 4, 4 };
-                    tabela_mali = new int[] { 3, 2, 4, 3, 2, 4, 3, 2, 4 };
-                    broj_slucajeva = 9;
-                }
-                else if (duzina_kombinacije == 7)
+                };
+                tabela_parni = new int[] { 3, 3, 3, 2, 2, 2, 4, 4, 4 };
+                tabela_mali = new int[] { 3, 2, 4, 3, 2, 4, 3, 2, 4 };
+                broj_slucajeva = 9;
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                tabela1 = new int[][]
                 {
-                    tabela1 = new int[][]
-                    {
                     new int[] { 3, 2, 3, 2 },
                     new int[] { 5, 5, 5, 5 },
                     new int[] { 8, 7, 8, 7 },
@@ -539,1071 +1419,229 @@ namespace Loto_App
                     new int[] { 20, 20, 20, 20 },
                     new int[] { 23, 22, 23, 22 },
                     new int[] { 25, 25, 25, 25 }
-                    };
-                    tabela_parni = new int[] { 3, 3, 4, 4 };
-                    tabela_mali = new int[] { 3, 4, 4, 3 };
-                    broj_slucajeva = 4;
-                }
-                int[] broj_parnih_brojeva_kombinacija = new int[15400000];
-                int broj_predjenih_kombinacija = 0;
-                int inkrement_kombinacija;
-                while (broj_predjenih_kombinacija < broj_kombinacija)
-                {
-                    if ((broj_kombinacija - broj_predjenih_kombinacija) > 100)
-                        inkrement_kombinacija = 100;
-                    else
-                        inkrement_kombinacija = broj_kombinacija - broj_predjenih_kombinacija;
+                };
+                tabela_parni = new int[] { 3, 3, 4, 4 };
+                tabela_mali = new int[] { 3, 4, 4, 3 };
+                broj_slucajeva = 4;
+            }
+            int[] broj_parnih_brojeva_kombinacija = new int[15400000];
+            int broj_predjenih_kombinacija = 0;
+            int inkrement_kombinacija;
+            while (broj_predjenih_kombinacija < broj_kombinacija)
+            {
+                if ((broj_kombinacija - broj_predjenih_kombinacija) > 100)
+                    inkrement_kombinacija = 100;
+                else
+                    inkrement_kombinacija = broj_kombinacija - broj_predjenih_kombinacija;
 
-                    for (int i = 0; i < broj_slucajeva; i++)
+                for (int i = 0; i < broj_slucajeva; i++)
+                {
+                    for (int j = 0; j < tabela1[(inkrement_kombinacija / 10) - 1][i]; j++)
                     {
-                        for (int j = 0; j < tabela1[(inkrement_kombinacija / 10) - 1][i]; j++)
-                        {
-                            broj_parnih_brojeva_kombinacija[broj_predjenih_kombinacija] = tabela_parni[i];
-                            broj_predjenih_kombinacija++;
-                        }
+                        broj_parnih_brojeva_kombinacija[broj_predjenih_kombinacija] = tabela_parni[i];
+                        broj_predjenih_kombinacija++;
                     }
                 }
-                int[] broj_malih_brojeva_kombinacija = new int[15400000];
-                broj_predjenih_kombinacija = 0;
-                while (broj_predjenih_kombinacija < broj_kombinacija)
-                {
-                    if ((broj_kombinacija - broj_predjenih_kombinacija) > 100)
-                        inkrement_kombinacija = 100;
-                    else
-                        inkrement_kombinacija = broj_kombinacija - broj_predjenih_kombinacija;
+            }
+            int[] broj_malih_brojeva_kombinacija = new int[15400000];
+            broj_predjenih_kombinacija = 0;
+            while (broj_predjenih_kombinacija < broj_kombinacija)
+            {
+                if ((broj_kombinacija - broj_predjenih_kombinacija) > 100)
+                    inkrement_kombinacija = 100;
+                else
+                    inkrement_kombinacija = broj_kombinacija - broj_predjenih_kombinacija;
 
-                    for (int i = 0; i < broj_slucajeva; i++)
+                for (int i = 0; i < broj_slucajeva; i++)
+                {
+                    for (int j = 0; j < tabela1[(inkrement_kombinacija / 10) - 1][i]; j++)
                     {
-                        for (int j = 0; j < tabela1[(inkrement_kombinacija / 10) - 1][i]; j++)
-                        {
-                            broj_malih_brojeva_kombinacija[broj_predjenih_kombinacija] = tabela_mali[i];
-                            broj_predjenih_kombinacija++;
-                        }
+                        broj_malih_brojeva_kombinacija[broj_predjenih_kombinacija] = tabela_mali[i];
+                        broj_predjenih_kombinacija++;
                     }
                 }
+            }
 
-                bool[] tabela_skupovi = new bool[0];    //TABELE SKUPOVI, SUSEDNI I ZADNJE CIFRE
-                bool[] tabela_susedni = new bool[0];
-                bool[] tabela_zadnje_cifre = new bool[0];
-                if (duzina_kombinacije == 6)
+            bool[] tabela_skupovi = new bool[0];    //TABELE SKUPOVI, SUSEDNI I ZADNJE CIFRE
+            bool[] tabela_susedni = new bool[0];
+            bool[] tabela_zadnje_cifre = new bool[0];
+            if (duzina_kombinacije == 6)
+            {
+                tabela_skupovi = new bool[] { false, true, false, true, false, true, false, true, false, true };
+                tabela_susedni = new bool[] { false, true, false, true, false, false, true, false, true, false };
+                tabela_zadnje_cifre = new bool[] { false, true, false, true, false, false, true, false, true, false };
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                tabela_skupovi = new bool[] { false, true, false, true, false, true, false, true, false, true };
+                tabela_susedni = new bool[] { false, true, false, true, false, false, true, false, true, false };
+                tabela_zadnje_cifre = new bool[] { false, true, false, true, true, false, true, false, true, true };
+            }
+            int velicina_skupa = 0;
+            if (duzina_kombinacije == 6)
+            {
+                if (broj_loptica == 39)
+                    velicina_skupa = 8;
+                else if (broj_loptica == 44)
+                    velicina_skupa = 9;
+                else if (broj_loptica == 45)
+                    velicina_skupa = 9;
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                if (broj_loptica == 35)
+                    velicina_skupa = 7;
+                else if (broj_loptica == 37)
+                    velicina_skupa = 8;
+                else if (broj_loptica == 39)
+                    velicina_skupa = 8;
+            }
+            bool[] petoskupovna_kombinacija = new bool[15400000];
+            bool[] sa_susednima_kombinacija = new bool[15400000];
+            bool[] sa_zadnjim_ciframa_kombinacija = new bool[15400000];
+            int biracka_pozicija_skupovi = random.Next(0, 10);
+            int biracka_pozicija_susedni = random.Next(0, 10);
+            int biracka_pozicija_zadnje_cifre = random.Next(0, 10);
+            petoskupovna_kombinacija[0] = tabela_skupovi[biracka_pozicija_skupovi];
+            biracka_pozicija_skupovi++;
+            if (biracka_pozicija_skupovi == 10)
+                biracka_pozicija_skupovi = 0;
+            sa_susednima_kombinacija[0] = tabela_susedni[biracka_pozicija_susedni];
+            biracka_pozicija_susedni++;
+            if (biracka_pozicija_susedni == 10)
+                biracka_pozicija_susedni = 0;
+            sa_zadnjim_ciframa_kombinacija[0] = tabela_zadnje_cifre[biracka_pozicija_zadnje_cifre];
+            biracka_pozicija_zadnje_cifre++;
+            if (biracka_pozicija_zadnje_cifre == 10)
+                biracka_pozicija_zadnje_cifre = 0;
+            for (int i = 1; i < broj_kombinacija; i++)
+            {
+                if ((broj_parnih_brojeva_kombinacija[i] != broj_parnih_brojeva_kombinacija[i - 1]) || (broj_malih_brojeva_kombinacija[i] != broj_malih_brojeva_kombinacija[i - 1]))
                 {
-                    tabela_skupovi = new bool[] { false, true, false, true, false, true, false, true, false, true };
-                    tabela_susedni = new bool[] { false, true, false, true, false, false, true, false, true, false };
-                    tabela_zadnje_cifre = new bool[] { false, true, false, true, false, false, true, false, true, false };
+                    biracka_pozicija_skupovi = random.Next(0, 10);
+                    biracka_pozicija_susedni = random.Next(0, 10);
+                    biracka_pozicija_zadnje_cifre = random.Next(0, 10);
                 }
-                else if (duzina_kombinacije == 7)
-                {
-                    tabela_skupovi = new bool[] { false, true, false, true, false, true, false, true, false, true };
-                    tabela_susedni = new bool[] { false, true, false, true, false, false, true, false, true, false };
-                    tabela_zadnje_cifre = new bool[] { false, true, false, true, true, false, true, false, true, true };
-                }
-                int velicina_skupa = 0;
-                if (duzina_kombinacije == 6)
-                {
-                    if (broj_loptica == 39)
-                        velicina_skupa = 8;
-                    else if (broj_loptica == 44)
-                        velicina_skupa = 9;
-                    else if (broj_loptica == 45)
-                        velicina_skupa = 9;
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    if (broj_loptica == 35)
-                        velicina_skupa = 7;
-                    else if (broj_loptica == 37)
-                        velicina_skupa = 8;
-                    else if (broj_loptica == 39)
-                        velicina_skupa = 8;
-                }
-                bool[] petoskupovna_kombinacija = new bool[15400000];
-                bool[] sa_susednima_kombinacija = new bool[15400000];
-                bool[] sa_zadnjim_ciframa_kombinacija = new bool[15400000];
-                int biracka_pozicija_skupovi = random.Next(0, 10);
-                int biracka_pozicija_susedni = random.Next(0, 10);
-                int biracka_pozicija_zadnje_cifre = random.Next(0, 10);
-                petoskupovna_kombinacija[0] = tabela_skupovi[biracka_pozicija_skupovi];
+                petoskupovna_kombinacija[i] = tabela_skupovi[biracka_pozicija_skupovi];
                 biracka_pozicija_skupovi++;
                 if (biracka_pozicija_skupovi == 10)
                     biracka_pozicija_skupovi = 0;
-                sa_susednima_kombinacija[0] = tabela_susedni[biracka_pozicija_susedni];
+                sa_susednima_kombinacija[i] = tabela_susedni[biracka_pozicija_susedni];
                 biracka_pozicija_susedni++;
                 if (biracka_pozicija_susedni == 10)
                     biracka_pozicija_susedni = 0;
-                sa_zadnjim_ciframa_kombinacija[0] = tabela_zadnje_cifre[biracka_pozicija_zadnje_cifre];
+                sa_zadnjim_ciframa_kombinacija[i] = tabela_zadnje_cifre[biracka_pozicija_zadnje_cifre];
                 biracka_pozicija_zadnje_cifre++;
                 if (biracka_pozicija_zadnje_cifre == 10)
                     biracka_pozicija_zadnje_cifre = 0;
-                for (int i = 1; i < broj_kombinacija; i++)
+            }
+
+            int[] sume_kombinacija = new int[15400000];   //STVARANJE SUMA
+            int suma;
+            for (int i = 0; i < broj_kombinacija; i++)
+            {
+                suma = 0;
+                for (int j = 0; j < duzina_kombinacije; j++)
+                    suma += brojevi[i][j];
+                sume_kombinacija[i] = suma;
+            }
+
+            int[] razlike_kombinacija = new int[15400000];  //STVARANJE RAZLIKA
+            for (int i = 0; i < broj_kombinacija; i++)
+                razlike_kombinacija[i] = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
+
+
+            int pocetna_kombinacija = 1;    //ODRADJIVANJE ALGORITMA PO STOTINAMA
+            int krajnja_kombinacija = 100;
+            if (krajnja_kombinacija > broj_kombinacija)
+                krajnja_kombinacija = broj_kombinacija;
+            while (pocetna_kombinacija <= broj_kombinacija)
+            {
+                _resi_100_kombinacija(brojevi, sume_kombinacija, razlike_kombinacija, pocetna_kombinacija, krajnja_kombinacija, duzina_kombinacije, broj_loptica, granica_malih, suma_min, suma_max, razlika_min, razlika_max, broj_parnih_brojeva_kombinacija, broj_malih_brojeva_kombinacija, velicina_skupa, petoskupovna_kombinacija, sa_susednima_kombinacija, sa_zadnjim_ciframa_kombinacija);
+                pocetna_kombinacija += 100;
+                krajnja_kombinacija += 100;
+                if (krajnja_kombinacija > broj_kombinacija)
+                    krajnja_kombinacija = broj_kombinacija;
+            }
+
+            for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
+            {
+                Console.Write((i + 1) + ": ");    //REDNI BROJEVI
+
+                for (int j = 0; j < duzina_kombinacije; j++)    //KOMBINACIJE
                 {
-                    if ((broj_parnih_brojeva_kombinacija[i] != broj_parnih_brojeva_kombinacija[i - 1]) || (broj_malih_brojeva_kombinacija[i] != broj_malih_brojeva_kombinacija[i - 1]))
-                    {
-                        biracka_pozicija_skupovi = random.Next(0, 10);
-                        biracka_pozicija_susedni = random.Next(0, 10);
-                        biracka_pozicija_zadnje_cifre = random.Next(0, 10);
-                    }
-                    petoskupovna_kombinacija[i] = tabela_skupovi[biracka_pozicija_skupovi];
-                    biracka_pozicija_skupovi++;
-                    if (biracka_pozicija_skupovi == 10)
-                        biracka_pozicija_skupovi = 0;
-                    sa_susednima_kombinacija[i] = tabela_susedni[biracka_pozicija_susedni];
-                    biracka_pozicija_susedni++;
-                    if (biracka_pozicija_susedni == 10)
-                        biracka_pozicija_susedni = 0;
-                    sa_zadnjim_ciframa_kombinacija[i] = tabela_zadnje_cifre[biracka_pozicija_zadnje_cifre];
-                    biracka_pozicija_zadnje_cifre++;
-                    if (biracka_pozicija_zadnje_cifre == 10)
-                        biracka_pozicija_zadnje_cifre = 0;
+                    //if (brojevi[i][j] % 2 == 0)
+                    //Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(brojevi[i][j] + "\t");
+                    //Console.ResetColor();
                 }
+                Console.Write("\t");
 
-                int brojac_parni = 0;   //RESAVANJE PARNIH
-                int broj_dobrih_parnih1 = 0;
-                int broj_dobrih_parnih2 = 0;
-                bool svi_parni_su_dobri = false;
-                while (!svi_parni_su_dobri)
-                {
-                    if (brojac_parni % 3 == 0)
-                    {
-                        broj_dobrih_parnih1 = broj_dobrih_parnih2;
-                        broj_dobrih_parnih2 = 0;
-                        for (int i = 0; i < broj_kombinacija; i++)
-                            if (broj_parnih_brojeva_kombinacija[i] == _broj_parnih(brojevi[i], duzina_kombinacije))
-                                broj_dobrih_parnih2++;
-                        if (broj_dobrih_parnih2 <= broj_dobrih_parnih1)
-                            break;
-                    }
+                if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)   //DA LI IMA PONAVLJANJA BROJEVA
+                    Console.Write("-\t");
+                else
+                    Console.Write("+\t");
 
-                    svi_parni_su_dobri = true;
-                    for (int i = 0; i < broj_kombinacija; i++)
-                    {
-                        if (broj_parnih_brojeva_kombinacija[i] < _broj_parnih(brojevi[i], duzina_kombinacije))
-                        {
-                            svi_parni_su_dobri = false;
-                            for (int j = 0; (j < broj_kombinacija) && (broj_parnih_brojeva_kombinacija[i] < _broj_parnih(brojevi[i], duzina_kombinacije)); j++)
-                                if (broj_parnih_brojeva_kombinacija[j] > _broj_parnih(brojevi[j], duzina_kombinacije))
-                                {
-                                    int temp = brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)];
-                                    brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)] = brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)];
-                                    brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)] = temp;
-                                }
-                        }
-                    }
+                if ((sume_kombinacija[i] > suma_max) || (sume_kombinacija[i] < suma_min))   //DA LI JE SUMA U OPSEGU
+                    Console.Write("-\t");
+                else
+                    Console.Write("+\t");
 
-                    brojac_parni++;
-                }
+                if ((razlike_kombinacija[i] > razlika_max) || (razlike_kombinacija[i] < razlika_min))   //RAZLIKA NAJMANJEG I NAJVECEG
+                    Console.Write("-\t");
+                else
+                    Console.Write("+\t");
 
-                int brojac_mali = 0;    //RESAVANJE MALIH
-                int broj_dobrih_malih1 = 0;
-                int broj_dobrih_malih2 = 0;
-                bool svi_mali_su_dobri = false;
-                while (!svi_mali_su_dobri)
-                {
-                    if (brojac_mali % 3 == 0)
-                    {
-                        broj_dobrih_malih1 = broj_dobrih_malih2;
-                        broj_dobrih_malih2 = 0;
-                        for (int i = 0; i < broj_kombinacija; i++)
-                            if (broj_malih_brojeva_kombinacija[i] == _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
-                                broj_dobrih_malih2++;
-                        if (broj_dobrih_malih2 <= broj_dobrih_malih1)
-                            break;
-                    }
+                //Console.Write(broj_parnih_brojeva_kombinacija[i] + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
 
-                    svi_mali_su_dobri = true;
-                    for (int i = 0; i < broj_kombinacija; i++)
-                    {
-                        if (broj_malih_brojeva_kombinacija[i] < _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
-                        {
-                            svi_mali_su_dobri = false;
-                            for (int j = 0; (j < broj_kombinacija) && (broj_malih_brojeva_kombinacija[i] < _broj_malih(brojevi[i], duzina_kombinacije, granica_malih)); j++)
-                                if (broj_malih_brojeva_kombinacija[j] > _broj_malih(brojevi[j], duzina_kombinacije, granica_malih)
-                                && ((brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] % 2) == (brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] % 2)))
-                                {
-                                    int temp = brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)];
-                                    brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] = brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)];
-                                    brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] = temp;
-                                }
-                        }
-                    }
+                if (broj_parnih_brojeva_kombinacija[i] == _broj_parnih(brojevi[i], duzina_kombinacije))
+                    Console.Write("+\t");
+                else
+                    Console.Write("-\t");
 
-                    brojac_mali++;
-                }
+                //Console.Write(broj_malih_brojeva_kombinacija[i] + "\t");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
 
-                int brojac_dupli = 0;    //RESAVANJE DUPLIKATA
-                int broj_dobrih_duplih1 = 0;
-                int broj_dobrih_duplih2 = 0;
-                bool svi_duplikati_su_dobri = false;
-                while (!svi_duplikati_su_dobri)
-                {
-                    if (brojac_dupli % 3 == 0)
-                    {
-                        broj_dobrih_duplih1 = broj_dobrih_duplih2;
-                        broj_dobrih_duplih2 = 0;
-                        for (int i = 0; i < broj_kombinacija; i++)
-                            if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)
-                                broj_dobrih_duplih2++;
-                        if (broj_dobrih_duplih2 <= broj_dobrih_duplih1)
-                            break;
-                    }
+                if (broj_malih_brojeva_kombinacija[i] == _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
+                    Console.Write("+\t");
+                else
+                    Console.Write("-\t");
 
-                    svi_duplikati_su_dobri = true;
-                    for (int i = 0; i < broj_kombinacija; i++)
-                    {
-                        if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)  //ZA VECE
-                        {
-                            svi_duplikati_su_dobri = false;
-                            for (int j = 0; (j < broj_kombinacija) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
-                            {
-                                if (!_poseduje_element(brojevi[j], duzina_kombinacije, _indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica))
-                                && ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] % 2) == (brojevi[j][0] % 2))
-                                && (((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] <= granica_malih) && (brojevi[j][0] <= granica_malih)) || ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] > granica_malih) && (brojevi[j][0] > granica_malih))))
-                                {
-                                    int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
-                                    brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][0];
-                                    brojevi[j][0] = temp;
-                                }
-                            }
-                        }
-                    }
+                //Console.Write(petoskupovna_kombinacija[i] + "\t");  //POMOCNE OSOBINE KOMBINACIJA
 
-                    brojac_dupli++;
-                }
+                //Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\t");
 
-                int brojac_skupovi = 0;   //STVARANJE SKUPOVA
-                int broj_dobrih_skupova1 = 0;
-                int broj_dobrih_skupova2 = 0;
-                bool svi_skupovi_su_dobri = false;
-                int nasumicni_element;
-                int[] nova_kombinacija1 = new int[duzina_kombinacije];
-                int[] nova_kombinacija2 = new int[duzina_kombinacije];
-                int odrzan_broj_kombinacija_skupovi;
-                while (!svi_skupovi_su_dobri)
-                {
-                    if (brojac_skupovi % 10 == 0)
-                    {
-                        broj_dobrih_skupova1 = broj_dobrih_skupova2;
-                        broj_dobrih_skupova2 = 0;
-                        for (int i = 0; i < broj_kombinacija; i++)
-                            if (!petoskupovna_kombinacija[i] && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
-                                broj_dobrih_skupova2++;
-                            else if (petoskupovna_kombinacija[i] && (_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
-                                broj_dobrih_skupova2++;
-                        if (broj_dobrih_skupova2 <= broj_dobrih_skupova1)
-                            break;
-                    }
+                if ((petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 5)) || (!petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 4)))
+                    Console.Write("+\t");
+                else
+                    Console.Write("-\t");
 
-                    svi_skupovi_su_dobri = true;
-                    for (int i = 0; i < broj_kombinacija; i++)
-                    {
-                        if (!petoskupovna_kombinacija[i])   //CETVOROSKUPNI
-                        {
-                            if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4)  //UKLONI SKUP
-                            {
-                                svi_skupovi_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) > 4); k++)
-                                    {
-                                        nasumicni_element = random.Next(0, duzina_kombinacije);
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[nasumicni_element] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][nasumicni_element];
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) >= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
-                                        && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][nasumicni_element];
-                                            brojevi[i][nasumicni_element] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                            else if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4) //DODAJ SKUP
-                            {
+                //Console.Write(sa_susednima_kombinacija[i] + "\t");
 
-                                svi_skupovi_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 4); k++)
-                                    {
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)];
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)];
-                                            brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                        }
-                        else if (petoskupovna_kombinacija[i])   //PETOSKUPNI
-                        {
-                            if (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5)  //DODAJ SKUP
-                            {
-                                svi_skupovi_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) < 5); k++)
-                                    {
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)];
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)];
-                                            brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                        }
-                    }
+                //Console.Write(_broj_susednih(brojevi[i], duzina_kombinacije) + "\t");
 
-                    brojac_skupovi++;
-                }
+                if ((sa_susednima_kombinacija[i] && (_broj_susednih(brojevi[i], duzina_kombinacije) == 1)) || (!sa_susednima_kombinacija[i] && (_broj_susednih(brojevi[i], duzina_kombinacije) == 0)))
+                    Console.Write("+\t");
+                else
+                    Console.Write("-\t");
 
-                int brojac_susedni = 0;   //STVARANJE SUSEDNIH
-                int broj_dobrih_susednih1 = 0;
-                int broj_dobrih_susednih2 = 0;
-                bool svi_susedni_su_dobri = false;
-                int odrzan_broj_kombinacija_susedni;
-                while (!svi_susedni_su_dobri)
-                {
-                    if (brojac_susedni % 10 == 0)
-                    {
-                        broj_dobrih_susednih1 = broj_dobrih_susednih2;
-                        broj_dobrih_susednih2 = 0;
-                        for (int i = 0; i < broj_kombinacija; i++)
-                            if (sa_susednima_kombinacija[i] && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) == -1) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) != -1))
-                                broj_dobrih_susednih2++;
-                            else if (!sa_susednima_kombinacija[i] && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) == -1))
-                                broj_dobrih_susednih2++;
-                        if (broj_dobrih_susednih2 <= broj_dobrih_susednih1)
-                            break;
-                    }
+                //Console.Write(sa_zadnjim_ciframa_kombinacija[i] + "\t");
 
-                    svi_susedni_su_dobri = true;
-                    for (int i = 0; i < broj_kombinacija; i++)
-                    {
-                        if (sa_susednima_kombinacija[i])   //JEDAN SUSEDNI
-                        {
-                            if (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) == -1)  //DODAJ SUSEDNOG
-                            {
-                                svi_susedni_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) == -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) == -1); k++)
-                                    {
-                                        nasumicni_element = random.Next(0, duzina_kombinacije);
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[nasumicni_element] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][nasumicni_element];
-                                        if (sa_susednima_kombinacija[j])
-                                            odrzan_broj_kombinacija_susedni = 1;
-                                        else
-                                            odrzan_broj_kombinacija_susedni = 0;
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((_broj_susednih(brojevi[i], duzina_kombinacije) <= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
-                                        && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
-                                        && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][nasumicni_element];
-                                            brojevi[i][nasumicni_element] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                            else if (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) != -1) //UKLONI SUSEDNOG
-                            {
+                //Console.Write(_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) + "\t");
 
-                                svi_susedni_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) != -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) != -1); k++)
-                                    {
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)];
-                                        if (sa_susednima_kombinacija[j])
-                                            odrzan_broj_kombinacija_susedni = 1;
-                                        else
-                                            odrzan_broj_kombinacija_susedni = 0;
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
-                                        && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
-                                        && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)];
-                                            brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                        }
-                        else if (!sa_susednima_kombinacija[i])   //NULA SUSEDNIH
-                        {
-                            if (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) != -1)  //UKLONI SUSEDNOG
-                            {
-                                svi_susedni_su_dobri = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) != -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_susedni_1_par(brojevi[i], duzina_kombinacije) != -1); k++)
-                                    {
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)];
-                                        if (sa_susednima_kombinacija[j])
-                                            odrzan_broj_kombinacija_susedni = 1;
-                                        else
-                                            odrzan_broj_kombinacija_susedni = 0;
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
-                                        && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
-                                        && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)];
-                                            brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                        }
-                    }
+                if ((sa_zadnjim_ciframa_kombinacija[i] && (_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) == 1)) || (!sa_zadnjim_ciframa_kombinacija[i] && (_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) == 0)))
+                    Console.Write("+\n");
+                else
+                    Console.Write("-\n");
+            }
+        }
 
-                    brojac_susedni++;
-                }
+        static void Mainara(string[] args)
+        {
+            string biranje_moda = Console.ReadLine();  //BIRANJE MODA
 
-                int brojac_cifre = 0;   //STVARANJE ZADNJIH CIFARA
-                int broj_dobrih_cifara1 = 0;
-                int broj_dobrih_cifara2 = 0;
-                bool sve_cifre_su_dobre = false;
-                int odrzan_broj_kombinacija_cifre;
-                while (!sve_cifre_su_dobre)
-                {
-                    if (brojac_cifre % 10 == 0)
-                    {
-                        broj_dobrih_cifara1 = broj_dobrih_cifara2;
-                        broj_dobrih_cifara2 = 0;
-                        for (int i = 0; i < broj_kombinacija; i++)
-                            if (sa_zadnjim_ciframa_kombinacija[i] && (_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije) == -1) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) != -1))
-                                broj_dobrih_cifara2++;
-                            else if (!sa_zadnjim_ciframa_kombinacija[i] && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) == -1))
-                                broj_dobrih_cifara2++;
-                        if (broj_dobrih_cifara2 <= broj_dobrih_cifara1)
-                            break;
-                    }
-
-                    sve_cifre_su_dobre = true;
-                    for (int i = 0; i < broj_kombinacija; i++)
-                    {
-                        if (sa_zadnjim_ciframa_kombinacija[i])   //JEDNA CIFRA
-                        {
-                            if (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) == -1)  //DODAJ CIFRU
-                            {
-                                sve_cifre_su_dobre = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) == -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) == -1); k++)
-                                    {
-                                        nasumicni_element = random.Next(0, duzina_kombinacije);
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[nasumicni_element] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][nasumicni_element];
-                                        if (sa_zadnjim_ciframa_kombinacija[j])
-                                            odrzan_broj_kombinacija_cifre = 1;
-                                        else
-                                            odrzan_broj_kombinacija_cifre = 0;
-                                        if (sa_susednima_kombinacija[j])
-                                            odrzan_broj_kombinacija_susedni = 1;
-                                        else
-                                            odrzan_broj_kombinacija_susedni = 0;
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) <= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
-                                        && (Math.Abs(_broj_zadnjih_cifara(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_cifre) >= Math.Abs(_broj_zadnjih_cifara(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_cifre))
-                                        && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
-                                        && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][nasumicni_element];
-                                            brojevi[i][nasumicni_element] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                            else if (_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije) != -1) //UKLONI CIFRU
-                            {
-
-                                sve_cifre_su_dobre = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije) != -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije) != -1); k++)
-                                    {
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)];
-                                        if (sa_zadnjim_ciframa_kombinacija[j])
-                                            odrzan_broj_kombinacija_cifre = 1;
-                                        else
-                                            odrzan_broj_kombinacija_cifre = 0;
-                                        if (sa_susednima_kombinacija[j])
-                                            odrzan_broj_kombinacija_susedni = 1;
-                                        else
-                                            odrzan_broj_kombinacija_susedni = 0;
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) >= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
-                                        && (Math.Abs(_broj_zadnjih_cifara(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_cifre) >= Math.Abs(_broj_zadnjih_cifara(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_cifre))
-                                        && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
-                                        && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)];
-                                            brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                        }
-                        else if (!sa_zadnjim_ciframa_kombinacija[i])   //NULA CIFARA
-                        {
-                            if (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) != -1)  //UKLONI CIFRU
-                            {
-                                sve_cifre_su_dobre = false;
-                                for (int j = 0; (j < broj_kombinacija) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) != -1); j++)
-                                    for (int k = 0; (k < duzina_kombinacije) && (_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije) != -1); k++)
-                                    {
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                        {
-                                            nova_kombinacija1[l] = brojevi[i][l];
-                                            nova_kombinacija2[l] = brojevi[j][l];
-                                        }
-                                        nova_kombinacija1[_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                        nova_kombinacija2[k] = brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)];
-                                        if (sa_zadnjim_ciframa_kombinacija[j])
-                                            odrzan_broj_kombinacija_cifre = 1;
-                                        else
-                                            odrzan_broj_kombinacija_cifre = 0;
-                                        if (sa_susednima_kombinacija[j])
-                                            odrzan_broj_kombinacija_susedni = 1;
-                                        else
-                                            odrzan_broj_kombinacija_susedni = 0;
-                                        if (petoskupovna_kombinacija[j])
-                                            odrzan_broj_kombinacija_skupovi = 5;
-                                        else
-                                            odrzan_broj_kombinacija_skupovi = 4;
-                                        if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) >= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
-                                        && (Math.Abs(_broj_zadnjih_cifara(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_cifre) >= Math.Abs(_broj_zadnjih_cifara(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_cifre))
-                                        && (Math.Abs(_broj_susednih(brojevi[j], duzina_kombinacije) - odrzan_broj_kombinacija_susedni) >= Math.Abs(_broj_susednih(nova_kombinacija2, duzina_kombinacije) - odrzan_broj_kombinacija_susedni))
-                                        && (Math.Abs(_broj_skupova(brojevi[j], duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi) >= Math.Abs(_broj_skupova(nova_kombinacija2, duzina_kombinacije, velicina_skupa) - odrzan_broj_kombinacija_skupovi))
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && ((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                        {
-                                            int temp = brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)];
-                                            brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                        }
-                                    }
-                            }
-                        }
-                    }
-
-                    brojac_cifre++;
-                }
-
-                int[] sume_kombinacija = new int[15400000]; //STVARANJE SUMA
-                int suma;
-                for (int i = 0; i < broj_kombinacija; i++)
-                {
-                    suma = 0;
-                    for (int j = 0; j < duzina_kombinacije; j++)
-                        suma += brojevi[i][j];
-                    sume_kombinacija[i] = suma;
-                }
-                int suma_min = int.MinValue, suma_max = int.MaxValue;
-                if (duzina_kombinacije == 6)
-                {
-                    if (broj_loptica == 39)
-                    {
-                        suma_min = 79;
-                        suma_max = 159;
-                    }
-                    else if (broj_loptica == 44)
-                    {
-                        suma_min = 100;
-                        suma_max = 179;
-                    }
-                    else if (broj_loptica == 45)
-                    {
-                        suma_min = 100;
-                        suma_max = 179;
-                    }
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    if (broj_loptica == 35)
-                    {
-                        suma_min = 79;
-                        suma_max = 169;
-                    }
-                    else if (broj_loptica == 37)
-                    {
-                        suma_min = 79;
-                        suma_max = 179;
-                    }
-                    else if (broj_loptica == 39)
-                    {
-                        suma_min = 79;
-                        suma_max = 179;
-                    }
-                }
-
-                int brojac_suma = 0;   //RESAVANJE SUMA
-                int broj_dobrih_suma1 = 0;
-                int broj_dobrih_suma2 = 0;
-                int nova_suma1;
-                int nova_suma2;
-                bool sve_sume_su_dobre = false;
-                while (!sve_sume_su_dobre)
-                {
-                    if (brojac_suma % 3 <= 0)
-                    {
-                        broj_dobrih_suma1 = broj_dobrih_suma2;
-                        broj_dobrih_suma2 = 0;
-                        for (int i = 0; i < broj_kombinacija; i++)
-                            if ((sume_kombinacija[i] >= suma_min) && (sume_kombinacija[i] >= suma_min))
-                                broj_dobrih_suma2++;
-                        if (broj_dobrih_suma2 <= broj_dobrih_suma1)
-                            break;
-                    }
-
-                    sve_sume_su_dobre = true;
-                    for (int i = 0; i < broj_kombinacija; i++)
-                    {
-                        if (sume_kombinacija[i] < suma_min)  //ZA MANJE
-                        {
-                            sve_sume_su_dobre = false;
-                            for (int j = 0; (j < broj_kombinacija) && (sume_kombinacija[i] < suma_min); j++)
-                                for (int k = 0; (k < duzina_kombinacije) && (sume_kombinacija[i] < suma_min); k++)
-                                {
-                                    nasumicni_element = random.Next(0, duzina_kombinacije);
-                                    nova_suma1 = sume_kombinacija[i] - brojevi[i][nasumicni_element] + brojevi[j][k];
-                                    nova_suma2 = sume_kombinacija[j] + brojevi[i][nasumicni_element] - brojevi[j][k];
-                                    if ((nova_suma1 <= suma_max)
-                                    && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
-                                    && (nova_suma1 > sume_kombinacija[i])
-                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
-                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                    && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
-                                    && (((brojevi[i][nasumicni_element] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
-                                    && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
-                                    {
-                                        int temp = brojevi[i][nasumicni_element];
-                                        brojevi[i][nasumicni_element] = brojevi[j][k];
-                                        brojevi[j][k] = temp;
-                                        sume_kombinacija[i] = nova_suma1;
-                                        sume_kombinacija[j] = nova_suma2;
-                                    }
-                                }
-                        }
-                        else if (sume_kombinacija[i] > suma_max)  //ZA VECE
-                        {
-                            sve_sume_su_dobre = false;
-                            for (int j = 0; (j < broj_kombinacija) && (sume_kombinacija[i] > suma_max); j++)
-                                for (int k = 0; (k < duzina_kombinacije) && (sume_kombinacija[i] > suma_max); k++)
-                                {
-                                    nasumicni_element = random.Next(0, duzina_kombinacije);
-                                    nova_suma1 = sume_kombinacija[i] - brojevi[i][nasumicni_element] + brojevi[j][k];
-                                    nova_suma2 = sume_kombinacija[j] + brojevi[i][nasumicni_element] - brojevi[j][k];
-                                    if ((nova_suma1 >= suma_min)
-                                    && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
-                                    && (nova_suma1 < sume_kombinacija[i])
-                                    && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
-                                    && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                    && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
-                                    && (((brojevi[i][nasumicni_element] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
-                                    && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
-                                    {
-                                        int temp = brojevi[i][nasumicni_element];
-                                        brojevi[i][nasumicni_element] = brojevi[j][k];
-                                        brojevi[j][k] = temp;
-                                        sume_kombinacija[i] = nova_suma1;
-                                        sume_kombinacija[j] = nova_suma2;
-                                    }
-                                }
-                        }
-                    }
-
-                    brojac_suma++;
-                }
-
-                int[] razlike_kombinacija = new int[15400000]; //STVARANJE RAZLIKA
-                for (int i = 0; i < broj_kombinacija; i++)
-                    razlike_kombinacija[i] = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
-                int razlika_min = int.MinValue, razlika_max = int.MaxValue;
-                if (duzina_kombinacije == 6)
-                {
-                    if (broj_loptica == 39)
-                    {
-                        razlika_min = 23;
-                        razlika_max = 37;
-                    }
-                    else if (broj_loptica == 44)
-                    {
-                        razlika_min = 24;
-                        razlika_max = 42;
-                    }
-                    else if (broj_loptica == 45)
-                    {
-                        razlika_min = 25;
-                        razlika_max = 43;
-                    }
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    if (broj_loptica == 35)
-                    {
-                        razlika_min = 21;
-                        razlika_max = 33;
-                    }
-                    else if (broj_loptica == 37)
-                    {
-                        razlika_min = 21;
-                        razlika_max = 35;
-                    }
-                    else if (broj_loptica == 39)
-                    {
-                        razlika_min = 23;
-                        razlika_max = 37;
-                    }
-                }
-
-                int brojac_razlika = 0;    //RESAVANJE RAZLIKA
-                int broj_dobrih_razlika1 = 0;
-                int broj_dobrih_razlika2 = 0;
-                int nova_razlika1;
-                int nova_razlika2;
-                int[] privremena_kombinacija2 = new int[7];
-                int izabran_broj;
-                bool sve_razlike_su_dobre = false;
-                while (!sve_razlike_su_dobre)
-                {
-                    if (brojac_razlika % 3 <= 0)
-                    {
-                        broj_dobrih_razlika1 = broj_dobrih_razlika2;
-                        broj_dobrih_razlika2 = 0;
-                        for (int i = 0; i < broj_kombinacija; i++)
-                            if ((razlike_kombinacija[i] >= razlika_min) && (razlike_kombinacija[i] >= razlika_min))
-                                broj_dobrih_razlika2++;
-                        if (broj_dobrih_razlika2 <= broj_dobrih_razlika1)
-                            break;
-                    }
-
-                    sve_razlike_su_dobre = true;
-                    for (int i = 0; i < broj_kombinacija; i++)
-                    {
-                        if (razlike_kombinacija[i] < razlika_min)  //ZA MANJE
-                        {
-                            sve_razlike_su_dobre = false;
-                            for (int j = 0; (j < broj_kombinacija) && (razlike_kombinacija[i] < razlika_min); j++)
-                                for (int k = 0; (k < duzina_kombinacije) && (razlike_kombinacija[i] < razlika_min); k++)
-                                {
-                                    izabran_broj = random.Next(1, 3);
-                                    if (izabran_broj == 1)  //SMANJUJE NAJMANJI
-                                    {
-                                        nova_razlika1 = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                            privremena_kombinacija2[l] = brojevi[j][l];
-                                        privremena_kombinacija2[k] = brojevi[j][_indeks_min(brojevi[j], duzina_kombinacije)];
-                                        nova_razlika2 = privremena_kombinacija2[_indeks_max(privremena_kombinacija2, duzina_kombinacije)] - privremena_kombinacija2[_indeks_min(privremena_kombinacija2, duzina_kombinacije)];
-
-                                        nova_suma1 = sume_kombinacija[i] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] + brojevi[j][k];
-                                        nova_suma2 = sume_kombinacija[j] + brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
-                                        if ((nova_razlika1 <= razlika_max)
-                                        && (nova_razlika2 >= razlika_min) && (nova_razlika2 <= razlika_max)
-                                        && (nova_razlika1 > razlike_kombinacija[i])
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
-                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
-                                        && ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
-                                        && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
-                                        && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                        && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
-                                        {
-                                            sume_kombinacija[i] = nova_suma1;
-                                            sume_kombinacija[j] = nova_suma2;
-
-                                            int temp = brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
-                                            brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                            razlike_kombinacija[i] = nova_razlika1;
-                                            razlike_kombinacija[j] = nova_razlika2;
-                                        }
-                                    }
-                                    else if (izabran_broj == 2) //POVECAVA NAJVECI
-                                    {
-                                        nova_razlika1 = brojevi[j][k] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                            privremena_kombinacija2[l] = brojevi[j][l];
-                                        privremena_kombinacija2[k] = brojevi[j][_indeks_max(brojevi[j], duzina_kombinacije)];
-                                        nova_razlika2 = privremena_kombinacija2[_indeks_max(privremena_kombinacija2, duzina_kombinacije)] - privremena_kombinacija2[_indeks_min(privremena_kombinacija2, duzina_kombinacije)];
-
-                                        nova_suma1 = sume_kombinacija[i] - brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] + brojevi[j][k];
-                                        nova_suma2 = sume_kombinacija[j] + brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
-                                        if ((nova_razlika1 <= razlika_max)
-                                        && (nova_razlika2 >= razlika_min) && (nova_razlika2 <= razlika_max)
-                                        && (nova_razlika1 > razlike_kombinacija[i])
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
-                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
-                                        && ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
-                                        && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
-                                        && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                        && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
-                                        {
-                                            sume_kombinacija[i] = nova_suma1;
-                                            sume_kombinacija[j] = nova_suma2;
-
-                                            int temp = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)];
-                                            brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                            razlike_kombinacija[i] = nova_razlika1;
-                                            razlike_kombinacija[j] = nova_razlika2;
-                                        }
-                                    }
-                                }
-                        }
-                        else if (razlike_kombinacija[i] > razlika_max)  //ZA VECE
-                        {
-                            sve_razlike_su_dobre = false;
-                            for (int j = 0; (j < broj_kombinacija) && (razlike_kombinacija[i] > razlika_max); j++)
-                                for (int k = 0; (k < duzina_kombinacije) && (razlike_kombinacija[i] > razlika_max); k++)
-                                {
-                                    izabran_broj = random.Next(1, 3);
-                                    if (izabran_broj == 1)  //POVECAVA NAJMANJI
-                                    {
-                                        nova_razlika1 = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                            privremena_kombinacija2[l] = brojevi[j][l];
-                                        privremena_kombinacija2[k] = brojevi[j][_indeks_min(brojevi[j], duzina_kombinacije)];
-                                        nova_razlika2 = privremena_kombinacija2[_indeks_max(privremena_kombinacija2, duzina_kombinacije)] - privremena_kombinacija2[_indeks_min(privremena_kombinacija2, duzina_kombinacije)];
-
-                                        nova_suma1 = sume_kombinacija[i] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] + brojevi[j][k];
-                                        nova_suma2 = sume_kombinacija[j] + brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
-                                        if ((nova_razlika1 >= razlika_min)
-                                        && (nova_razlika2 >= razlika_min) && (nova_razlika2 <= razlika_max)
-                                        && (nova_razlika1 < razlike_kombinacija[i])
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
-                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
-                                        && ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
-                                        && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
-                                        && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                        && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
-                                        {
-                                            sume_kombinacija[i] = nova_suma1;
-                                            sume_kombinacija[j] = nova_suma2;
-
-                                            int temp = brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
-                                            brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                            razlike_kombinacija[i] = nova_razlika1;
-                                            razlike_kombinacija[j] = nova_razlika2;
-                                        }
-                                    }
-                                    else if (izabran_broj == 2) //SMANJUJE NAJVECI
-                                    {
-                                        nova_razlika1 = brojevi[j][k] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
-                                        for (int l = 0; l < duzina_kombinacije; l++)
-                                            privremena_kombinacija2[l] = brojevi[j][l];
-                                        privremena_kombinacija2[k] = brojevi[j][_indeks_max(brojevi[j], duzina_kombinacije)];
-                                        nova_razlika2 = privremena_kombinacija2[_indeks_max(privremena_kombinacija2, duzina_kombinacije)] - privremena_kombinacija2[_indeks_min(privremena_kombinacija2, duzina_kombinacije)];
-
-                                        nova_suma1 = sume_kombinacija[i] - brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] + brojevi[j][k];
-                                        nova_suma2 = sume_kombinacija[j] + brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[j][k];
-                                        if ((nova_razlika1 >= razlika_min)
-                                        && (nova_razlika2 >= razlika_min) && (nova_razlika2 <= razlika_max)
-                                        && (nova_razlika1 < razlike_kombinacija[i])
-                                        && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)])
-                                        && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                        && (nova_suma1 >= suma_min) && (nova_suma1 <= suma_max)
-                                        && (nova_suma2 >= suma_min) && (nova_suma2 <= suma_max)
-                                        && ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                        && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
-                                        && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
-                                        && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                        && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
-                                        {
-                                            sume_kombinacija[i] = nova_suma1;
-                                            sume_kombinacija[j] = nova_suma2;
-
-                                            int temp = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)];
-                                            brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
-                                            brojevi[j][k] = temp;
-                                            razlike_kombinacija[i] = nova_razlika1;
-                                            razlike_kombinacija[j] = nova_razlika2;
-                                        }
-                                    }
-                                }
-                        }
-                    }
-
-                    brojac_razlika++;
-                }
-
-                for (int i = 0; i < broj_kombinacija; i++)  //ISPIS         /////////////////////////////////////////////////////TESTIRAJ
-                {
-                    Console.Write((i + 1) + ":\t");    //REDNI BROJEVI
-
-                    for (int j = 0; j < duzina_kombinacije; j++)    //KOMBINACIJE
-                    {
-                        //if (brojevi[i][j] % 2 == 0)
-                        //Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(brojevi[i][j] + "\t");
-                        //Console.ResetColor();
-                    }
-                    Console.Write("\t");
-
-                    /*if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
-                        Console.Write("\t-1\t");
-                    else
-                        Console.Write("\t" + brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] + "\t");
-
-                    if ((sume_kombinacija[i] > suma_max) || (sume_kombinacija[i] < suma_min))   //DA LI JE SUMA U OPSEGU
-                        Console.Write("-1\t");
-                    else
-                        Console.Write(sume_kombinacija[i] + "\t");
-
-                    if ((razlike_kombinacija[i] > razlika_max) || (razlike_kombinacija[i] < razlika_min))   //RAZLIKA NAJMANJEG I NAJVECEG
-                        Console.Write("-1\t");
-                    else
-                        Console.Write(razlike_kombinacija[i] + "\t");*/
-
-                    //Console.Write(broj_parnih_brojeva_kombinacija[i] + "\t");   //BROJ PARNIH BROJEVA U KOMBINACIJAMA
-
-                    //Console.Write(broj_malih_brojeva_kombinacija[i] + "\t");   //BROJ MALIH BROJEVA U KOMBINACIJAMA
-
-                    //Console.Write(petoskupovna_kombinacija[i] + "\t");  //POMOCNE OSOBINE KOMBINACIJA
-
-                    //Console.Write(_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) + "\t");
-
-                    if ((petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 5)) || (!petoskupovna_kombinacija[i] && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) == 4)))
-                        Console.Write("+\t");
-                    else
-                        Console.Write("-\t");
-
-                    //Console.Write(sa_susednima_kombinacija[i] + "\t");
-
-                    //Console.Write(_broj_susednih(brojevi[i], duzina_kombinacije) + "\t");
-
-                    if ((sa_susednima_kombinacija[i] && (_broj_susednih(brojevi[i], duzina_kombinacije) == 1)) || (!sa_susednima_kombinacija[i] && (_broj_susednih(brojevi[i], duzina_kombinacije) == 0)))
-                        Console.Write("+\t");
-                    else
-                        Console.Write("-\t");
-
-                    //Console.Write(sa_zadnjim_ciframa_kombinacija[i] + "\t");
-
-                    //Console.Write(_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) + "\t");
-
-                    if ((sa_zadnjim_ciframa_kombinacija[i] && (_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) == 1)) || (!sa_zadnjim_ciframa_kombinacija[i] && (_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) == 0)))
-                        Console.Write("+\n");
-                    else
-                        Console.Write("-\n");
-                }
+            if (biranje_moda == "neke")
+            {
+                _neke_kombinacije();
             }
             else if (biranje_moda == "sve")
             {
