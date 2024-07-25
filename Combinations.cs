@@ -400,7 +400,7 @@ namespace Loto_App
             Random random = new Random();
             int broj_kombinacija = kraj - pocetak + 1;
 
-            int brojac_parni = 0;   //RESAVANJE PARNIH
+            /*int brojac_parni = 0;   //RESAVANJE PARNIH
             int broj_dobrih_parnih1 = 0;
             int broj_dobrih_parnih2 = 0;
             bool svi_parni_su_dobri = false;
@@ -471,15 +471,15 @@ namespace Loto_App
                 }
 
                 brojac_mali++;
-            }
+            }*/
 
-            int brojac_dupli = 0;    //RESAVANJE DUPLIKATA
+            int brojac_dupli = 0;    //RESAVANJE DUPLIKATA  ///////////////////////////////////////////NE RADI
             int broj_dobrih_duplih1 = 0;
             int broj_dobrih_duplih2 = 0;
             bool svi_duplikati_su_dobri = false;
             while (!svi_duplikati_su_dobri)
             {
-                if (brojac_dupli % 3 == 0)
+                if (brojac_dupli % 10 == 0)
                 {
                     broj_dobrih_duplih1 = broj_dobrih_duplih2;
                     broj_dobrih_duplih2 = 0;
@@ -493,27 +493,27 @@ namespace Loto_App
                 svi_duplikati_su_dobri = true;
                 for (int i = (pocetak - 1); i < kraj; i++)
                 {
-                    if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)  //ZA VECE
+                    if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)
                     {
                         svi_duplikati_su_dobri = false;
                         for (int j = (pocetak - 1); (j < kraj) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
-                        {
-                            if (!_poseduje_element(brojevi[j], duzina_kombinacije, _indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica))
-                            && ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] % 2) == (brojevi[j][0] % 2))
-                            && (((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] <= granica_malih) && (brojevi[j][0] <= granica_malih)) || ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] > granica_malih) && (brojevi[j][0] > granica_malih))))
-                            {
-                                int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
-                                brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][0];
-                                brojevi[j][0] = temp;
-                            }
-                        }
+                            for (int k = 0; (k < duzina_kombinacije) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); k++)
+                                if (!_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)])
+                                && ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] % 2) == (brojevi[j][k] % 2))
+                                && (((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                {
+                                    int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
+                                    brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][k];
+                                    brojevi[j][k] = temp;
+                                }
                     }
                 }
 
                 brojac_dupli++;
             }
 
-            int brojac_skupovi = 0;   //STVARANJE SKUPOVA
+            /*int brojac_skupovi = 0;   //STVARANJE SKUPOVA
             int broj_dobrih_skupova1 = 0;
             int broj_dobrih_skupova2 = 0;
             bool svi_skupovi_su_dobri = false;
@@ -1199,10 +1199,10 @@ namespace Loto_App
                 }
 
                 brojac_razlika++;
-            }
+            }*/
         }
 
-        static void _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva)
+        static void _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
         {
             int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
             if (duzina_kombinacije == 6)
@@ -1232,6 +1232,10 @@ namespace Loto_App
                     for (int j = 0; j < broj_zabranjenih_brojeva; j++)
                         if ((i + 1) == zabranjeni_brojevi[j])
                             upotrebljeni_brojevi[i] = true;
+                if (broj_omiljenih_brojeva != -1)
+                    for (int j = 0; j < broj_omiljenih_brojeva; j++)
+                        if ((i + 1) == omiljeni_brojevi[j])
+                            upotrebljeni_brojevi[i] = true;
             }
 
             int ukupan_broj_parnih = 0; //STVARANJE BROJEVA
@@ -1242,19 +1246,52 @@ namespace Loto_App
             int broj_brojeva_u_ciklusu = broj_loptica;
             if (broj_zabranjenih_brojeva != -1)
                 broj_brojeva_u_ciklusu -= broj_zabranjenih_brojeva;
+            if (broj_zabranjenih_brojeva != -1)
+                broj_brojeva_u_ciklusu -= broj_omiljenih_brojeva;
             int[][] brojevi = new int[15400000][];
             int trenutni_broj = 1;
+            int indeks_omiljenog_broja = 0;
             bool moguc_broj;
-            for (int i = 0; i < (broj_brojeva / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu); i++)
+            int indeks_deljenja = 0;
+            int pocetak_kruga;
+            if (procenat_pojavljivana_omiljenih_brojeva == 100)
+                indeks_deljenja = 1;
+            else if (procenat_pojavljivana_omiljenih_brojeva == 50)
+                indeks_deljenja = 2;
+            if (broj_omiljenih_brojeva == -1)
+                pocetak_kruga = 0;
+            else
+                pocetak_kruga = (broj_omiljenih_brojeva * broj_kombinacija / indeks_deljenja);
+            if (broj_omiljenih_brojeva != -1)
+                for (int i = 0; i < pocetak_kruga; i++)
+                {
+                    if (indeks_omiljenog_broja == broj_omiljenih_brojeva)
+                        indeks_omiljenog_broja = 0;
+
+                    if ((omiljeni_brojevi[indeks_omiljenog_broja] % 2) == 0)
+                        ukupan_broj_parnih++;
+                    else if ((omiljeni_brojevi[indeks_omiljenog_broja] % 2) != 0)
+                        ukupan_broj_neparnih++;
+                    if (omiljeni_brojevi[indeks_omiljenog_broja] <= granica_malih)
+                        ukupan_broj_malih++;
+                    else if (omiljeni_brojevi[indeks_omiljenog_broja] > granica_malih)
+                        ukupan_broj_velikih++;
+                    if (i % duzina_kombinacije == 0)
+                        brojevi[i / duzina_kombinacije] = new int[7];
+                    brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = omiljeni_brojevi[indeks_omiljenog_broja];
+                    indeks_omiljenog_broja++;
+                }
+            for (int i = pocetak_kruga; i < ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i++)
             {
                 if (trenutni_broj > broj_loptica)
                     trenutni_broj = 1;
 
                 moguc_broj = false;
-                if (broj_zabranjenih_brojeva != -1)
-                    while (!moguc_broj)
+                while (!moguc_broj)
+                {
+                    moguc_broj = true;
+                    if (broj_zabranjenih_brojeva != -1)
                     {
-                        moguc_broj = true;
                         for (int j = 0; j < broj_zabranjenih_brojeva; j++)
                             if (trenutni_broj == zabranjeni_brojevi[j])
                             {
@@ -1262,6 +1299,17 @@ namespace Loto_App
                                 moguc_broj = false;
                             }
                     }
+                    if (broj_omiljenih_brojeva != -1)
+                    {
+                        for (int j = 0; j < broj_omiljenih_brojeva; j++)
+                            if (trenutni_broj == omiljeni_brojevi[j])
+                            {
+                                trenutni_broj++;
+                                moguc_broj = false;
+                            }
+                    }
+                }
+
                 if ((trenutni_broj % 2) == 0)
                     ukupan_broj_parnih++;
                 else if ((trenutni_broj % 2) != 0)
@@ -1277,30 +1325,61 @@ namespace Loto_App
                 trenutni_broj++;
             }
             trenutni_broj = 1;
+            int brojac = 0;
             bool broj_nadjen = false;
-            for (int i = (broj_brojeva / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu); i < broj_brojeva; i++)
+            bool manjak_brojeva = false;
+            for (int i = ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i < broj_brojeva; i++)
             {
-                broj_nadjen = false;
-                while (broj_nadjen == false)
+                if (!manjak_brojeva)
+                {
+                    brojac = 0;
+                    broj_nadjen = false;
+                    while (broj_nadjen == false)
+                    {
+                        if (brojac == 100)
+                        {
+                            manjak_brojeva = true;
+                            break;
+                        }
+
+                        if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
+                            trenutni_broj++;
+                        else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else
+                        {
+                            if (trenutni_broj > broj_loptica)
+                                trenutni_broj = 1;
+                            broj_nadjen = true;
+                            upotrebljeni_brojevi[trenutni_broj - 1] = true;
+                        }
+                        if (trenutni_broj > broj_loptica)
+                            trenutni_broj = 1;
+
+                        brojac++;
+                    }
+                }
+                else if (manjak_brojeva)
                 {
                     if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
                         trenutni_broj++;
-                    else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
-                        trenutni_broj++;
-                    else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
-                        trenutni_broj++;
-                    else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
-                        trenutni_broj++;
-                    else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
-                        trenutni_broj++;
                     else
                     {
+                        if (trenutni_broj > broj_loptica)
+                            trenutni_broj = 1;
                         broj_nadjen = true;
-                        upotrebljeni_brojevi[(trenutni_broj % broj_loptica) - 1] = true;
+                        upotrebljeni_brojevi[trenutni_broj - 1] = true;
                     }
                     if (trenutni_broj > broj_loptica)
                         trenutni_broj = 1;
                 }
+
                 if (trenutni_broj % 2 == 0)
                     ukupan_broj_parnih++;
                 else if (trenutni_broj % 2 != 0)
@@ -1574,7 +1653,7 @@ namespace Loto_App
                 razlike_kombinacija[i] = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
 
 
-            /*int pocetna_kombinacija = 1;    //ODRADJIVANJE ALGORITMA PO STOTINAMA
+            int pocetna_kombinacija = 1;    //ODRADJIVANJE ALGORITMA PO STOTINAMA
             int krajnja_kombinacija = 100;
             if (krajnja_kombinacija > broj_kombinacija)
                 krajnja_kombinacija = broj_kombinacija;
@@ -1585,7 +1664,7 @@ namespace Loto_App
                 krajnja_kombinacija += 100;
                 if (krajnja_kombinacija > broj_kombinacija)
                     krajnja_kombinacija = broj_kombinacija;
-            }*/
+            }
 
             for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
             {
@@ -1926,8 +2005,11 @@ namespace Loto_App
                 int broj_kombinacija = int.Parse(Console.ReadLine());
                 int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
                 int broj_zabranjenih_brojeva = 5;
+                int[] omiljeni_brojevi = new int[] { 2, 19 };
+                int broj_omiljenih_brojeva = 2;
+                int procenat_pojavljivanja_omiljenih_brojeva = 100;
 
-                _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, broj_zabranjenih_brojeva);
+                _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, broj_zabranjenih_brojeva, omiljeni_brojevi, broj_omiljenih_brojeva, procenat_pojavljivanja_omiljenih_brojeva);
             }
             else if (biranje_moda == "sve")
             {
