@@ -125,7 +125,6 @@ namespace Loto_App
                 zadnje_cifre[niz[i] % 10]++;
 
             int par = -1;
-            int broj_parova = 0;
             for (int i = 0; i < 10; i++)
             {
                 if (zadnje_cifre[i] >= 2)
@@ -1203,12 +1202,8 @@ namespace Loto_App
             }
         }
 
-        static void _neke_kombinacije()
+        static void _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva)
         {
-            int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
-            int duzina_kombinacije = int.Parse(Console.ReadLine());
-            int broj_kombinacija = int.Parse(Console.ReadLine());
-
             int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
             if (duzina_kombinacije == 6)
             {
@@ -1231,31 +1226,59 @@ namespace Loto_App
 
             bool[] upotrebljeni_brojevi = new bool[broj_loptica];    //LISTA UPOTREBLJENIH BROJEVA
             for (int i = 0; i < broj_loptica; i++)
+            {
                 upotrebljeni_brojevi[i] = false;
+                if (broj_zabranjenih_brojeva != -1)
+                    for (int j = 0; j < broj_zabranjenih_brojeva; j++)
+                        if ((i + 1) == zabranjeni_brojevi[j])
+                            upotrebljeni_brojevi[i] = true;
+            }
 
             int ukupan_broj_parnih = 0; //STVARANJE BROJEVA
             int ukupan_broj_neparnih = 0;
             int ukupan_broj_malih = 0;
             int ukupan_broj_velikih = 0;
             int broj_brojeva = broj_kombinacija * duzina_kombinacije;
+            int broj_brojeva_u_ciklusu = broj_loptica;
+            if (broj_zabranjenih_brojeva != -1)
+                broj_brojeva_u_ciklusu -= broj_zabranjenih_brojeva;
             int[][] brojevi = new int[15400000][];
-            for (int i = 0; i < (broj_brojeva / broj_loptica * broj_loptica); i++)
+            int trenutni_broj = 1;
+            bool moguc_broj;
+            for (int i = 0; i < (broj_brojeva / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu); i++)
             {
-                if ((i % broj_loptica + 1) % 2 == 0)
+                if (trenutni_broj > broj_loptica)
+                    trenutni_broj = 1;
+
+                moguc_broj = false;
+                if (broj_zabranjenih_brojeva != -1)
+                    while (!moguc_broj)
+                    {
+                        moguc_broj = true;
+                        for (int j = 0; j < broj_zabranjenih_brojeva; j++)
+                            if (trenutni_broj == zabranjeni_brojevi[j])
+                            {
+                                trenutni_broj++;
+                                moguc_broj = false;
+                            }
+                    }
+                if ((trenutni_broj % 2) == 0)
                     ukupan_broj_parnih++;
-                else if ((i % broj_loptica + 1) % 2 != 0)
+                else if ((trenutni_broj % 2) != 0)
                     ukupan_broj_neparnih++;
-                if ((i % broj_loptica + 1) <= granica_malih)
+                if (trenutni_broj <= granica_malih)
                     ukupan_broj_malih++;
-                else if ((i % broj_loptica + 1) > granica_malih)
+                else if (trenutni_broj > granica_malih)
                     ukupan_broj_velikih++;
                 if (i % duzina_kombinacije == 0)
                     brojevi[i / duzina_kombinacije] = new int[7];
-                brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = i % broj_loptica + 1;
+                brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
+
+                trenutni_broj++;
             }
-            int trenutni_broj = 1;
+            trenutni_broj = 1;
             bool broj_nadjen = false;
-            for (int i = (broj_brojeva / broj_loptica * broj_loptica); i < broj_brojeva; i++)
+            for (int i = (broj_brojeva / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu); i < broj_brojeva; i++)
             {
                 broj_nadjen = false;
                 while (broj_nadjen == false)
@@ -1292,7 +1315,7 @@ namespace Loto_App
             }
 
             Random random = new Random();  //MESANJE BROJEVA
-            for (int i = broj_brojeva - 1; i > 0; i--)
+            /*for (int i = broj_brojeva - 1; i > 0; i--)
             {
                 int j = random.Next(0, i + 1);
 
@@ -1304,7 +1327,7 @@ namespace Loto_App
                 int temp = brojevi[red_i][kolona_i];
                 brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
                 brojevi[red_j][kolona_j] = temp;
-            }
+            }*/
 
             int suma_min = int.MinValue, suma_max = int.MaxValue;
             if (duzina_kombinacije == 6)
@@ -1551,7 +1574,7 @@ namespace Loto_App
                 razlike_kombinacija[i] = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
 
 
-            int pocetna_kombinacija = 1;    //ODRADJIVANJE ALGORITMA PO STOTINAMA
+            /*int pocetna_kombinacija = 1;    //ODRADJIVANJE ALGORITMA PO STOTINAMA
             int krajnja_kombinacija = 100;
             if (krajnja_kombinacija > broj_kombinacija)
                 krajnja_kombinacija = broj_kombinacija;
@@ -1562,7 +1585,7 @@ namespace Loto_App
                 krajnja_kombinacija += 100;
                 if (krajnja_kombinacija > broj_kombinacija)
                     krajnja_kombinacija = broj_kombinacija;
-            }
+            }*/
 
             for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
             {
@@ -1635,272 +1658,283 @@ namespace Loto_App
             }
         }
 
+        static void _sve_kombinacije(int broj_loptica, int duzina_kombinacije)
+        {
+            int rezervisano_mesto = 15400000;   //REZERVISANJE MESTA
+            if (duzina_kombinacije == 6)
+            {
+                if (broj_loptica == 39)
+                    rezervisano_mesto = 3300000;
+                else if (broj_loptica == 44)
+                    rezervisano_mesto = 7100000;
+                else if (broj_loptica == 45)
+                    rezervisano_mesto = 8200000;
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                if (broj_loptica == 35)
+                    rezervisano_mesto = 7000000;
+                else if (broj_loptica == 37)
+                    rezervisano_mesto = 10300000;
+                else if (broj_loptica == 39)
+                    rezervisano_mesto = 15400000;
+            }
+
+            int[][] brojevi = new int[15400000][];  //STVARANJE SVIH KOMBINACIJA
+            int[] trenutna_kombinacija = new int[7];
+            for (int i = 0; i < rezervisano_mesto; i++)
+                brojevi[i] = new int[7];
+            int red = 0;
+            red = _generisi_kombinacije(brojevi, trenutna_kombinacija, red, 1, 1, broj_loptica, duzina_kombinacije);
+
+            int[] sume_kombinacija = new int[15400000]; //STVARANJE SUMA
+            int suma;
+            for (int i = 0; i < red; i++)
+            {
+                suma = 0;
+                for (int j = 0; j < duzina_kombinacije; j++)
+                    suma += brojevi[i][j];
+                sume_kombinacija[i] = suma;
+            }
+            int suma_min = int.MinValue, suma_max = int.MaxValue;
+            if (duzina_kombinacije == 6)
+            {
+                if (broj_loptica == 39)
+                {
+                    suma_min = 79;
+                    suma_max = 159;
+                }
+                else if (broj_loptica == 44)
+                {
+                    suma_min = 100;
+                    suma_max = 179;
+                }
+                else if (broj_loptica == 45)
+                {
+                    suma_min = 100;
+                    suma_max = 179;
+                }
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                if (broj_loptica == 35)
+                {
+                    suma_min = 79;
+                    suma_max = 169;
+                }
+                else if (broj_loptica == 37)
+                {
+                    suma_min = 79;
+                    suma_max = 179;
+                }
+                else if (broj_loptica == 39)
+                {
+                    suma_min = 79;
+                    suma_max = 179;
+                }
+            }
+
+            int[] razlike_kombinacija = new int[15400000]; //STVARANJE RAZLIKA
+            for (int i = 0; i < red; i++)
+                razlike_kombinacija[i] = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
+            int razlika_min = int.MinValue, razlika_max = int.MaxValue;
+            if (duzina_kombinacije == 6)
+            {
+                if (broj_loptica == 39)
+                {
+                    razlika_min = 23;
+                    razlika_max = 37;
+                }
+                else if (broj_loptica == 44)
+                {
+                    razlika_min = 24;
+                    razlika_max = 42;
+                }
+                else if (broj_loptica == 45)
+                {
+                    razlika_min = 25;
+                    razlika_max = 43;
+                }
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                if (broj_loptica == 35)
+                {
+                    razlika_min = 21;
+                    razlika_max = 33;
+                }
+                else if (broj_loptica == 37)
+                {
+                    razlika_min = 21;
+                    razlika_max = 35;
+                }
+                else if (broj_loptica == 39)
+                {
+                    razlika_min = 23;
+                    razlika_max = 37;
+                }
+            }
+
+            int[] broj_parnih_brojeva_kombinacija = new int[15400000];  //STVARANJE PARNIH
+            for (int i = 0; i < red; i++)
+                broj_parnih_brojeva_kombinacija[i] = _broj_parnih(brojevi[i], duzina_kombinacije);
+            int parni_min = 0;
+            int parni_max = 0;
+            if (duzina_kombinacije == 6)
+            {
+                parni_min = 2;
+                parni_max = 4;
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                parni_min = 3;
+                parni_max = 4;
+            }
+
+            int[] broj_malih_brojeva_kombinacija = new int[15400000];  //STVARANJE MALIH
+            int mali_min = 0;
+            int mali_max = 0;
+            int granica_malih = 0;
+            if (duzina_kombinacije == 6)
+            {
+                mali_min = 2;
+                mali_max = 4;
+
+                if (broj_loptica == 39)
+                    granica_malih = 19;
+                else if (broj_loptica == 44)
+                    granica_malih = 22;
+                else if (broj_loptica == 45)
+                    granica_malih = 22;
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                mali_min = 3;
+                mali_max = 4;
+
+                if (broj_loptica == 35)
+                    granica_malih = 17;
+                else if (broj_loptica == 37)
+                    granica_malih = 18;
+                else if (broj_loptica == 39)
+                    granica_malih = 19;
+            }
+            for (int i = 0; i < red; i++)
+                broj_malih_brojeva_kombinacija[i] = _broj_malih(brojevi[i], duzina_kombinacije, granica_malih);
+
+            int[][] zadnje_cifre = new int[15400000][];   //STVARANJE ZADNJIH CIFARA
+            for (int i = 0; i < red; i++)
+            {
+                zadnje_cifre[i] = new int[10];
+                for (int j = 0; j < duzina_kombinacije; j++)
+                    zadnje_cifre[i][brojevi[i][j] % 10]++;
+            }
+
+            int velicina_skupa = 0;
+            if (duzina_kombinacije == 6)
+            {
+                if (broj_loptica == 39)
+                    velicina_skupa = 8;
+                else if (broj_loptica == 44)
+                    velicina_skupa = 9;
+                else if (broj_loptica == 45)
+                    velicina_skupa = 9;
+            }
+            else if (duzina_kombinacije == 7)
+            {
+                if (broj_loptica == 35)
+                    velicina_skupa = 7;
+                else if (broj_loptica == 37)
+                    velicina_skupa = 8;
+                else if (broj_loptica == 39)
+                    velicina_skupa = 8;
+            }
+
+            int red2 = 0;
+            for (int i = 0; i < red; i++)   //IZBACIVANJE NEPOTREBNIH KOMBINACIJA
+                if ((sume_kombinacija[i] <= suma_max) && (sume_kombinacija[i] >= suma_min)
+                && (razlike_kombinacija[i] <= razlika_max) && (razlike_kombinacija[i] >= razlika_min)
+                && (broj_parnih_brojeva_kombinacija[i] <= parni_max) && (broj_parnih_brojeva_kombinacija[i] >= parni_min)
+                && (broj_malih_brojeva_kombinacija[i] <= mali_max) && (broj_malih_brojeva_kombinacija[i] >= mali_min)
+                && (_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) == -1)
+                && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) == -1)
+                && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
+                {
+                    for (int j = 0; j < duzina_kombinacije; j++)
+                        brojevi[red2][j] = brojevi[i][j];
+                    red2++;
+                }
+
+            for (int i = 0; i < red2; i++)  //ISPIS
+            {
+                Console.Write((i + 1) + ":\t");    //REDNI BROJEVI
+
+                for (int j = 0; j < duzina_kombinacije; j++)    //KOMBINACIJE
+                    Console.Write(brojevi[i][j] + "\t");
+                Console.Write("\n");
+
+                /*if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
+                    Console.Write("-1\t");
+                else
+                    Console.Write(brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] + "\t");
+
+                if ((sume_kombinacija[i] > suma_max) || (sume_kombinacija[i] < suma_min))   //DA LI JE SUMA U OPSEGU
+                    Console.Write("-1\t");
+                else
+                    Console.Write(sume_kombinacija[i] + "\t");
+
+                if ((razlike_kombinacija[i] > razlika_max) || (razlike_kombinacija[i] < razlika_min))   //RAZLIKA NAJMANJEG I NAJVECEG
+                    Console.Write("-1\n");
+                else
+                    Console.Write(razlike_kombinacija[i] + "\n");
+
+                if (broj_parnih_brojeva_kombinacija[i] < 0)   //BROJ PARNIH
+                    Console.Write("-1\n");
+                else
+                    Console.Write(broj_parnih_brojeva_kombinacija[i] + "\n");
+
+                if (broj_parnih_brojeva_kombinacija[i] < 0)   //BROJ MALIH
+                    Console.Write("-1\n");
+                else
+                    Console.Write(broj_malih_brojeva_kombinacija[i] + "\n");
+
+                if (_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) == -1)   //ZADNJE CIFRE
+                    Console.Write("-1\n");
+                else
+                    Console.Write(_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) + "\n");
+
+                if (_indeks_susedni(brojevi[i], duzina_kombinacije) == -1)   //ZADNJE CIFRE
+                    Console.Write("-1\n");
+                else
+                    Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");
+
+                if (_indeks_skupovi_visak(brojevi[i], duzina_kombinacije, velicina_skupa) == -1)   //ZADNJE CIFRE
+                    Console.Write("-1\n");
+                else
+                    Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");*/
+            }
+        }
+
         static void Mainara(string[] args)
         {
             string biranje_moda = Console.ReadLine();  //BIRANJE MODA
 
             if (biranje_moda == "neke")
             {
-                _neke_kombinacije();
+                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
+                int duzina_kombinacije = int.Parse(Console.ReadLine());
+                int broj_kombinacija = int.Parse(Console.ReadLine());
+                int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
+                int broj_zabranjenih_brojeva = 5;
+
+                _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, broj_zabranjenih_brojeva);
             }
             else if (biranje_moda == "sve")
             {
                 int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
                 int duzina_kombinacije = int.Parse(Console.ReadLine());
 
-                int rezervisano_mesto = 15400000;   //REZERVISANJE MESTA
-                if (duzina_kombinacije == 6)
-                {
-                    if (broj_loptica == 39)
-                        rezervisano_mesto = 3300000;
-                    else if (broj_loptica == 44)
-                        rezervisano_mesto = 7100000;
-                    else if (broj_loptica == 45)
-                        rezervisano_mesto = 8200000;
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    if (broj_loptica == 35)
-                        rezervisano_mesto = 7000000;
-                    else if (broj_loptica == 37)
-                        rezervisano_mesto = 10300000;
-                    else if (broj_loptica == 39)
-                        rezervisano_mesto = 15400000;
-                }
-
-                int[][] brojevi = new int[15400000][];  //STVARANJE SVIH KOMBINACIJA
-                int[] trenutna_kombinacija = new int[7];
-                for (int i = 0; i < rezervisano_mesto; i++)
-                    brojevi[i] = new int[7];
-                int red = 0;
-                red = _generisi_kombinacije(brojevi, trenutna_kombinacija, red, 1, 1, broj_loptica, duzina_kombinacije);
-
-                int[] sume_kombinacija = new int[15400000]; //STVARANJE SUMA
-                int suma;
-                for (int i = 0; i < red; i++)
-                {
-                    suma = 0;
-                    for (int j = 0; j < duzina_kombinacije; j++)
-                        suma += brojevi[i][j];
-                    sume_kombinacija[i] = suma;
-                }
-                int suma_min = int.MinValue, suma_max = int.MaxValue;
-                if (duzina_kombinacije == 6)
-                {
-                    if (broj_loptica == 39)
-                    {
-                        suma_min = 79;
-                        suma_max = 159;
-                    }
-                    else if (broj_loptica == 44)
-                    {
-                        suma_min = 100;
-                        suma_max = 179;
-                    }
-                    else if (broj_loptica == 45)
-                    {
-                        suma_min = 100;
-                        suma_max = 179;
-                    }
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    if (broj_loptica == 35)
-                    {
-                        suma_min = 79;
-                        suma_max = 169;
-                    }
-                    else if (broj_loptica == 37)
-                    {
-                        suma_min = 79;
-                        suma_max = 179;
-                    }
-                    else if (broj_loptica == 39)
-                    {
-                        suma_min = 79;
-                        suma_max = 179;
-                    }
-                }
-
-                int[] razlike_kombinacija = new int[15400000]; //STVARANJE RAZLIKA
-                for (int i = 0; i < red; i++)
-                    razlike_kombinacija[i] = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
-                int razlika_min = int.MinValue, razlika_max = int.MaxValue;
-                if (duzina_kombinacije == 6)
-                {
-                    if (broj_loptica == 39)
-                    {
-                        razlika_min = 23;
-                        razlika_max = 37;
-                    }
-                    else if (broj_loptica == 44)
-                    {
-                        razlika_min = 24;
-                        razlika_max = 42;
-                    }
-                    else if (broj_loptica == 45)
-                    {
-                        razlika_min = 25;
-                        razlika_max = 43;
-                    }
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    if (broj_loptica == 35)
-                    {
-                        razlika_min = 21;
-                        razlika_max = 33;
-                    }
-                    else if (broj_loptica == 37)
-                    {
-                        razlika_min = 21;
-                        razlika_max = 35;
-                    }
-                    else if (broj_loptica == 39)
-                    {
-                        razlika_min = 23;
-                        razlika_max = 37;
-                    }
-                }
-
-                int[] broj_parnih_brojeva_kombinacija = new int[15400000];  //STVARANJE PARNIH
-                for (int i = 0; i < red; i++)
-                    broj_parnih_brojeva_kombinacija[i] = _broj_parnih(brojevi[i], duzina_kombinacije);
-                int parni_min = 0;
-                int parni_max = 0;
-                if (duzina_kombinacije == 6)
-                {
-                    parni_min = 2;
-                    parni_max = 4;
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    parni_min = 3;
-                    parni_max = 4;
-                }
-
-                int[] broj_malih_brojeva_kombinacija = new int[15400000];  //STVARANJE MALIH
-                int mali_min = 0;
-                int mali_max = 0;
-                int granica_malih = 0;
-                if (duzina_kombinacije == 6)
-                {
-                    mali_min = 2;
-                    mali_max = 4;
-
-                    if (broj_loptica == 39)
-                        granica_malih = 19;
-                    else if (broj_loptica == 44)
-                        granica_malih = 22;
-                    else if (broj_loptica == 45)
-                        granica_malih = 22;
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    mali_min = 3;
-                    mali_max = 4;
-
-                    if (broj_loptica == 35)
-                        granica_malih = 17;
-                    else if (broj_loptica == 37)
-                        granica_malih = 18;
-                    else if (broj_loptica == 39)
-                        granica_malih = 19;
-                }
-                for (int i = 0; i < red; i++)
-                    broj_malih_brojeva_kombinacija[i] = _broj_malih(brojevi[i], duzina_kombinacije, granica_malih);
-
-                int[][] zadnje_cifre = new int[15400000][];   //STVARANJE ZADNJIH CIFARA
-                for (int i = 0; i < red; i++)
-                {
-                    zadnje_cifre[i] = new int[10];
-                    for (int j = 0; j < duzina_kombinacije; j++)
-                        zadnje_cifre[i][brojevi[i][j] % 10]++;
-                }
-
-                int velicina_skupa = 0;
-                if (duzina_kombinacije == 6)
-                {
-                    if (broj_loptica == 39)
-                        velicina_skupa = 8;
-                    else if (broj_loptica == 44)
-                        velicina_skupa = 9;
-                    else if (broj_loptica == 45)
-                        velicina_skupa = 9;
-                }
-                else if (duzina_kombinacije == 7)
-                {
-                    if (broj_loptica == 35)
-                        velicina_skupa = 7;
-                    else if (broj_loptica == 37)
-                        velicina_skupa = 8;
-                    else if (broj_loptica == 39)
-                        velicina_skupa = 8;
-                }
-
-                int red2 = 0;
-                for (int i = 0; i < red; i++)   //IZBACIVANJE NEPOTREBNIH KOMBINACIJA
-                    if ((sume_kombinacija[i] <= suma_max) && (sume_kombinacija[i] >= suma_min)
-                    && (razlike_kombinacija[i] <= razlika_max) && (razlike_kombinacija[i] >= razlika_min)
-                    && (broj_parnih_brojeva_kombinacija[i] <= parni_max) && (broj_parnih_brojeva_kombinacija[i] >= parni_min)
-                    && (broj_malih_brojeva_kombinacija[i] <= mali_max) && (broj_malih_brojeva_kombinacija[i] >= mali_min)
-                    && (_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) == -1)
-                    && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) == -1)
-                    && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
-                    {
-                        for (int j = 0; j < duzina_kombinacije; j++)
-                            brojevi[red2][j] = brojevi[i][j];
-                        red2++;
-                    }
-
-                for (int i = 0; i < red2; i++)  //ISPIS
-                {
-                    Console.Write((i + 1) + ":\t");    //REDNI BROJEVI
-
-                    for (int j = 0; j < duzina_kombinacije; j++)    //KOMBINACIJE
-                        Console.Write(brojevi[i][j] + "\t");
-                    Console.Write("\n");
-
-                    /*if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)   //DA LI IMA PONAVLJANJA BROJEVA
-                        Console.Write("-1\t");
-                    else
-                        Console.Write(brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] + "\t");
-
-                    if ((sume_kombinacija[i] > suma_max) || (sume_kombinacija[i] < suma_min))   //DA LI JE SUMA U OPSEGU
-                        Console.Write("-1\t");
-                    else
-                        Console.Write(sume_kombinacija[i] + "\t");
-
-                    if ((razlike_kombinacija[i] > razlika_max) || (razlike_kombinacija[i] < razlika_min))   //RAZLIKA NAJMANJEG I NAJVECEG
-                        Console.Write("-1\n");
-                    else
-                        Console.Write(razlike_kombinacija[i] + "\n");
-
-                    if (broj_parnih_brojeva_kombinacija[i] < 0)   //BROJ PARNIH
-                        Console.Write("-1\n");
-                    else
-                        Console.Write(broj_parnih_brojeva_kombinacija[i] + "\n");
-
-                    if (broj_parnih_brojeva_kombinacija[i] < 0)   //BROJ MALIH
-                        Console.Write("-1\n");
-                    else
-                        Console.Write(broj_malih_brojeva_kombinacija[i] + "\n");
-
-                    if (_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) == -1)   //ZADNJE CIFRE
-                        Console.Write("-1\n");
-                    else
-                        Console.Write(_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) + "\n");
-
-                    if (_indeks_susedni(brojevi[i], duzina_kombinacije) == -1)   //ZADNJE CIFRE
-                        Console.Write("-1\n");
-                    else
-                        Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");
-
-                    if (_indeks_skupovi_visak(brojevi[i], duzina_kombinacije, velicina_skupa) == -1)   //ZADNJE CIFRE
-                        Console.Write("-1\n");
-                    else
-                        Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");*/
-                }
+                _sve_kombinacije(broj_loptica, duzina_kombinacije);
             }
         }
     }
