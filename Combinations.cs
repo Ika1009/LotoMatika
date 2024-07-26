@@ -400,7 +400,7 @@ namespace Loto_App
             Random random = new Random();
             int broj_kombinacija = kraj - pocetak + 1;
 
-            /*int brojac_parni = 0;   //RESAVANJE PARNIH
+            int brojac_parni = 0;   //RESAVANJE PARNIH
             int broj_dobrih_parnih1 = 0;
             int broj_dobrih_parnih2 = 0;
             bool svi_parni_su_dobri = false;
@@ -471,9 +471,9 @@ namespace Loto_App
                 }
 
                 brojac_mali++;
-            }*/
+            }
 
-            int brojac_dupli = 0;    //RESAVANJE DUPLIKATA  ///////////////////////////////////////////NE RADI
+            int brojac_dupli = 0;
             int broj_dobrih_duplih1 = 0;
             int broj_dobrih_duplih2 = 0;
             bool svi_duplikati_su_dobri = false;
@@ -496,7 +496,7 @@ namespace Loto_App
                     if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)
                     {
                         svi_duplikati_su_dobri = false;
-                        for (int j = (pocetak - 1); (j < kraj) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
+                        for (int j = (i + 1); (j < kraj) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
                             for (int k = 0; (k < duzina_kombinacije) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); k++)
                                 if (!_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                 && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)])
@@ -512,8 +512,42 @@ namespace Loto_App
 
                 brojac_dupli++;
             }
+            brojac_dupli = 1;
+            while (!svi_duplikati_su_dobri)
+            {
+                if (brojac_dupli % 10 == 0)
+                {
+                    broj_dobrih_duplih1 = broj_dobrih_duplih2;
+                    broj_dobrih_duplih2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)
+                            broj_dobrih_duplih2++;
+                    if (broj_dobrih_duplih2 <= broj_dobrih_duplih1)
+                        break;
+                }
 
-            /*int brojac_skupovi = 0;   //STVARANJE SKUPOVA
+                svi_duplikati_su_dobri = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
+                {
+                    if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)
+                    {
+                        svi_duplikati_su_dobri = false;
+                        for (int j = (i + 1); (j < kraj) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
+                            for (int k = 0; (k < duzina_kombinacije) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); k++)
+                                if (!_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)]))
+                                {
+                                    int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
+                                    brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][k];
+                                    brojevi[j][k] = temp;
+                                }
+                    }
+                }
+
+                brojac_dupli++;
+            }
+
+            int brojac_skupovi = 0;   //STVARANJE SKUPOVA
             int broj_dobrih_skupova1 = 0;
             int broj_dobrih_skupova2 = 0;
             bool svi_skupovi_su_dobri = false;
@@ -1199,7 +1233,7 @@ namespace Loto_App
                 }
 
                 brojac_razlika++;
-            }*/
+            }
         }
 
         static void _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
@@ -1327,47 +1361,39 @@ namespace Loto_App
             trenutni_broj = 1;
             int brojac = 0;
             bool broj_nadjen = false;
-            bool manjak_brojeva = false;
             for (int i = ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i < broj_brojeva; i++)
             {
-                if (!manjak_brojeva)
+                brojac = 0;
+                broj_nadjen = false;
+                while (broj_nadjen == false)
                 {
-                    brojac = 0;
-                    broj_nadjen = false;
-                    while (broj_nadjen == false)
+                    if (brojac == 100)
                     {
-                        if (brojac == 100)
+                        for (int j = 0; j < broj_loptica; j++)
                         {
-                            manjak_brojeva = true;
-                            break;
+                            upotrebljeni_brojevi[j] = false;
+                            if (broj_zabranjenih_brojeva != -1)
+                                for (int k = 0; k < broj_zabranjenih_brojeva; k++)
+                                    if ((j + 1) == zabranjeni_brojevi[k])
+                                        upotrebljeni_brojevi[j] = true;
+                            if (broj_omiljenih_brojeva != -1)
+                                for (int k = 0; k < broj_omiljenih_brojeva; k++)
+                                    if ((j + 1) == omiljeni_brojevi[k])
+                                        upotrebljeni_brojevi[j] = true;
                         }
-
-                        if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
-                            trenutni_broj++;
-                        else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
-                            trenutni_broj++;
-                        else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
-                            trenutni_broj++;
-                        else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
-                            trenutni_broj++;
-                        else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
-                            trenutni_broj++;
-                        else
-                        {
-                            if (trenutni_broj > broj_loptica)
-                                trenutni_broj = 1;
-                            broj_nadjen = true;
-                            upotrebljeni_brojevi[trenutni_broj - 1] = true;
-                        }
-                        if (trenutni_broj > broj_loptica)
-                            trenutni_broj = 1;
-
-                        brojac++;
+                        brojac = 0;
+                        trenutni_broj = 1;
                     }
-                }
-                else if (manjak_brojeva)
-                {
+
                     if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
+                        trenutni_broj++;
+                    else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
+                        trenutni_broj++;
+                    else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
+                        trenutni_broj++;
+                    else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
+                        trenutni_broj++;
+                    else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
                         trenutni_broj++;
                     else
                     {
@@ -1378,6 +1404,8 @@ namespace Loto_App
                     }
                     if (trenutni_broj > broj_loptica)
                         trenutni_broj = 1;
+
+                    brojac++;
                 }
 
                 if (trenutni_broj % 2 == 0)
@@ -1394,7 +1422,7 @@ namespace Loto_App
             }
 
             Random random = new Random();  //MESANJE BROJEVA
-            /*for (int i = broj_brojeva - 1; i > 0; i--)
+            for (int i = broj_brojeva - 1; i > 0; i--)
             {
                 int j = random.Next(0, i + 1);
 
@@ -1406,7 +1434,7 @@ namespace Loto_App
                 int temp = brojevi[red_i][kolona_i];
                 brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
                 brojevi[red_j][kolona_j] = temp;
-            }*/
+            }
 
             int suma_min = int.MinValue, suma_max = int.MaxValue;
             if (duzina_kombinacije == 6)
@@ -2006,7 +2034,7 @@ namespace Loto_App
                 int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
                 int broj_zabranjenih_brojeva = 5;
                 int[] omiljeni_brojevi = new int[] { 2, 19 };
-                int broj_omiljenih_brojeva = 2;
+                int broj_omiljenih_brojeva = -1;
                 int procenat_pojavljivanja_omiljenih_brojeva = 100;
 
                 _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, broj_zabranjenih_brojeva, omiljeni_brojevi, broj_omiljenih_brojeva, procenat_pojavljivanja_omiljenih_brojeva);
