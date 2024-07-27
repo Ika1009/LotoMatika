@@ -395,7 +395,7 @@ namespace Loto_App
             return red;
         }
 
-        static void _resi_100_kombinacija(int[][] brojevi, int[] sume_kombinacija, int[] razlike_kombinacija, int pocetak, int kraj, int duzina_kombinacije, int broj_loptica, int granica_malih, int suma_min, int suma_max, int razlika_min, int razlika_max, int[] broj_parnih_brojeva_kombinacija, int[] broj_malih_brojeva_kombinacija, int velicina_skupa, bool[] petoskupovna_kombinacija, bool[] sa_susednima_kombinacija, bool[] sa_zadnjim_ciframa_kombinacija)
+        static void _resi_100_kombinacija(int[][] brojevi, int[] sume_kombinacija, int[] razlike_kombinacija, int pocetak, int kraj, int duzina_kombinacije, int broj_loptica, int granica_malih, int suma_min, int suma_max, int razlika_min, int razlika_max, int[] broj_parnih_brojeva_kombinacija, int[] broj_malih_brojeva_kombinacija, int velicina_skupa, bool[] petoskupovna_kombinacija, bool[] sa_susednima_kombinacija, bool[] sa_zadnjim_ciframa_kombinacija, int[] omiljeni_brojevi, int broj_omiljenih_brojeva)
         {
             Random random = new Random();
             int broj_kombinacija = kraj - pocetak + 1;
@@ -424,7 +424,10 @@ namespace Loto_App
                     {
                         svi_parni_su_dobri = false;
                         for (int j = (pocetak - 1); (j < kraj) && (broj_parnih_brojeva_kombinacija[i] < _broj_parnih(brojevi[i], duzina_kombinacije)); j++)
-                            if (broj_parnih_brojeva_kombinacija[j] > _broj_parnih(brojevi[j], duzina_kombinacije))
+                            if ((broj_parnih_brojeva_kombinacija[j] > _broj_parnih(brojevi[j], duzina_kombinacije))
+                            && ((broj_omiljenih_brojeva == -1)
+                            || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)] != omiljeni_brojevi[0]))
+                            || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)] != omiljeni_brojevi[1]))))
                             {
                                 int temp = brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)];
                                 brojevi[i][_indeks_parni(brojevi[i], duzina_kombinacije)] = brojevi[j][_indeks_neparni(brojevi[j], duzina_kombinacije)];
@@ -461,7 +464,10 @@ namespace Loto_App
                         svi_mali_su_dobri = false;
                         for (int j = (pocetak - 1); (j < kraj) && (broj_malih_brojeva_kombinacija[i] < _broj_malih(brojevi[i], duzina_kombinacije, granica_malih)); j++)
                             if (broj_malih_brojeva_kombinacija[j] > _broj_malih(brojevi[j], duzina_kombinacije, granica_malih)
-                            && ((brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] % 2) == (brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] % 2)))
+                            && ((brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] % 2) == (brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] % 2))
+                            && ((broj_omiljenih_brojeva == -1)
+                            || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] != omiljeni_brojevi[0]) && (brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] != omiljeni_brojevi[0]))
+                            || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] != omiljeni_brojevi[0]) && (brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] != omiljeni_brojevi[1]) && (brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)] != omiljeni_brojevi[1]))))
                             {
                                 int temp = brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)];
                                 brojevi[i][_indeks_mali(brojevi[i], duzina_kombinacije, granica_malih)] = brojevi[j][_indeks_veliki(brojevi[j], duzina_kombinacije, granica_malih)];
@@ -473,10 +479,51 @@ namespace Loto_App
                 brojac_mali++;
             }
 
-            int brojac_dupli = 0;
-            int broj_dobrih_duplih1 = 0;
+            int brojac_dupli = 0;   //RESAVANJE DUPLIH
+            int broj_dobrih_duplih1 = -1;
             int broj_dobrih_duplih2 = 0;
             bool svi_duplikati_su_dobri = false;
+            while (!svi_duplikati_su_dobri)
+            {
+                if (brojac_dupli % 10 == 0)
+                {
+                    broj_dobrih_duplih1 = broj_dobrih_duplih2;
+                    broj_dobrih_duplih2 = 0;
+                    for (int i = (pocetak - 1); i < kraj; i++)
+                        if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)
+                            broj_dobrih_duplih2++;
+                    if ((broj_dobrih_duplih2 <= broj_dobrih_duplih1))
+                        break;
+                }
+
+                svi_duplikati_su_dobri = true;
+                for (int i = (pocetak - 1); i < kraj; i++)
+                {
+                    if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)
+                    {
+                        svi_duplikati_su_dobri = false;
+                        for (int j = (i + 1); (j < kraj) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
+                            for (int k = 0; (k < duzina_kombinacije) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); k++)
+                                if (!_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
+                                && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)])
+                                && ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] % 2) == (brojevi[j][k] % 2))
+                                && (((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                && ((broj_omiljenih_brojeva == -1)
+                                || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
+                                {
+                                    int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
+                                    brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][k];
+                                    brojevi[j][k] = temp;
+                                }
+                    }
+                }
+
+                brojac_dupli++;
+            }
+            brojac_dupli = 1;
+            broj_dobrih_duplih1 = 0;
+            broj_dobrih_duplih2 = -1;
             while (!svi_duplikati_su_dobri)
             {
                 if (brojac_dupli % 10 == 0)
@@ -500,42 +547,9 @@ namespace Loto_App
                             for (int k = 0; (k < duzina_kombinacije) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); k++)
                                 if (!_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                 && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)])
-                                && ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] % 2) == (brojevi[j][k] % 2))
-                                && (((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] > granica_malih) && (brojevi[j][k] > granica_malih))))
-                                {
-                                    int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
-                                    brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][k];
-                                    brojevi[j][k] = temp;
-                                }
-                    }
-                }
-
-                brojac_dupli++;
-            }
-            brojac_dupli = 1;
-            while (!svi_duplikati_su_dobri)
-            {
-                if (brojac_dupli % 10 == 0)
-                {
-                    broj_dobrih_duplih1 = broj_dobrih_duplih2;
-                    broj_dobrih_duplih2 = 0;
-                    for (int i = (pocetak - 1); i < kraj; i++)
-                        if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) == -1)
-                            broj_dobrih_duplih2++;
-                    if (broj_dobrih_duplih2 <= broj_dobrih_duplih1)
-                        break;
-                }
-
-                svi_duplikati_su_dobri = true;
-                for (int i = (pocetak - 1); i < kraj; i++)
-                {
-                    if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)
-                    {
-                        svi_duplikati_su_dobri = false;
-                        for (int j = (i + 1); (j < kraj) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); j++)
-                            for (int k = 0; (k < duzina_kombinacije) && (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1); k++)
-                                if (!_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
-                                && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)]))
+                                && ((broj_omiljenih_brojeva == -1)
+                                || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                 {
                                     int temp = brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)];
                                     brojevi[i][_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica)] = brojevi[j][k];
@@ -598,7 +612,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][nasumicni_element];
                                         brojevi[i][nasumicni_element] = brojevi[j][k];
@@ -629,7 +646,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)];
                                         brojevi[i][_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
@@ -662,7 +682,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)];
                                         brojevi[i][_indeks_skupovi_visak_5(brojevi[i], duzina_kombinacije, velicina_skupa)] = brojevi[j][k];
@@ -729,7 +752,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][nasumicni_element];
                                         brojevi[i][nasumicni_element] = brojevi[j][k];
@@ -765,7 +791,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)];
                                         brojevi[i][_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
@@ -803,7 +832,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)];
                                         brojevi[i][_indeks_susedni_1_par(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
@@ -875,7 +907,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][nasumicni_element])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][nasumicni_element] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][nasumicni_element];
                                         brojevi[i][nasumicni_element] = brojevi[j][k];
@@ -916,7 +951,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)];
                                         brojevi[i][_indeks_zadnja_cifra_2_plus(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
@@ -959,7 +997,10 @@ namespace Loto_App
                                     && !_poseduje_element(brojevi[j], duzina_kombinacije, brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)])
                                     && !_poseduje_element(brojevi[i], duzina_kombinacije, brojevi[j][k])
                                     && ((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] % 2) == (brojevi[j][k] % 2))
-                                    && (((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih))))
+                                    && (((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         int temp = brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)];
                                         brojevi[i][_indeks_zadnja_cifra_1(brojevi[i], duzina_kombinacije)] = brojevi[j][k];
@@ -1013,7 +1054,10 @@ namespace Loto_App
                                 && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
                                 && (((brojevi[i][nasumicni_element] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
                                 && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                && ((broj_omiljenih_brojeva == -1)
+                                || ((broj_omiljenih_brojeva == 1) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                || ((broj_omiljenih_brojeva == 2) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                 {
                                     int temp = brojevi[i][nasumicni_element];
                                     brojevi[i][nasumicni_element] = brojevi[j][k];
@@ -1041,7 +1085,10 @@ namespace Loto_App
                                 && (((brojevi[i][nasumicni_element] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (brojevi[j][k] > granica_malih)))
                                 && (((brojevi[i][nasumicni_element] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
                                 && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][nasumicni_element]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                && ((broj_omiljenih_brojeva == -1)
+                                || ((broj_omiljenih_brojeva == 1) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                || ((broj_omiljenih_brojeva == 2) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][nasumicni_element] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                 {
                                     int temp = brojevi[i][nasumicni_element];
                                     brojevi[i][nasumicni_element] = brojevi[j][k];
@@ -1108,7 +1155,10 @@ namespace Loto_App
                                     && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
                                     && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
                                     && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         sume_kombinacija[i] = nova_suma1;
                                         sume_kombinacija[j] = nova_suma2;
@@ -1141,7 +1191,9 @@ namespace Loto_App
                                     && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
                                     && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
                                     && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])) && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         sume_kombinacija[i] = nova_suma1;
                                         sume_kombinacija[j] = nova_suma2;
@@ -1183,7 +1235,10 @@ namespace Loto_App
                                     && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
                                     && (((brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
                                     && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         sume_kombinacija[i] = nova_suma1;
                                         sume_kombinacija[j] = nova_suma2;
@@ -1216,7 +1271,10 @@ namespace Loto_App
                                     && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] <= granica_malih) && (brojevi[j][k] <= granica_malih)) || ((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] > granica_malih) && (brojevi[j][k] > granica_malih)))
                                     && (((brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] / velicina_skupa) - 1) == ((brojevi[j][k] / velicina_skupa) - 1))
                                     && (_broj_susednih_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_susednih_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
-                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k])))
+                                    && (_broj_zadnjih_cifara_elemenata(brojevi[i], duzina_kombinacije, brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)]) == _broj_zadnjih_cifara_elemenata(brojevi[j], duzina_kombinacije, brojevi[j][k]))
+                                    && ((broj_omiljenih_brojeva == -1)
+                                    || ((broj_omiljenih_brojeva == 1) && (brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]))
+                                    || ((broj_omiljenih_brojeva == 2) && (brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[0]) && (brojevi[j][k] != omiljeni_brojevi[0]) && (brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] != omiljeni_brojevi[1]) && (brojevi[j][k] != omiljeni_brojevi[1]))))
                                     {
                                         sume_kombinacija[i] = nova_suma1;
                                         sume_kombinacija[j] = nova_suma2;
@@ -1296,8 +1354,9 @@ namespace Loto_App
                 pocetak_kruga = 0;
             else
                 pocetak_kruga = (broj_omiljenih_brojeva * broj_kombinacija / indeks_deljenja);
-            if (broj_omiljenih_brojeva != -1)
-                for (int i = 0; i < pocetak_kruga; i++)
+            for (int i = 0; i < ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i++)
+            {
+                if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0)) || ((broj_omiljenih_brojeva == 2) && ((i % duzina_kombinacije == 0) || (i % duzina_kombinacije == 1))))
                 {
                     if (indeks_omiljenog_broja == broj_omiljenih_brojeva)
                         indeks_omiljenog_broja = 0;
@@ -1315,125 +1374,188 @@ namespace Loto_App
                     brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = omiljeni_brojevi[indeks_omiljenog_broja];
                     indeks_omiljenog_broja++;
                 }
-            for (int i = pocetak_kruga; i < ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i++)
-            {
-                if (trenutni_broj > broj_loptica)
-                    trenutni_broj = 1;
-
-                moguc_broj = false;
-                while (!moguc_broj)
+                else
                 {
-                    moguc_broj = true;
-                    if (broj_zabranjenih_brojeva != -1)
+                    if (trenutni_broj > broj_loptica)
+                        trenutni_broj = 1;
+
+                    moguc_broj = false;
+                    while (!moguc_broj)
                     {
-                        for (int j = 0; j < broj_zabranjenih_brojeva; j++)
-                            if (trenutni_broj == zabranjeni_brojevi[j])
-                            {
-                                trenutni_broj++;
-                                moguc_broj = false;
-                            }
+                        moguc_broj = true;
+                        if (broj_zabranjenih_brojeva != -1)
+                        {
+                            for (int j = 0; j < broj_zabranjenih_brojeva; j++)
+                                if (trenutni_broj == zabranjeni_brojevi[j])
+                                {
+                                    trenutni_broj++;
+                                    moguc_broj = false;
+                                }
+                        }
+                        if (broj_omiljenih_brojeva != -1)
+                        {
+                            for (int j = 0; j < broj_omiljenih_brojeva; j++)
+                                if (trenutni_broj == omiljeni_brojevi[j])
+                                {
+                                    trenutni_broj++;
+                                    moguc_broj = false;
+                                }
+                        }
                     }
-                    if (broj_omiljenih_brojeva != -1)
-                    {
-                        for (int j = 0; j < broj_omiljenih_brojeva; j++)
-                            if (trenutni_broj == omiljeni_brojevi[j])
-                            {
-                                trenutni_broj++;
-                                moguc_broj = false;
-                            }
-                    }
+
+                    if ((trenutni_broj % 2) == 0)
+                        ukupan_broj_parnih++;
+                    else if ((trenutni_broj % 2) != 0)
+                        ukupan_broj_neparnih++;
+                    if (trenutni_broj <= granica_malih)
+                        ukupan_broj_malih++;
+                    else if (trenutni_broj > granica_malih)
+                        ukupan_broj_velikih++;
+                    if (i % duzina_kombinacije == 0)
+                        brojevi[i / duzina_kombinacije] = new int[7];
+                    brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
+
+                    trenutni_broj++;
                 }
-
-                if ((trenutni_broj % 2) == 0)
-                    ukupan_broj_parnih++;
-                else if ((trenutni_broj % 2) != 0)
-                    ukupan_broj_neparnih++;
-                if (trenutni_broj <= granica_malih)
-                    ukupan_broj_malih++;
-                else if (trenutni_broj > granica_malih)
-                    ukupan_broj_velikih++;
-                if (i % duzina_kombinacije == 0)
-                    brojevi[i / duzina_kombinacije] = new int[7];
-                brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
-
-                trenutni_broj++;
             }
             trenutni_broj = 1;
             int brojac = 0;
             bool broj_nadjen = false;
             for (int i = ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i < broj_brojeva; i++)
             {
-                brojac = 0;
-                broj_nadjen = false;
-                while (broj_nadjen == false)
+                if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0)) || ((broj_omiljenih_brojeva == 2) && ((i % duzina_kombinacije == 0) || (i % duzina_kombinacije == 1))))
                 {
-                    if (brojac == 100)
-                    {
-                        for (int j = 0; j < broj_loptica; j++)
-                        {
-                            upotrebljeni_brojevi[j] = false;
-                            if (broj_zabranjenih_brojeva != -1)
-                                for (int k = 0; k < broj_zabranjenih_brojeva; k++)
-                                    if ((j + 1) == zabranjeni_brojevi[k])
-                                        upotrebljeni_brojevi[j] = true;
-                            if (broj_omiljenih_brojeva != -1)
-                                for (int k = 0; k < broj_omiljenih_brojeva; k++)
-                                    if ((j + 1) == omiljeni_brojevi[k])
-                                        upotrebljeni_brojevi[j] = true;
-                        }
-                        brojac = 0;
-                        trenutni_broj = 1;
-                    }
+                    if (indeks_omiljenog_broja == broj_omiljenih_brojeva)
+                        indeks_omiljenog_broja = 0;
 
-                    if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
-                        trenutni_broj++;
-                    else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
-                        trenutni_broj++;
-                    else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
-                        trenutni_broj++;
-                    else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
-                        trenutni_broj++;
-                    else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
-                        trenutni_broj++;
-                    else
+                    if ((omiljeni_brojevi[indeks_omiljenog_broja] % 2) == 0)
+                        ukupan_broj_parnih++;
+                    else if ((omiljeni_brojevi[indeks_omiljenog_broja] % 2) != 0)
+                        ukupan_broj_neparnih++;
+                    if (omiljeni_brojevi[indeks_omiljenog_broja] <= granica_malih)
+                        ukupan_broj_malih++;
+                    else if (omiljeni_brojevi[indeks_omiljenog_broja] > granica_malih)
+                        ukupan_broj_velikih++;
+                    if (i % duzina_kombinacije == 0)
+                        brojevi[i / duzina_kombinacije] = new int[7];
+                    brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = omiljeni_brojevi[indeks_omiljenog_broja];
+                    indeks_omiljenog_broja++;
+                }
+                else
+                {
+                    brojac = 0;
+                    broj_nadjen = false;
+                    while (broj_nadjen == false)
                     {
+                        if (brojac == 100)
+                        {
+                            for (int j = 0; j < broj_loptica; j++)
+                            {
+                                upotrebljeni_brojevi[j] = false;
+                                if (broj_zabranjenih_brojeva != -1)
+                                    for (int k = 0; k < broj_zabranjenih_brojeva; k++)
+                                        if ((j + 1) == zabranjeni_brojevi[k])
+                                            upotrebljeni_brojevi[j] = true;
+                                if (broj_omiljenih_brojeva != -1)
+                                    for (int k = 0; k < broj_omiljenih_brojeva; k++)
+                                        if ((j + 1) == omiljeni_brojevi[k])
+                                            upotrebljeni_brojevi[j] = true;
+                            }
+                            brojac = 0;
+                            trenutni_broj = 1;
+                        }
+
+                        if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
+                            trenutni_broj++;
+                        else if ((trenutni_broj % 2 == 0) && (ukupan_broj_parnih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if ((trenutni_broj % 2 != 0) && (ukupan_broj_neparnih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if (trenutni_broj <= granica_malih && (ukupan_broj_malih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else if (trenutni_broj > granica_malih && (ukupan_broj_velikih * 2 == broj_brojeva))
+                            trenutni_broj++;
+                        else
+                        {
+                            if (trenutni_broj > broj_loptica)
+                                trenutni_broj = 1;
+                            broj_nadjen = true;
+                            upotrebljeni_brojevi[trenutni_broj - 1] = true;
+                        }
                         if (trenutni_broj > broj_loptica)
                             trenutni_broj = 1;
-                        broj_nadjen = true;
-                        upotrebljeni_brojevi[trenutni_broj - 1] = true;
+
+                        brojac++;
                     }
-                    if (trenutni_broj > broj_loptica)
-                        trenutni_broj = 1;
 
-                    brojac++;
+                    if (trenutni_broj % 2 == 0)
+                        ukupan_broj_parnih++;
+                    else if (trenutni_broj % 2 != 0)
+                        ukupan_broj_neparnih++;
+                    if (trenutni_broj <= granica_malih)
+                        ukupan_broj_malih++;
+                    else if (trenutni_broj > granica_malih)
+                        ukupan_broj_velikih++;
+                    if (i % duzina_kombinacije == 0)
+                        brojevi[i / duzina_kombinacije] = new int[7];
+                    brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
                 }
-
-                if (trenutni_broj % 2 == 0)
-                    ukupan_broj_parnih++;
-                else if (trenutni_broj % 2 != 0)
-                    ukupan_broj_neparnih++;
-                if (trenutni_broj <= granica_malih)
-                    ukupan_broj_malih++;
-                else if (trenutni_broj > granica_malih)
-                    ukupan_broj_velikih++;
-                if (i % duzina_kombinacije == 0)
-                    brojevi[i / duzina_kombinacije] = new int[7];
-                brojevi[i / duzina_kombinacije][i % duzina_kombinacije] = trenutni_broj;
             }
 
             Random random = new Random();  //MESANJE BROJEVA
-            for (int i = broj_brojeva - 1; i > 0; i--)
+            if (broj_omiljenih_brojeva == -1)
             {
-                int j = random.Next(0, i + 1);
+                for (int i = broj_brojeva - 1; i > 0; i--)
+                {
+                    int j = random.Next(0, i + 1);
 
-                int red_i = i / duzina_kombinacije;
-                int kolona_i = i % duzina_kombinacije;
-                int red_j = j / duzina_kombinacije;
-                int kolona_j = j % duzina_kombinacije;
+                    int red_i = i / duzina_kombinacije;
+                    int kolona_i = i % duzina_kombinacije;
+                    int red_j = j / duzina_kombinacije;
+                    int kolona_j = j % duzina_kombinacije;
 
-                int temp = brojevi[red_i][kolona_i];
-                brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
-                brojevi[red_j][kolona_j] = temp;
+                    int temp = brojevi[red_i][kolona_i];
+                    brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
+                    brojevi[red_j][kolona_j] = temp;
+                }
+            }
+            else if (broj_omiljenih_brojeva == 1)
+            {
+                for (int i = broj_brojeva - 1; i > 0; i--)
+                {
+                    int j = random.Next(0, i + 1);
+
+                    int red_i = i / duzina_kombinacije;
+                    int kolona_i = i % duzina_kombinacije;
+                    int red_j = j / duzina_kombinacije;
+                    int kolona_j = j % duzina_kombinacije;
+                    if (kolona_i <= 0)
+                        kolona_i = 1;
+                    if (kolona_j <= 0)
+                        kolona_j = 1;
+                    int temp = brojevi[red_i][kolona_i];
+                    brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
+                    brojevi[red_j][kolona_j] = temp;
+                }
+            }
+            else if (broj_omiljenih_brojeva == 2)
+            {
+                for (int i = broj_brojeva - 1; i > 0; i--)
+                {
+                    int j = random.Next(0, i + 1);
+
+                    int red_i = i / duzina_kombinacije;
+                    int kolona_i = i % duzina_kombinacije;
+                    int red_j = j / duzina_kombinacije;
+                    int kolona_j = j % duzina_kombinacije;
+                    if (kolona_i <= 1)
+                        kolona_i = 2;
+                    if (kolona_j <= 1)
+                        kolona_j = 2;
+                    int temp = brojevi[red_i][kolona_i];
+                    brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
+                    brojevi[red_j][kolona_j] = temp;
+                }
             }
 
             int suma_min = int.MinValue, suma_max = int.MaxValue;
@@ -1687,14 +1809,121 @@ namespace Loto_App
                 krajnja_kombinacija = broj_kombinacija;
             while (pocetna_kombinacija <= broj_kombinacija)
             {
-                _resi_100_kombinacija(brojevi, sume_kombinacija, razlike_kombinacija, pocetna_kombinacija, krajnja_kombinacija, duzina_kombinacije, broj_loptica, granica_malih, suma_min, suma_max, razlika_min, razlika_max, broj_parnih_brojeva_kombinacija, broj_malih_brojeva_kombinacija, velicina_skupa, petoskupovna_kombinacija, sa_susednima_kombinacija, sa_zadnjim_ciframa_kombinacija);
+                _resi_100_kombinacija(brojevi, sume_kombinacija, razlike_kombinacija, pocetna_kombinacija, krajnja_kombinacija, duzina_kombinacije, broj_loptica, granica_malih, suma_min, suma_max, razlika_min, razlika_max, broj_parnih_brojeva_kombinacija, broj_malih_brojeva_kombinacija, velicina_skupa, petoskupovna_kombinacija, sa_susednima_kombinacija, sa_zadnjim_ciframa_kombinacija, omiljeni_brojevi, broj_omiljenih_brojeva);
                 pocetna_kombinacija += 100;
                 krajnja_kombinacija += 100;
                 if (krajnja_kombinacija > broj_kombinacija)
                     krajnja_kombinacija = broj_kombinacija;
             }
 
-            for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
+            int[][] dobri_brojevi = new int[15400000][];    //ODRADJIVANJE ALGORITMA CISCENJE
+            int broj_dobrih = 101;
+            int[][] losi_brojevi = new int[15400000][];
+            int broj_losih = 101;
+            int[] sume_kombinacija_dobre = new int[15400000];
+            int[] sume_kombinacija_lose = new int[15400000];
+            int[] razlike_kombinacija_dobre = new int[15400000];
+            int[] razlike_kombinacija_lose = new int[15400000];
+            int[] broj_parnih_brojeva_kombinacija_dobre = new int[15400000];
+            int[] broj_parnih_brojeva_kombinacija_lose = new int[15400000];
+            int[] broj_malih_brojeva_kombinacija_dobre = new int[15400000];
+            int[] broj_malih_brojeva_kombinacija_lose = new int[15400000];
+            bool[] petoskupovna_kombinacija_dobre = new bool[15400000];
+            bool[] petoskupovna_kombinacija_lose = new bool[15400000];
+            bool[] sa_susednima_kombinacija_dobre = new bool[15400000];
+            bool[] sa_susednima_kombinacija_lose = new bool[15400000];
+            bool[] sa_zadnjim_ciframa_kombinacija_dobre = new bool[15400000];
+            bool[] sa_zadnjim_ciframa_kombinacija_lose = new bool[15400000];
+            brojac = 0;
+            while (broj_losih > 100)
+            {
+                if (brojac > 2)
+                    break;
+
+                broj_dobrih = 0;    //RAZLAGANJE
+                broj_losih = 0;
+                for (int i = 0; i < broj_kombinacija; i++)
+                {
+                    if ((_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)
+                       || (broj_parnih_brojeva_kombinacija[i] != _broj_parnih(brojevi[i], duzina_kombinacije))
+                       || (broj_malih_brojeva_kombinacija[i] != _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
+                       || ((sume_kombinacija[i] < suma_min) && (sume_kombinacija[i] > suma_max))
+                       || ((razlike_kombinacija[i] < razlika_min) && (razlike_kombinacija[i] > razlika_max))
+
+                       )
+                    {
+                        losi_brojevi[broj_losih] = new int[7];
+                        for (int j = 0; j < duzina_kombinacije; j++)
+                            losi_brojevi[broj_losih][j] = brojevi[i][j];
+                        sume_kombinacija_lose[broj_losih] = sume_kombinacija[i];
+                        razlike_kombinacija_lose[broj_losih] = razlike_kombinacija[i];
+                        broj_parnih_brojeva_kombinacija_lose[broj_losih] = broj_parnih_brojeva_kombinacija[i];
+                        broj_malih_brojeva_kombinacija_lose[broj_losih] = broj_malih_brojeva_kombinacija[i];
+                        petoskupovna_kombinacija_lose[broj_losih] = petoskupovna_kombinacija[i];
+                        sa_susednima_kombinacija_lose[broj_losih] = sa_susednima_kombinacija[i];
+                        sa_zadnjim_ciframa_kombinacija_lose[broj_losih] = sa_zadnjim_ciframa_kombinacija[i];
+
+                        broj_losih++;
+                    }
+                    else
+                    {
+                        dobri_brojevi[broj_dobrih] = new int[7];
+                        for (int j = 0; j < duzina_kombinacije; j++)
+                            dobri_brojevi[broj_dobrih][j] = brojevi[i][j];
+                        sume_kombinacija_dobre[broj_dobrih] = sume_kombinacija[i];
+                        razlike_kombinacija_dobre[broj_dobrih] = razlike_kombinacija[i];
+                        broj_parnih_brojeva_kombinacija_dobre[broj_dobrih] = broj_parnih_brojeva_kombinacija[i];
+                        broj_malih_brojeva_kombinacija_dobre[broj_dobrih] = broj_malih_brojeva_kombinacija[i];
+                        petoskupovna_kombinacija_dobre[broj_dobrih] = petoskupovna_kombinacija[i];
+                        sa_susednima_kombinacija_dobre[broj_dobrih] = sa_susednima_kombinacija[i];
+                        sa_zadnjim_ciframa_kombinacija_dobre[broj_dobrih] = sa_zadnjim_ciframa_kombinacija[i];
+
+                        broj_dobrih++;
+                    }
+                }
+
+                pocetna_kombinacija = 1;    //RESAVANJE
+                krajnja_kombinacija = 100;
+                if (krajnja_kombinacija > broj_losih)
+                    krajnja_kombinacija = broj_losih;
+                while (pocetna_kombinacija <= broj_losih)
+                {
+                    _resi_100_kombinacija(losi_brojevi, sume_kombinacija_lose, razlike_kombinacija_lose, pocetna_kombinacija, krajnja_kombinacija, duzina_kombinacije, broj_loptica, granica_malih, suma_min, suma_max, razlika_min, razlika_max, broj_parnih_brojeva_kombinacija_lose, broj_malih_brojeva_kombinacija_lose, velicina_skupa, petoskupovna_kombinacija_lose, sa_susednima_kombinacija_lose, sa_zadnjim_ciframa_kombinacija_lose, omiljeni_brojevi, broj_omiljenih_brojeva);
+                    pocetna_kombinacija += 100;
+                    krajnja_kombinacija += 100;
+                    if (krajnja_kombinacija > broj_losih)
+                        krajnja_kombinacija = broj_losih;
+                }
+
+                for (int i = 0; i < broj_dobrih; i++)  //SASTAVLJANJE
+                {
+                    for (int j = 0; j < duzina_kombinacije; j++)
+                        brojevi[i][j] = dobri_brojevi[i][j];
+                    sume_kombinacija[i] = sume_kombinacija_dobre[i];
+                    razlike_kombinacija[i] = razlike_kombinacija_dobre[i];
+                    broj_parnih_brojeva_kombinacija[i] = broj_parnih_brojeva_kombinacija_dobre[i];
+                    broj_malih_brojeva_kombinacija[i] = broj_malih_brojeva_kombinacija_dobre[i];
+                    petoskupovna_kombinacija[i] = petoskupovna_kombinacija_dobre[i];
+                    sa_susednima_kombinacija[i] = sa_susednima_kombinacija_dobre[i];
+                    sa_zadnjim_ciframa_kombinacija[i] = sa_zadnjim_ciframa_kombinacija_dobre[i];
+                }
+                for (int i = broj_dobrih; i < broj_kombinacija; i++)
+                {
+                    for (int j = 0; j < duzina_kombinacije; j++)
+                        brojevi[i][j] = losi_brojevi[i - broj_dobrih][j];
+                    sume_kombinacija[i] = sume_kombinacija_lose[i - broj_dobrih];
+                    razlike_kombinacija[i] = razlike_kombinacija_lose[i - broj_dobrih];
+                    broj_parnih_brojeva_kombinacija[i] = broj_parnih_brojeva_kombinacija_lose[i - broj_dobrih];
+                    broj_malih_brojeva_kombinacija[i] = broj_malih_brojeva_kombinacija_lose[i - broj_dobrih];
+                    petoskupovna_kombinacija[i] = petoskupovna_kombinacija_lose[i - broj_dobrih];
+                    sa_susednima_kombinacija[i] = sa_susednima_kombinacija_lose[i - broj_dobrih];
+                    sa_zadnjim_ciframa_kombinacija[i] = sa_zadnjim_ciframa_kombinacija_lose[i - broj_dobrih];
+                }
+
+                brojac++;
+            }
+
+            /*for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
             {
                 Console.Write((i + 1) + ": ");    //REDNI BROJEVI
 
@@ -1762,7 +1991,7 @@ namespace Loto_App
                     Console.Write("+\n");
                 else
                     Console.Write("-\n");
-            }
+            }*/
         }
 
         static void _sve_kombinacije(int broj_loptica, int duzina_kombinacije)
@@ -1972,7 +2201,7 @@ namespace Loto_App
                     red2++;
                 }
 
-            for (int i = 0; i < red2; i++)  //ISPIS
+            /*for (int i = 0; i < red2; i++)  //ISPIS
             {
                 Console.Write((i + 1) + ":\t");    //REDNI BROJEVI
 
@@ -2018,34 +2247,8 @@ namespace Loto_App
                 if (_indeks_skupovi_visak(brojevi[i], duzina_kombinacije, velicina_skupa) == -1)   //ZADNJE CIFRE
                     Console.Write("-1\n");
                 else
-                    Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");*/
-            }
-        }
-
-        static void Mainara(string[] args)
-        {
-            string biranje_moda = Console.ReadLine();  //BIRANJE MODA
-
-            if (biranje_moda == "neke")
-            {
-                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
-                int duzina_kombinacije = int.Parse(Console.ReadLine());
-                int broj_kombinacija = int.Parse(Console.ReadLine());
-                int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
-                int broj_zabranjenih_brojeva = 5;
-                int[] omiljeni_brojevi = new int[] { 2, 19 };
-                int broj_omiljenih_brojeva = -1;
-                int procenat_pojavljivanja_omiljenih_brojeva = 100;
-
-                _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, broj_zabranjenih_brojeva, omiljeni_brojevi, broj_omiljenih_brojeva, procenat_pojavljivanja_omiljenih_brojeva);
-            }
-            else if (biranje_moda == "sve")
-            {
-                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
-                int duzina_kombinacije = int.Parse(Console.ReadLine());
-
-                _sve_kombinacije(broj_loptica, duzina_kombinacije);
-            }
+                    Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");
+            }*/
         }
     }
 }
