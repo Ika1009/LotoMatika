@@ -31,8 +31,8 @@
 
         <TextBlock Text="Softver je iz igre izbacio ukupno …. kombinacija, kako bi vam omogućio da lakše osvojite jedan ili više novčanih dobitaka." 
                    HorizontalAlignment="Center" 
-                   VerticalAlignment="Bottom"
-                   Margin="20,0,20,100"
+                   VerticalAlignment="Top"
+                   Margin="0,152,0,0"
                    FontSize="18"
                    FontWeight="Normal"
                    Foreground="Black"
@@ -42,8 +42,8 @@
 
         <Button Content="IZRAČUNAJ MOJE KOMBINACIJE" 
                 HorizontalAlignment="Center" 
-                VerticalAlignment="Bottom" 
-                Margin="0,0,0,60"
+                VerticalAlignment="Top" 
+                Margin="0,309,0,0"
                 Width="240"
                 Height="50"
                 Background="#FF6666"

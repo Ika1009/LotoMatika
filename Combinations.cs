@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Loto_App
 {
-    class Combinations
+    static class Combinations
     {
         static int _indeks_min(int[] niz, int duzina_niza)  //NALAZENJE NAJMANJEG CLANA NIZA
         {
