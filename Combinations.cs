@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Loto_App
 {
-    class Combinations
+    public static class Combinations
     {
         static int _indeks_min(int[] niz, int duzina_niza)  //NALAZENJE NAJMANJEG CLANA NIZA
         {
@@ -1294,7 +1294,7 @@ namespace Loto_App
             }
         }
 
-        static void _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
+        public static List<List<int>> _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
         {
             int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
             if (duzina_kombinacije == 6)
@@ -1923,6 +1923,24 @@ namespace Loto_App
                 brojac++;
             }
 
+            if (broj_omiljenih_brojeva >= 1)
+                for (int i = broj_brojeva - 1; i > 0; i--)
+                {
+                    int j = random.Next(0, i + 1);
+
+                    int red_i = i / duzina_kombinacije;
+                    int kolona_i = i % duzina_kombinacije;
+                    int red_j = j / duzina_kombinacije;
+                    int kolona_j = j % duzina_kombinacije;
+
+                    red_j = red_i;
+
+                    int temp = brojevi[red_i][kolona_i];
+                    brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
+                    brojevi[red_j][kolona_j] = temp;
+                }
+
+
             /*for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
             {
                 Console.Write((i + 1) + ": ");    //REDNI BROJEVI
@@ -1992,9 +2010,19 @@ namespace Loto_App
                 else
                     Console.Write("-\n");
             }*/
+
+            List<List<int>> neke_kombinacije = new List<List<int>>();   //2D ARRAY -----> LIST
+            for (int i = 0; i < broj_kombinacija; i++)
+            {
+                neke_kombinacije.Add(new List<int>());
+                for (int j = 0; j < duzina_kombinacije; j++)
+                    neke_kombinacije[i].Add(brojevi[i][j]);
+            }
+            
+            return neke_kombinacije;
         }
 
-        static void _sve_kombinacije(int broj_loptica, int duzina_kombinacije)
+        public static List<List<int>> _sve_kombinacije(int broj_loptica, int duzina_kombinacije)
         {
             int rezervisano_mesto = 15400000;   //REZERVISANJE MESTA
             if (duzina_kombinacije == 6)
@@ -2249,6 +2277,16 @@ namespace Loto_App
                 else
                     Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");
             }*/
+
+            List<List<int>> sve_kombinacije = new List<List<int>>();   //2D ARRAY -----> LIST
+            for (int i = 0; i < red2; i++)
+            {
+                sve_kombinacije.Add(new List<int>());
+                for (int j = 0; j < duzina_kombinacije; j++)
+                    sve_kombinacije[i].Add(brojevi[i][j]);
+            }
+
+            return sve_kombinacije;
         }
     }
 }
