@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Loto_App
 {
-    static class Combinations
+    public static class Combinations
     {
         static int _indeks_min(int[] niz, int duzina_niza)  //NALAZENJE NAJMANJEG CLANA NIZA
         {
@@ -1294,8 +1294,13 @@ namespace Loto_App
             }
         }
 
-        public static void _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
+        public static List<List<int>> _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
         {
+            if (broj_omiljenih_brojeva == 0)
+                broj_omiljenih_brojeva = -1;
+            if (broj_zabranjenih_brojeva == 0)
+                broj_zabranjenih_brojeva = -1;
+
             int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
             if (duzina_kombinacije == 6)
             {
@@ -1356,7 +1361,10 @@ namespace Loto_App
                 pocetak_kruga = (broj_omiljenih_brojeva * broj_kombinacija / indeks_deljenja);
             for (int i = 0; i < ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i++)
             {
-                if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0)) || ((broj_omiljenih_brojeva == 2) && ((i % duzina_kombinacije == 0) || (i % duzina_kombinacije == 1))))
+                if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0) && (procenat_pojavljivana_omiljenih_brojeva == 100))
+                || ((broj_omiljenih_brojeva == 2) && ((i % duzina_kombinacije == 0) || (i % duzina_kombinacije == 1)) && (procenat_pojavljivana_omiljenih_brojeva == 100))
+                || ((broj_omiljenih_brojeva == 1) && ((i % duzina_kombinacije == 0) && (i < (broj_brojeva / 2))) && (procenat_pojavljivana_omiljenih_brojeva == 50))
+                || ((broj_omiljenih_brojeva == 2) && (((i % duzina_kombinacije == 0) || (i % duzina_kombinacije == 1)) && (i < (broj_brojeva / 2)) && (procenat_pojavljivana_omiljenih_brojeva == 50))))
                 {
                     if (indeks_omiljenog_broja == broj_omiljenih_brojeva)
                         indeks_omiljenog_broja = 0;
@@ -1423,7 +1431,10 @@ namespace Loto_App
             bool broj_nadjen = false;
             for (int i = ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i < broj_brojeva; i++)
             {
-                if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0)) || ((broj_omiljenih_brojeva == 2) && ((i % duzina_kombinacije == 0) || (i % duzina_kombinacije == 1))))
+                if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0) && (procenat_pojavljivana_omiljenih_brojeva == 100))
+                || ((broj_omiljenih_brojeva == 2) && ((i % duzina_kombinacije == 0) || (i % duzina_kombinacije == 1)) && (procenat_pojavljivana_omiljenih_brojeva == 100))
+                || ((broj_omiljenih_brojeva == 1) && ((i % duzina_kombinacije == 0) && (i < (broj_brojeva / 2))) && (procenat_pojavljivana_omiljenih_brojeva == 50))
+                || ((broj_omiljenih_brojeva == 2) && (((i % duzina_kombinacije == 0) || (i % duzina_kombinacije == 1)) && (i < (broj_brojeva / 2)) && (procenat_pojavljivana_omiljenih_brojeva == 50))))
                 {
                     if (indeks_omiljenog_broja == broj_omiljenih_brojeva)
                         indeks_omiljenog_broja = 0;
@@ -1642,16 +1653,16 @@ namespace Loto_App
             {
                 tabela1 = new int[][]
                 {
-                        new int[] { 2, 1, 1, 1, 1, 1, 1, 1, 1 },
-                        new int[] { 4, 2, 2, 2, 2, 2, 2, 2, 2 },
-                        new int[] { 6, 3, 3, 3, 3, 3, 3, 3, 3 },
-                        new int[] { 6, 5, 5, 5, 5, 4, 3, 4, 3 },
-                        new int[] { 8, 6, 6, 6, 6, 5, 4, 5, 4 },
-                        new int[] { 10, 7, 7, 7, 7, 6, 5, 6, 5 },
-                        new int[] { 12, 9, 8, 9, 8, 6, 6, 6, 6 },
-                        new int[] { 12, 10, 10, 10, 10, 7, 7, 7, 7 },
-                        new int[] { 14, 11, 10, 11, 10, 9, 8, 9, 8 },
-                        new int[] { 16, 12, 12, 12, 12, 9, 9, 9, 9 }
+                            new int[] { 2, 1, 1, 1, 1, 1, 1, 1, 1 },
+                            new int[] { 4, 2, 2, 2, 2, 2, 2, 2, 2 },
+                            new int[] { 6, 3, 3, 3, 3, 3, 3, 3, 3 },
+                            new int[] { 6, 5, 5, 5, 5, 4, 3, 4, 3 },
+                            new int[] { 8, 6, 6, 6, 6, 5, 4, 5, 4 },
+                            new int[] { 10, 7, 7, 7, 7, 6, 5, 6, 5 },
+                            new int[] { 12, 9, 8, 9, 8, 6, 6, 6, 6 },
+                            new int[] { 12, 10, 10, 10, 10, 7, 7, 7, 7 },
+                            new int[] { 14, 11, 10, 11, 10, 9, 8, 9, 8 },
+                            new int[] { 16, 12, 12, 12, 12, 9, 9, 9, 9 }
                 };
                 tabela_parni = new int[] { 3, 3, 3, 2, 2, 2, 4, 4, 4 };
                 tabela_mali = new int[] { 3, 2, 4, 3, 2, 4, 3, 2, 4 };
@@ -1661,16 +1672,16 @@ namespace Loto_App
             {
                 tabela1 = new int[][]
                 {
-                    new int[] { 3, 2, 3, 2 },
-                    new int[] { 5, 5, 5, 5 },
-                    new int[] { 8, 7, 8, 7 },
-                    new int[] { 10, 10, 10, 10 },
-                    new int[] { 13, 12, 13, 12 },
-                    new int[] { 15, 15, 15, 15 },
-                    new int[] { 18, 17, 18, 17 },
-                    new int[] { 20, 20, 20, 20 },
-                    new int[] { 23, 22, 23, 22 },
-                    new int[] { 25, 25, 25, 25 }
+                        new int[] { 3, 2, 3, 2 },
+                        new int[] { 5, 5, 5, 5 },
+                        new int[] { 8, 7, 8, 7 },
+                        new int[] { 10, 10, 10, 10 },
+                        new int[] { 13, 12, 13, 12 },
+                        new int[] { 15, 15, 15, 15 },
+                        new int[] { 18, 17, 18, 17 },
+                        new int[] { 20, 20, 20, 20 },
+                        new int[] { 23, 22, 23, 22 },
+                        new int[] { 25, 25, 25, 25 }
                 };
                 tabela_parni = new int[] { 3, 3, 4, 4 };
                 tabela_mali = new int[] { 3, 4, 4, 3 };
@@ -1845,12 +1856,10 @@ namespace Loto_App
                 for (int i = 0; i < broj_kombinacija; i++)
                 {
                     if ((_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)
-                       || (broj_parnih_brojeva_kombinacija[i] != _broj_parnih(brojevi[i], duzina_kombinacije))
-                       || (broj_malih_brojeva_kombinacija[i] != _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
-                       || ((sume_kombinacija[i] < suma_min) && (sume_kombinacija[i] > suma_max))
-                       || ((razlike_kombinacija[i] < razlika_min) && (razlike_kombinacija[i] > razlika_max))
-
-                       )
+                    || (broj_parnih_brojeva_kombinacija[i] != _broj_parnih(brojevi[i], duzina_kombinacije))
+                    || (broj_malih_brojeva_kombinacija[i] != _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))
+                    || ((sume_kombinacija[i] < suma_min) && (sume_kombinacija[i] > suma_max))
+                    || ((razlike_kombinacija[i] < razlika_min) && (razlike_kombinacija[i] > razlika_max)))
                     {
                         losi_brojevi[broj_losih] = new int[7];
                         for (int j = 0; j < duzina_kombinacije; j++)
@@ -1923,6 +1932,36 @@ namespace Loto_App
                 brojac++;
             }
 
+            if (broj_omiljenih_brojeva >= 1)    //MESANJE KOMBINACIJA POSEBNO
+            {
+                for (int i = broj_brojeva - 1; i > 0; i--)
+                {
+                    int j = random.Next(0, i + 1);
+
+                    int red_i = i / duzina_kombinacije;
+                    int kolona_i = i % duzina_kombinacije;
+                    int red_j = j / duzina_kombinacije;
+                    int kolona_j = j % duzina_kombinacije;
+
+                    red_j = red_i;
+
+                    int temp = brojevi[red_i][kolona_i];
+                    brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
+                    brojevi[red_j][kolona_j] = temp;
+                }
+                for (int i = broj_kombinacija; i > 0; i--)
+                {
+                    int j = random.Next(0, i + 1);
+
+                    for (int k = 0; k < duzina_kombinacije; k++)
+                    {
+                        int temp = brojevi[i][k];
+                        brojevi[i][k] = brojevi[j][k];
+                        brojevi[j][k] = temp;
+                    }
+                }
+            }
+
             /*for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
             {
                 Console.Write((i + 1) + ": ");    //REDNI BROJEVI
@@ -1934,9 +1973,9 @@ namespace Loto_App
                     Console.Write(brojevi[i][j] + "\t");
                     //Console.ResetColor();
                 }
-                Console.Write("\t");
+                Console.Write("\n");
 
-                if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)   //DA LI IMA PONAVLJANJA BROJEVA
+                /*if (_indeks_dupli(brojevi[i], duzina_kombinacije, broj_loptica) != -1)   //DA LI IMA PONAVLJANJA BROJEVA
                     Console.Write("-\t");
                 else
                     Console.Write("+\t");
@@ -1992,10 +2031,23 @@ namespace Loto_App
                 else
                     Console.Write("-\n");
             }*/
+
+            List<List<int>> neke_kombinacije = new List<List<int>>();   //2D ARRAY -----> LIST
+            for (int i = 0; i < broj_kombinacija; i++)
+            {
+                neke_kombinacije.Add(new List<int>());
+                for (int j = 0; j < duzina_kombinacije; j++)
+                    neke_kombinacije[i].Add(brojevi[i][j]);
+            }
+            
+            return neke_kombinacije;
         }
 
-        public static void _sve_kombinacije(int broj_loptica, int duzina_kombinacije)
+        public static List<List<int>> _sve_kombinacije(int broj_loptica, int duzina_kombinacije, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva)
         {
+            if (broj_zabranjenih_brojeva == 0)
+                broj_zabranjenih_brojeva = -1;
+
             int rezervisano_mesto = 15400000;   //REZERVISANJE MESTA
             if (duzina_kombinacije == 6)
             {
@@ -2194,7 +2246,13 @@ namespace Loto_App
                 && (broj_malih_brojeva_kombinacija[i] <= mali_max) && (broj_malih_brojeva_kombinacija[i] >= mali_min)
                 && (_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) == -1)
                 && (_indeks_susedni_2_plus_para(brojevi[i], duzina_kombinacije) == -1)
-                && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) == -1))
+                && (_indeks_skupovi_visak_4(brojevi[i], duzina_kombinacije, velicina_skupa) == -1)
+                && ((broj_zabranjenih_brojeva == -1)
+                    || ((broj_zabranjenih_brojeva == 1) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]))
+                    || ((broj_zabranjenih_brojeva == 2) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[1]))
+                    || ((broj_zabranjenih_brojeva == 3) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[2]))
+                    || ((broj_zabranjenih_brojeva == 4) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[2]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[3]))
+                    || ((broj_zabranjenih_brojeva == 5) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[2]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[3]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[4]))))
                 {
                     for (int j = 0; j < duzina_kombinacije; j++)
                         brojevi[red2][j] = brojevi[i][j];
@@ -2237,9 +2295,9 @@ namespace Loto_App
                 if (_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) == -1)   //ZADNJE CIFRE
                     Console.Write("-1\n");
                 else
-                    Console.Write(_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) + "\n");
+                    Console.Write(_indeks_zadnja_cifra(brojevi[i], duzina_kombinacije, zadnje_cifre[i]) + "\n");*/
 
-                if (_indeks_susedni(brojevi[i], duzina_kombinacije) == -1)   //ZADNJE CIFRE
+                /*if (_indeks_susedni(brojevi[i], duzina_kombinacije) == -1)   //ZADNJE CIFRE
                     Console.Write("-1\n");
                 else
                     Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");
@@ -2249,6 +2307,44 @@ namespace Loto_App
                 else
                     Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");
             }*/
+
+             List<List<int>> sve_kombinacije = new List<List<int>>();   //2D ARRAY -----> LIST
+                for (int i = 0; i < red2; i++)
+                {
+                    sve_kombinacije.Add(new List<int>());
+                    for (int j = 0; j < duzina_kombinacije; j++)
+                        sve_kombinacije[i].Add(brojevi[i][j]);
+                }
+
+                return sve_kombinacije;
+        }
+
+        static void Main(string[] args)
+        {
+            string biranje_moda = Console.ReadLine();  //BIRANJE MODA
+
+            if (biranje_moda == "neke")
+            {
+                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
+                int duzina_kombinacije = int.Parse(Console.ReadLine());
+                int broj_kombinacija = int.Parse(Console.ReadLine());
+                int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
+                int broj_zabranjenih_brojeva = 5;
+                int[] omiljeni_brojevi = new int[] { 2, 19 };
+                int broj_omiljenih_brojeva = 2;
+                int procenat_pojavljivanja_omiljenih_brojeva = 100;
+
+                _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, broj_zabranjenih_brojeva, omiljeni_brojevi, broj_omiljenih_brojeva, procenat_pojavljivanja_omiljenih_brojeva);
+            }
+            else if (biranje_moda == "sve")
+            {
+                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
+                int duzina_kombinacije = int.Parse(Console.ReadLine());
+                int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
+                int broj_zabranjenih_brojeva = 5;
+
+                _sve_kombinacije(broj_loptica, duzina_kombinacije, zabranjeni_brojevi, broj_zabranjenih_brojeva);
+            }
         }
     }
 }
