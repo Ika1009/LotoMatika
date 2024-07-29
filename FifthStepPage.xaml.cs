@@ -34,7 +34,7 @@ namespace Loto_App
 
         private int CalculateTotalCombinations()
         {
-            Combinations._sve_kombinacije()
+            //Combinations._sve_kombinacije()
             return 123456;
         }
 
