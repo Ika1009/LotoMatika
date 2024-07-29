@@ -5,6 +5,7 @@ namespace Loto_App
     public partial class MainWindow : Window
     {
         private int maxNumber;
+        private int combinationLength;
         List<int> excludedNumbers;
         List<int> favoriteNumbers;
         double? favoriteUsage;
@@ -19,9 +20,10 @@ namespace Loto_App
             MainFrame.Navigate(new FirstStepPage(this));
         }
 
-        public void NavigateToSecondStepPage(int maxNumber)
+        public void NavigateToSecondStepPage(int maxNumber, int combinationLength)
         {
             this.maxNumber = maxNumber;
+            this.combinationLength = combinationLength;
             MainFrame.Navigate(new SecondStepPage(this, maxNumber));
         }
 

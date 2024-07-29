@@ -1294,7 +1294,7 @@ namespace Loto_App
             }
         }
 
-        static void _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
+        public static void _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
         {
             int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
             if (duzina_kombinacije == 6)
@@ -1994,7 +1994,7 @@ namespace Loto_App
             }*/
         }
 
-        static void _sve_kombinacije(int broj_loptica, int duzina_kombinacije)
+        public static void _sve_kombinacije(int broj_loptica, int duzina_kombinacije)
         {
             int rezervisano_mesto = 15400000;   //REZERVISANJE MESTA
             if (duzina_kombinacije == 6)
