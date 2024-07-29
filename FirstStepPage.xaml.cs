@@ -31,30 +31,37 @@ namespace Loto_App
             {
                 string selectedGameText = selectedGame.Content.ToString();
                 int maxNumber = 35;
+                int combinationLength = 7;
 
                 switch (selectedGameText)
                 {
                     case "7 od 35 (Hrvatska)":
+                        combinationLength = 7;
                         maxNumber = 35;
                         break;
                     case "6 od 45 (Hrvatska)":
+                        combinationLength = 6;
                         maxNumber = 45;
                         break;
                     case "7 od 39 (Srbija)":
+                        combinationLength = 7;
                         maxNumber = 39;
                         break;
                     case "6 od 44 (Slovenija)":
+                        combinationLength = 6;
                         maxNumber = 44;
                         break;
                     case "6 od 39 (BiH)":
+                        combinationLength = 6;
                         maxNumber = 39;
                         break;
                     case "7 od 37 (Makedonija)":
+                        combinationLength = 7;
                         maxNumber = 37;
                         break;
                 }
 
-                _mainWindow.NavigateToSecondStepPage(maxNumber);
+                _mainWindow.NavigateToSecondStepPage(maxNumber, combinationLength);
             }
             else
             {

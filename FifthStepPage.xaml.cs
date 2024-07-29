@@ -28,22 +28,14 @@ namespace Loto_App
         {
             // Implementirajte logiku za izračunavanje kombinacija
             int totalCombinations = CalculateTotalCombinations();
-            int excludedCombinations = CalculateExcludedCombinations();
 
             TotalCombinationsTextBlock.Text = $"Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi: {totalCombinations}";
-            ExcludedCombinationsTextBlock.Text = $"Softver je iz igre izbacio ukupno {excludedCombinations} kombinacija, kako bi vam omogućio da lakše osvojite jedan ili više novčanih dobitaka.";
         }
 
         private int CalculateTotalCombinations()
         {
-            // Placeholder logika za izračunavanje kombinacija
+            //Combinations._sve_kombinacije()
             return 123456;
-        }
-
-        private int CalculateExcludedCombinations()
-        {
-            // Placeholder logika za izračunavanje isključenih kombinacija
-            return 7890;
         }
 
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
