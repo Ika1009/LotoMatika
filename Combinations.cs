@@ -1933,6 +1933,7 @@ namespace Loto_App
             }
 
             if (broj_omiljenih_brojeva >= 1)    //MESANJE KOMBINACIJA POSEBNO
+            {
                 for (int i = broj_brojeva - 1; i > 0; i--)
                 {
                     int j = random.Next(0, i + 1);
@@ -1948,6 +1949,18 @@ namespace Loto_App
                     brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
                     brojevi[red_j][kolona_j] = temp;
                 }
+                for (int i = broj_kombinacija; i > 0; i--)
+                {
+                    int j = random.Next(0, i + 1);
+
+                    for (int k = 0; k < duzina_kombinacije; k++)
+                    {
+                        int temp = brojevi[i][k];
+                        brojevi[i][k] = brojevi[j][k];
+                        brojevi[j][k] = temp;
+                    }
+                }
+            }
 
             /*for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
             {
