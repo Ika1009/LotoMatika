@@ -2319,7 +2319,7 @@ namespace Loto_App
                 return sve_kombinacije;
         }
 
-        static void Main(string[] args)
+        /*static void Main(string[] args)
         {
             string biranje_moda = Console.ReadLine();  //BIRANJE MODA
 
@@ -2345,6 +2345,6 @@ namespace Loto_App
 
                 _sve_kombinacije(broj_loptica, duzina_kombinacije, zabranjeni_brojevi, broj_zabranjenih_brojeva);
             }
-        }
+        }*/
     }
 }
