@@ -27,9 +27,9 @@ namespace Loto_App
         private void CalculateTotalCombinations()
         {
             // Implementirajte logiku za izračunavanje kombinacija
-            //int totalCombinations = Combinations._sve_kombinacije();
+            int totalCombinations = Combinations._sve_kombinacije();
 
-            //TotalCombinationsTextBlock.Text = $"Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi: {totalCombinations}";
+            TotalCombinationsTextBlock.Text = $"Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi: {totalCombinations}";
         }
 
         private void NextStepButton_Click(object sender, RoutedEventArgs e)

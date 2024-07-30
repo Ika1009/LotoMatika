@@ -9,6 +9,12 @@ namespace Loto_App
         List<int> excludedNumbers;
         List<int> favoriteNumbers;
         double? favoriteUsage;
+        // Functions to retrieve the values for better encapsulation
+        public int GetMaxNumber() => maxNumber;
+        public int GetCombinationLength() => combinationLength;
+        public List<int> GetExcludedNumbers() => excludedNumbers;
+        public List<int> GetFavoriteNumbers() => favoriteNumbers;
+        public double? GetFavoriteUsage() => favoriteUsage;
         public MainWindow()
         {
             InitializeComponent();
@@ -24,7 +30,7 @@ namespace Loto_App
         {
             this.maxNumber = maxNumber;
             this.combinationLength = combinationLength;
-            MainFrame.Navigate(new SecondStepPage(this, maxNumber));
+            MainFrame.Navigate(new SecondStepPage(this));
         }
 
         public void NavigateToThirdStepPage(List<int> excludedNumbers)
@@ -35,7 +41,7 @@ namespace Loto_App
 
         public void NavigateToFourthStepPage()
         {
-            MainFrame.Navigate(new FourthStepPage(this, maxNumber, excludedNumbers));
+            MainFrame.Navigate(new FourthStepPage(this));
         }
 
         public void NavigateToFifthStepPage(List<int> favoriteNumbers)

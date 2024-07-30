@@ -21,11 +21,11 @@ namespace Loto_App
         private List<int> excludedNumbers = [];
         private readonly MainWindow _mainWindow;
 
-        public SecondStepPage(MainWindow mainWindow, int totalNumbers)
+        public SecondStepPage(MainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-            AddNumberButtons(totalNumbers);
+            AddNumberButtons(_mainWindow.GetMaxNumber());
         }
 
         private void AddNumberButtons(int totalNumbers)

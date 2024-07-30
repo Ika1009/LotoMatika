@@ -14,12 +14,12 @@ namespace Loto_App
         private List<int> excludedNumbers; // Updated to store excluded numbers
         MainWindow _mainWindow;
 
-        public FourthStepPage(MainWindow mainWindow, int maxNumber, List<int> excludedNumbers)
+        public FourthStepPage(MainWindow mainWindow)
         {
             InitializeComponent();
-            this.maxNumber = maxNumber;
-            this.excludedNumbers = excludedNumbers;
             _mainWindow = mainWindow;
+            this.maxNumber = _mainWindow.GetMaxNumber();
+            this.excludedNumbers = _mainWindow.GetExcludedNumbers();
             AddNumberButtons();
         }
 

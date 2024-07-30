@@ -12,13 +12,11 @@ namespace Loto_App
 
         // Variables to store calculated values
         private int totalCombinations;
-        private int excludedCombinations;
 
-        public SeventhStepPage(MainWindow mainWindow, int totalCombinations, int excludedCombinations)
+        public SeventhStepPage(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
-            this.totalCombinations = totalCombinations;
-            this.excludedCombinations = excludedCombinations;
+            this.totalCombinations = _mainWindow.GetCombinationLength();
             InitializeComponent();
 
             // Update text blocks with calculated values
