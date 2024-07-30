@@ -39,7 +39,8 @@
                  Height="40"
                  Margin="0,80,0,0"
                  FontSize="16"
-                 KeyDown="CombinationCountTextBox_KeyDown"/>
+                 KeyDown="CombinationCountTextBox_KeyDown"
+                 PreviewTextInput="CombinationCountTextBox_PreviewTextInput"/>
 
         <Button Content="PRIKAŽI MOJE KOMBINACIJE" 
                 HorizontalAlignment="Center" 
