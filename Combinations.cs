@@ -1304,7 +1304,7 @@ namespace Loto_App
             int[] omiljeni_brojevi = new int[2];
             for (int i = 0; i < broj_omiljenih_brojeva; i++)
                 omiljeni_brojevi[i] = omiljeni_brojevi_lista[i];
-            int[] zabranjeni_brojevi = new int[2];
+            int[] zabranjeni_brojevi = new int[5];
             for (int i = 0; i < broj_zabranjenih_brojeva; i++)
                 zabranjeni_brojevi[i] = zabranjeni_brojevi_lista[i];
 
@@ -2056,7 +2056,7 @@ namespace Loto_App
             if (broj_zabranjenih_brojeva == 0)
                 broj_zabranjenih_brojeva = -1;
 
-            int[] zabranjeni_brojevi = new int[2];
+            int[] zabranjeni_brojevi = new int[5];
             for (int i = 0; i < broj_zabranjenih_brojeva; i++)
                 zabranjeni_brojevi[i] = zabranjeni_brojevi_lista[i];
 
