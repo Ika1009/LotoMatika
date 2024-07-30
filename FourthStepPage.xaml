@@ -6,12 +6,13 @@
       xmlns:local="clr-namespace:Loto_App"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Četvrti Korak">
+      Title="Treći Korak">
     <Page.Background>
         <SolidColorBrush Color="#FFB3B3"/>
     </Page.Background>
     <Grid>
-        <TextBlock Text="Favorit broj ili brojeve možete koristiti u 100% kombinacija ili u 50% kombinacija. Molimo da odaberete klikom na jednu od dvije mogućnosti ispod." 
+        <TextBlock x:Name="QuestionText" 
+                   Text="Da li želite koristiti favorit broj? Ako želite, kliknite na DA, a ako ne želite, kliknite na NE." 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top"
                    Margin="20"
@@ -25,26 +26,38 @@
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
                     Margin="0,100,0,0">
-            <Button Content="FAVORIT 100%" 
-                    Width="200" 
+            <Button x:Name="YesButton"
+                    Content="DA" 
+                    Width="100" 
                     Height="50" 
                     Background="LightGreen" 
                     FontSize="16"
                     FontWeight="Bold"
                     Margin="20"
-                    Click="Favorite100Button_Click"/>
-            <Button Content="FAVORIT 50%" 
-                    Width="200" 
+                    Click="YesButton_Click"/>
+            <Button x:Name="NoButton"
+                    Content="NE" 
+                    Width="100" 
                     Height="50" 
                     Background="LightCoral" 
                     FontSize="16"
                     FontWeight="Bold"
                     Margin="20"
-                    Click="Favorite50Button_Click"/>
+                    Click="NoButton_Click"/>
         </StackPanel>
 
+        <UniformGrid x:Name="NumberGrid"
+                     Rows="5"
+                     Columns="10"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Margin="20,70,20,70"
+                     Visibility="Collapsed">
+            <!-- Brojevi će biti dodani programatski -->
+        </UniformGrid>
+
         <Button x:Name="NextStepButton"
-                Content="PRIJEĐI NA SLIJEDEĆI KORAK" 
+                Content="PRIJEĐI NA IDUĆI KORAK" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
                 Margin="0,0,0,30"

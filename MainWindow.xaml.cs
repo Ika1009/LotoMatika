@@ -30,21 +30,25 @@ namespace Loto_App
         public void NavigateToThirdStepPage(List<int> excludedNumbers)
         {
             this.excludedNumbers = excludedNumbers;
-            MainFrame.Navigate(new ThirdStepPage(this, maxNumber, excludedNumbers));
+            MainFrame.Navigate(new ThirdStepPage(this));
         }
 
-        public void NavigateToFourthStepPage(List<int> favoriteNumbers)
+        public void NavigateToFourthStepPage()
+        {
+            MainFrame.Navigate(new FourthStepPage(this, maxNumber, excludedNumbers));
+        }
+
+        public void NavigateToFifthStepPage(List<int> favoriteNumbers)
         {
             this.favoriteNumbers = favoriteNumbers;
-            MainFrame.Navigate(new FourthStepPage(this));
-        }
-
-        public void NavigateToFifthStepPage(double? favoriteUsage)
-        {
-            this.favoriteUsage = favoriteUsage;
             MainFrame.Navigate(new FifthStepPage(this));
         }
 
+        public void NavigateToSixthStepPage(double? favoriteUsage)
+        {
+            this.favoriteUsage = favoriteUsage;
+            MainFrame.Navigate(new SixthStepPage(this));
+        }
         public void NavigateToSixthStepPage()
         {
             MainFrame.Navigate(new SixthStepPage(this));

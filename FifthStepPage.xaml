@@ -6,69 +6,56 @@
       xmlns:local="clr-namespace:Loto_App"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Peti Korak">
+      Title="Četvrti Korak">
     <Page.Background>
         <SolidColorBrush Color="#FFB3B3"/>
     </Page.Background>
     <Grid>
-        <TextBlock Text="Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi:" 
-                   HorizontalAlignment="Left" 
+        <TextBlock Text="Favorit broj ili brojeve možete koristiti u 100% kombinacija ili u 50% kombinacija. Molimo da odaberete klikom na jednu od dvije mogućnosti ispod." 
+                   HorizontalAlignment="Center" 
                    VerticalAlignment="Top"
-                   Margin="128,51,0,0"
-                   FontSize="25"
+                   Margin="20"
+                   FontSize="20"
                    FontWeight="DemiBold"
                    Foreground="Black"
                    TextAlignment="Center"
-                   TextWrapping="Wrap" Width="501" Height="106"/>
+                   TextWrapping="Wrap"/>
 
-        <TextBlock x:Name="TotalCombinationsTextBlock"
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Top"
-                   FontSize="30"
-                   FontWeight="Bold"
-                   Foreground="Black"
-                   TextAlignment="Center" Width="52" Margin="0,157,0,0"/>
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Margin="0,100,0,0">
+            <Button Content="FAVORIT 100%" 
+                    Width="200" 
+                    Height="50" 
+                    Background="LightGreen" 
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Margin="20"
+                    Click="Favorite100Button_Click"/>
+            <Button Content="FAVORIT 50%" 
+                    Width="200" 
+                    Height="50" 
+                    Background="LightCoral" 
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Margin="20"
+                    Click="Favorite50Button_Click"/>
+        </StackPanel>
 
-        <Button Content="IZRAČUNAJ MOJE KOMBINACIJE" 
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Top" 
-                Margin="0,309,0,0"
-                Width="240"
-                Height="50"
-                Background="#FF6666"
-                Foreground="White"
-                FontSize="16"
-                FontWeight="Bold"
-                Click="CalculateButton_Click">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="{TemplateBinding BorderThickness}" 
-                                        CornerRadius="10">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
-
-        <Button Content="PRIJEĐI NA IDUĆI KORAK" 
+        <Button x:Name="NextStepButton"
+                Content="PRIJEĐI NA SLIJEDEĆI KORAK" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
-                Margin="0,0,0,20"
+                Margin="0,0,0,30"
                 Width="240"
                 Height="50"
                 Background="#FF6666"
                 Foreground="White"
                 FontSize="16"
                 FontWeight="Bold"
-                Click="NextStepButton_Click">
+                Click="NextStepButton_Click"
+                Visibility="Collapsed">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">

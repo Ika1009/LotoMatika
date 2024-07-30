@@ -41,7 +41,7 @@ namespace Loto_App
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
             // Implement logic to navigate to the next step
-            _mainWindow.NavigateToSixthStepPage();
+            //_mainWindow.NavigateToSixthStepPage();
         }
 
         private void PreviousStepButton_Click(object sender, RoutedEventArgs e)

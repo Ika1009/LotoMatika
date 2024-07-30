@@ -2318,33 +2318,5 @@ namespace Loto_App
 
                 return sve_kombinacije;
         }
-
-        static void Main(string[] args)
-        {
-            string biranje_moda = Console.ReadLine();  //BIRANJE MODA
-
-            if (biranje_moda == "neke")
-            {
-                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
-                int duzina_kombinacije = int.Parse(Console.ReadLine());
-                int broj_kombinacija = int.Parse(Console.ReadLine());
-                int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
-                int broj_zabranjenih_brojeva = 5;
-                int[] omiljeni_brojevi = new int[] { 2, 19 };
-                int broj_omiljenih_brojeva = 2;
-                int procenat_pojavljivanja_omiljenih_brojeva = 100;
-
-                _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, broj_zabranjenih_brojeva, omiljeni_brojevi, broj_omiljenih_brojeva, procenat_pojavljivanja_omiljenih_brojeva);
-            }
-            else if (biranje_moda == "sve")
-            {
-                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
-                int duzina_kombinacije = int.Parse(Console.ReadLine());
-                int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
-                int broj_zabranjenih_brojeva = 5;
-
-                _sve_kombinacije(broj_loptica, duzina_kombinacije, zabranjeni_brojevi, broj_zabranjenih_brojeva);
-            }
-        }
     }
 }

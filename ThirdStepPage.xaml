@@ -6,69 +6,40 @@
       xmlns:local="clr-namespace:Loto_App"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Treći Korak">
+      Title="Peti Korak">
     <Page.Background>
         <SolidColorBrush Color="#FFB3B3"/>
     </Page.Background>
     <Grid>
-        <TextBlock x:Name="QuestionText" 
-                   Text="Da li želite koristiti favorit broj? Ako želite, kliknite na DA, a ako ne želite, kliknite na NE." 
-                   HorizontalAlignment="Center" 
+        <TextBlock Text="Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi:" 
+                   HorizontalAlignment="Left" 
                    VerticalAlignment="Top"
-                   Margin="20"
-                   FontSize="20"
+                   Margin="128,51,0,0"
+                   FontSize="25"
                    FontWeight="DemiBold"
                    Foreground="Black"
                    TextAlignment="Center"
-                   TextWrapping="Wrap"/>
+                   TextWrapping="Wrap" Width="501" Height="106"/>
 
-        <StackPanel Orientation="Horizontal" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Margin="0,100,0,0">
-            <Button x:Name="YesButton"
-                    Content="DA" 
-                    Width="100" 
-                    Height="50" 
-                    Background="LightGreen" 
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Margin="20"
-                    Click="YesButton_Click"/>
-            <Button x:Name="NoButton"
-                    Content="NE" 
-                    Width="100" 
-                    Height="50" 
-                    Background="LightCoral" 
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Margin="20"
-                    Click="NoButton_Click"/>
-        </StackPanel>
+        <TextBlock x:Name="TotalCombinationsTextBlock"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Top"
+                   FontSize="30"
+                   FontWeight="Bold"
+                   Foreground="Black"
+                   TextAlignment="Center" Width="52" Margin="0,157,0,0"/>
 
-        <UniformGrid x:Name="NumberGrid"
-                     Rows="5"
-                     Columns="10"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Center"
-                     Margin="20,70,20,70"
-                     Visibility="Collapsed">
-            <!-- Brojevi će biti dodani programatski -->
-        </UniformGrid>
-
-        <Button x:Name="NextStepButton"
-                Content="PRIJEĐI NA IDUĆI KORAK" 
+        <Button Content="PRIJEĐI NA IDUĆI KORAK" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
-                Margin="0,0,0,30"
+                Margin="0,0,0,20"
                 Width="240"
                 Height="50"
                 Background="#FF6666"
                 Foreground="White"
                 FontSize="16"
                 FontWeight="Bold"
-                Click="NextStepButton_Click"
-                Visibility="Collapsed">
+                Click="NextStepButton_Click">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">

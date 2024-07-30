@@ -1,96 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace Loto_App
 {
     public partial class ThirdStepPage : Page
     {
-        private int maxFavoriteNumbers = 2;
-        private int maxNumber;
-        private List<int> favoriteNumbers = new List<int>();
-        private List<int> excludedNumbers; // Updated to store excluded numbers
         MainWindow _mainWindow;
-
-        public ThirdStepPage(MainWindow mainWindow, int maxNumber, List<int> excludedNumbers)
+        public ThirdStepPage(MainWindow mainWindow)
         {
-            InitializeComponent();
-            this.maxNumber = maxNumber;
-            this.excludedNumbers = excludedNumbers;
             _mainWindow = mainWindow;
-            AddNumberButtons();
+            InitializeComponent();
         }
 
-        private void AddNumberButtons()
+        private void CalculateTotalCombinations()
         {
-            // Generate buttons for numbers not in excluded list
-            for (int i = 1; i <= maxNumber; i++)
-            {
-                if (!excludedNumbers.Contains(i))
-                {
-                    Button numberButton = new Button
-                    {
-                        Content = i.ToString(),
-                        Width = 35,
-                        Height = 35,
-                        Margin = new Thickness(5),
-                        Background = Brushes.White,
-                        Foreground = Brushes.Black,
-                        FontWeight = FontWeights.Bold,
-                        Tag = i
-                    };
+            // Implementirajte logiku za izračunavanje kombinacija
+            //int totalCombinations = Combinations._sve_kombinacije();
 
-                    numberButton.Click += NumberButton_Click;
-                    NumberGrid.Children.Add(numberButton);
-                }
-            }
-        }
-
-        private void NumberButton_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            int number = (int)button.Tag;
-
-            if (favoriteNumbers.Contains(number))
-            {
-                favoriteNumbers.Remove(number);
-                button.Background = Brushes.Gray;
-            }
-            else
-            {
-                if (favoriteNumbers.Count < maxFavoriteNumbers)
-                {
-                    favoriteNumbers.Add(number);
-                    button.Background = Brushes.Green;
-                }
-                else
-                {
-                    MessageBox.Show("Možete izabrati maksimalno 2 favorit broja.");
-                }
-            }
-        }
-
-        private void YesButton_Click(object sender, RoutedEventArgs e)
-        {
-            YesButton.Visibility = Visibility.Hidden;
-            NoButton.Visibility = Visibility.Hidden;
-            QuestionText.Text = "Možete izabrati najviše do 2 favorit broja.";
-            NumberGrid.Visibility = Visibility.Visible;
-            NextStepButton.Visibility = Visibility.Visible;
-        }
-
-        private void NoButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement navigation to the fifth step, skipping the fourth step
-            _mainWindow.NavigateToFifthStepPage(null);
+            //TotalCombinationsTextBlock.Text = $"Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi: {totalCombinations}";
         }
 
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the next step, passing the favoriteNumbers list
-            _mainWindow.NavigateToFourthStepPage(favoriteNumbers);
+            // Implementirajte prelaz na sledeći korak
+            _mainWindow.NavigateToFourthStepPage();
         }
     }
 }
+
