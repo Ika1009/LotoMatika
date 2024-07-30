@@ -1294,12 +1294,19 @@ namespace Loto_App
             }
         }
 
-        public static List<List<int>> _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva, int[] omiljeni_brojevi, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
+        public static List<List<int>> _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, List<int> zabranjeni_brojevi_lista, int broj_zabranjenih_brojeva, List<int> omiljeni_brojevi_lista, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
         {
             if (broj_omiljenih_brojeva == 0)
                 broj_omiljenih_brojeva = -1;
             if (broj_zabranjenih_brojeva == 0)
                 broj_zabranjenih_brojeva = -1;
+
+            int[] omiljeni_brojevi = new int[2];
+            for (int i = 0; i < broj_omiljenih_brojeva; i++)
+                omiljeni_brojevi[i] = omiljeni_brojevi_lista[i];
+            int[] zabranjeni_brojevi = new int[2];
+            for (int i = 0; i < broj_zabranjenih_brojeva; i++)
+                zabranjeni_brojevi[i] = zabranjeni_brojevi_lista[i];
 
             int granica_malih = 0;  //STVARANJE GRANICE MALI/VELIKI
             if (duzina_kombinacije == 6)
@@ -2043,10 +2050,14 @@ namespace Loto_App
             return neke_kombinacije;
         }
 
-        public static List<List<int>> _sve_kombinacije(int broj_loptica, int duzina_kombinacije, int[] zabranjeni_brojevi, int broj_zabranjenih_brojeva)
+        public static List<List<int>> _sve_kombinacije(int broj_loptica, int duzina_kombinacije, List<int> zabranjeni_brojevi_lista, int broj_zabranjenih_brojeva)
         {
             if (broj_zabranjenih_brojeva == 0)
                 broj_zabranjenih_brojeva = -1;
+
+            int[] zabranjeni_brojevi = new int[2];
+            for (int i = 0; i < broj_zabranjenih_brojeva; i++)
+                zabranjeni_brojevi[i] = zabranjeni_brojevi_lista[i];
 
             int rezervisano_mesto = 15400000;   //REZERVISANJE MESTA
             if (duzina_kombinacije == 6)
@@ -2318,5 +2329,33 @@ namespace Loto_App
 
                 return sve_kombinacije;
         }
+
+        /*static void Main(string[] args)
+        {
+            string biranje_moda = Console.ReadLine();  //BIRANJE MODA
+
+            if (biranje_moda == "neke")
+            {
+                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
+                int duzina_kombinacije = int.Parse(Console.ReadLine());
+                int broj_kombinacija = int.Parse(Console.ReadLine());
+                int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
+                int broj_zabranjenih_brojeva = 5;
+                int[] omiljeni_brojevi = new int[] { 2, 19 };
+                int broj_omiljenih_brojeva = 2;
+                int procenat_pojavljivanja_omiljenih_brojeva = 100;
+
+                _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, broj_zabranjenih_brojeva, omiljeni_brojevi, broj_omiljenih_brojeva, procenat_pojavljivanja_omiljenih_brojeva);
+            }
+            else if (biranje_moda == "sve")
+            {
+                int broj_loptica = int.Parse(Console.ReadLine());   //UNOS
+                int duzina_kombinacije = int.Parse(Console.ReadLine());
+                int[] zabranjeni_brojevi = new int[] { 1, 5, 7, 8, 11 };
+                int broj_zabranjenih_brojeva = 5;
+
+                _sve_kombinacije(broj_loptica, duzina_kombinacije, zabranjeni_brojevi, broj_zabranjenih_brojeva);
+            }
+        }*/
     }
 }
