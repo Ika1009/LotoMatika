@@ -32,7 +32,7 @@ namespace Loto_App
             int combLenght = _mainWindow.GetCombinationLength();
             int totalCombinations = Combinations._sve_kombinacije(maxNumber, combLenght, _mainWindow.GetExcludedNumbers()).Count;
 
-            TotalCombinationsTextBlock.Text = $"Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi: {totalCombinations}";
+            TotalCombinationsTextBlock.Text = $"{totalCombinations}";
         }
 
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
