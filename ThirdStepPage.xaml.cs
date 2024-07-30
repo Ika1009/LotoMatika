@@ -22,12 +22,15 @@ namespace Loto_App
         {
             _mainWindow = mainWindow;
             InitializeComponent();
+            CalculateTotalCombinations();
         }
 
         private void CalculateTotalCombinations()
         {
             // Implementirajte logiku za izračunavanje kombinacija
-            int totalCombinations = Combinations._sve_kombinacije();
+            int maxNumber = _mainWindow.GetMaxNumber();
+            int combLenght = _mainWindow.GetCombinationLength();
+            int totalCombinations = Combinations._sve_kombinacije(maxNumber, combLenght, _mainWindow.GetExcludedNumbers()).Count;
 
             TotalCombinationsTextBlock.Text = $"Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi: {totalCombinations}";
         }

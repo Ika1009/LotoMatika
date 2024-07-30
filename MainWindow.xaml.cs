@@ -62,7 +62,7 @@ namespace Loto_App
 
         public void NavigateToSeventhStepPage()
         {
-            MainFrame.Navigate(new SeventhStepPage(this, 0, 0));
+            MainFrame.Navigate(new SeventhStepPage(this));
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)

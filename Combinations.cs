@@ -2050,8 +2050,9 @@ namespace Loto_App
             return neke_kombinacije;
         }
 
-        public static List<List<int>> _sve_kombinacije(int broj_loptica, int duzina_kombinacije, List<int> zabranjeni_brojevi_lista, int broj_zabranjenih_brojeva)
+        public static List<List<int>> _sve_kombinacije(int broj_loptica, int duzina_kombinacije, List<int> zabranjeni_brojevi_lista)
         {
+            int broj_zabranjenih_brojeva = zabranjeni_brojevi_lista.Count;
             if (broj_zabranjenih_brojeva == 0)
                 broj_zabranjenih_brojeva = -1;
 
