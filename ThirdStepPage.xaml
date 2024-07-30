@@ -27,7 +27,7 @@
                    FontSize="30"
                    FontWeight="Bold"
                    Foreground="Black"
-                   TextAlignment="Center" Width="52" Margin="0,157,0,0"/>
+                   TextAlignment="Center" Width="332" Margin="0,157,0,0"/>
 
         <Button Content="PRIJEĐI NA IDUĆI KORAK" 
                 HorizontalAlignment="Center" 
