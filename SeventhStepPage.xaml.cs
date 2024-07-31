@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Xps.Packaging;
 
 namespace Loto_App
 {
@@ -10,18 +10,42 @@ namespace Loto_App
     {
         private MainWindow _mainWindow;
 
-        // Variables to store calculated values
-        private int totalCombinations;
-
         public SeventhStepPage(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
-            this.totalCombinations = _mainWindow.GetCombinationLength();
             InitializeComponent();
+        }
 
-            // Update text blocks with calculated values
-            //TotalCombinationsText.Text = $"Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi: {totalCombinations}";
-            //ExcludedCombinationsText.Text = $"Softver je iz igre izbacio ukupno {excludedCombinations} kombinacija, kako bi vam omogućio da lakše osvojite jedan ili više novčanih dobitaka.";
+        private void ShowCombinationsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Generate and display combinations
+            List<List<int>> combinations = GenerateCombinations();
+            StringBuilder combinationsText = new ();
+            foreach (var combination in combinations)
+            {
+                combinationsText.AppendLine(string.Join(", ", combination));
+            }
+
+            CombinationsTextBlock.Text = combinationsText.ToString();
+            CombinationsTextBlock.Visibility = Visibility.Visible;
+
+            // Show additional options after displaying combinations
+            ShowCombinationsButton.Visibility = Visibility.Collapsed;
+            OptionsPanel.Visibility = Visibility.Visible;
+        }
+
+        private List<List<int>> GenerateCombinations()
+        {
+            // Placeholder logic for generating combinations
+            // Replace this with your actual combination generation logic
+            int maxNumber = _mainWindow.GetMaxNumber();
+            int combinationLength = _mainWindow.GetCombinationLength();
+            int combinationsRequested = _mainWindow.GetCombinationsRequested();
+            List<int> excludedNumbers = _mainWindow.GetExcludedNumbers();
+            List<int> favoritedNumbers = _mainWindow.GetFavoriteNumbers();
+            int favoriteUsage = _mainWindow.GetFavoriteUsage();
+
+            return Combinations._neke_kombinacije(maxNumber, combinationLength, combinationsRequested, excludedNumbers, favoritedNumbers, favoriteUsage);
         }
 
         private void SaveCombinationsButton_Click(object sender, RoutedEventArgs e)
@@ -39,7 +63,7 @@ namespace Loto_App
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
             // Implement logic to navigate to the next step
-            //_mainWindow.NavigateToSixthStepPage();
+            // _mainWindow.NavigateToSixthStepPage();
         }
 
         private void PreviousStepButton_Click(object sender, RoutedEventArgs e)

@@ -1294,8 +1294,11 @@ namespace Loto_App
             }
         }
 
-        public static List<List<int>> _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, List<int> zabranjeni_brojevi_lista, int broj_zabranjenih_brojeva, List<int> omiljeni_brojevi_lista, int broj_omiljenih_brojeva, int procenat_pojavljivana_omiljenih_brojeva)
+        public static List<List<int>> _neke_kombinacije(int broj_loptica, int duzina_kombinacije, int broj_kombinacija, List<int> zabranjeni_brojevi_lista, List<int> omiljeni_brojevi_lista, int procenat_pojavljivana_omiljenih_brojeva)
         {
+            int broj_zabranjenih_brojeva = zabranjeni_brojevi_lista.Count;
+            int broj_omiljenih_brojeva = omiljeni_brojevi_lista.Count;
+
             if (broj_omiljenih_brojeva == 0)
                 broj_omiljenih_brojeva = -1;
             if (broj_zabranjenih_brojeva == 0)

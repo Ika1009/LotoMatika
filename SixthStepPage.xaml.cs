@@ -8,6 +8,8 @@ namespace Loto_App
     public partial class SixthStepPage : Page
     {
         MainWindow _mainWindow;
+        private int? validNumber;
+
         public SixthStepPage(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
@@ -17,7 +19,7 @@ namespace Loto_App
 
         private void PopulateCombinationCountComboBox()
         {
-            for (int i = 10; i <= 1000; i += 10)
+            for (int i = 20; i <= 1000; i += 10)
             {
                 CombinationCountComboBox.Items.Add(i.ToString());
             }
@@ -26,6 +28,7 @@ namespace Loto_App
         private void CombinationCountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CombinationCountTextBox.Text = CombinationCountComboBox.SelectedItem.ToString();
+            ValidateAndProcessInput();
         }
 
         private void CombinationCountTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -58,27 +61,38 @@ namespace Loto_App
         {
             if (int.TryParse(CombinationCountTextBox.Text, out int number))
             {
-                if (number > 10 && number % 5 == 0)
+                if (number >= 10 && number % 10 == 0)
                 {
-                    // The number is valid, proceed with your logic
+                    // The number is valid, store it
+                    validNumber = number;
                     MessageBox.Show($"Uneli ste validan broj: {number}");
                 }
                 else
                 {
                     // The number is invalid
-                    MessageBox.Show("Broj mora biti veći od 10 i deljiv sa 5.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Error);
+                    validNumber = null;
+                    MessageBox.Show("Broj mora biti veći od 10 i deljiv sa 10.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
             {
                 // The input is not a number
+                validNumber = null;
                 MessageBox.Show("Unesite ispravan broj.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implementirajte prelaz na sledeći korak
-            _mainWindow.NavigateToSeventhStepPage();
+            if (validNumber.HasValue)
+            {
+                // Navigate to the next step with the valid number
+                _mainWindow.NavigateToSeventhStepPage(validNumber.Value);
+            }
+            else
+            {
+                MessageBox.Show("Molimo unesite validan broj pre nego što nastavite.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }
