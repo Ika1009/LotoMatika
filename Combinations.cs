@@ -1959,7 +1959,7 @@ namespace Loto_App
                     brojevi[red_i][kolona_i] = brojevi[red_j][kolona_j];
                     brojevi[red_j][kolona_j] = temp;
                 }
-                for (int i = broj_kombinacija; i > 0; i--)
+                for (int i = (broj_kombinacija - 1); i >= 0; i--)
                 {
                     int j = random.Next(0, i + 1);
 
