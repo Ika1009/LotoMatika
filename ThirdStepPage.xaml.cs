@@ -30,7 +30,7 @@ namespace Loto_App
             // Implementirajte logiku za izračunavanje kombinacija
             int maxNumber = _mainWindow.GetMaxNumber();
             int combLenght = _mainWindow.GetCombinationLength();
-            int totalCombinations = Combinations._sve_kombinacije(maxNumber, combLenght, _mainWindow.GetExcludedNumbers()).Count;
+            int totalCombinations = Combinations._sve_kombinacije(maxNumber, combLenght, _mainWindow.GetExcludedNumbers());
 
             TotalCombinationsTextBlock.Text = $"{totalCombinations}";
         }

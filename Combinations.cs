@@ -2085,7 +2085,7 @@ namespace Loto_App
             return neke_kombinacije;
         }
 
-        public static List<List<int>> _sve_kombinacije(int broj_loptica, int duzina_kombinacije, List<int> zabranjeni_brojevi_lista)
+        public static int _sve_kombinacije(int broj_loptica, int duzina_kombinacije, List<int> zabranjeni_brojevi_lista)
         {
             int broj_zabranjenih_brojeva;
             if (zabranjeni_brojevi_lista == null)
@@ -2306,8 +2306,8 @@ namespace Loto_App
                     || ((broj_zabranjenih_brojeva == 4) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[2]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[3]))
                     || ((broj_zabranjenih_brojeva == 5) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[2]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[3]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[4]))))
                 {
-                    for (int j = 0; j < duzina_kombinacije; j++)
-                        brojevi[red2][j] = brojevi[i][j];
+                    /*for (int j = 0; j < duzina_kombinacije; j++)
+                        brojevi[red2][j] = brojevi[i][j];*/
                     red2++;
                 }
 
@@ -2360,15 +2360,15 @@ namespace Loto_App
                     Console.Write(_indeks_susedni(brojevi[i], duzina_kombinacije) + "\n");
             }*/
 
-             List<List<int>> sve_kombinacije = new List<List<int>>();   //2D ARRAY -----> LIST
+             /*List<List<int>> sve_kombinacije = new List<List<int>>();   //2D ARRAY -----> LIST
                 for (int i = 0; i < red2; i++)
                 {
                     sve_kombinacije.Add(new List<int>());
                     for (int j = 0; j < duzina_kombinacije; j++)
                         sve_kombinacije[i].Add(brojevi[i][j]);
-                }
+                }*/
 
-                return sve_kombinacije;
+                return red2;
         }
 
         /*static void Main(string[] args)
