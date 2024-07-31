@@ -19,7 +19,7 @@ namespace Loto_App
 
         private void PopulateCombinationCountComboBox()
         {
-            for (int i = 20; i <= 1000; i += 10)
+            for (int i = 10; i <= 1000; i += 10)
             {
                 CombinationCountComboBox.Items.Add(i.ToString());
             }
