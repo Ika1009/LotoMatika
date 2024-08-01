@@ -55,7 +55,7 @@ namespace Loto_App
             try
             {
                 // Create a file path
-                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LotoCombinations.txt");
+                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $"Loto Kombinacije {allCombinations.Count}.txt");
 
                 // Prepare the content to save
                 StringBuilder combinationsText = new StringBuilder();
@@ -82,13 +82,11 @@ namespace Loto_App
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement logic to exit the program
             Application.Current.Shutdown();
         }
 
         private void NewCalculationButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement logic to start a new calculation
             _mainWindow.NavigateToStartPage();
         }
     }
