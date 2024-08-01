@@ -1406,7 +1406,7 @@ namespace Loto_App
                 if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0) && (procenat_pojavljivana_omiljenih_brojeva == 100))
                 || ((broj_omiljenih_brojeva == 2) && (((i % duzina_kombinacije == 0) && prvi_omiljen) || ((i % duzina_kombinacije == 1) && drugi_omiljen)) && (procenat_pojavljivana_omiljenih_brojeva == 100))
                 || ((broj_omiljenih_brojeva == 1) && ((i % duzina_kombinacije == 0) && (i < (broj_brojeva / 2))) && (procenat_pojavljivana_omiljenih_brojeva == 50))
-                || ((broj_omiljenih_brojeva == 2) && ((((i % duzina_kombinacije == 0) && prvi_omiljen) || ((i % duzina_kombinacije == 1) && prvi_omiljen)) && (i < (broj_brojeva / 2)) && (procenat_pojavljivana_omiljenih_brojeva == 50))))
+                || ((broj_omiljenih_brojeva == 2) && ((((i % duzina_kombinacije == 0) && prvi_omiljen) || ((i % duzina_kombinacije == 1) && drugi_omiljen)) && (i < (broj_brojeva / 2)) && (procenat_pojavljivana_omiljenih_brojeva == 50))))
                 {
                     if (indeks_omiljenog_broja == broj_omiljenih_brojeva)
                         indeks_omiljenog_broja = 0;
@@ -1502,7 +1502,7 @@ namespace Loto_App
                 if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0) && (procenat_pojavljivana_omiljenih_brojeva == 100))
                 || ((broj_omiljenih_brojeva == 2) && (((i % duzina_kombinacije == 0) && prvi_omiljen) || ((i % duzina_kombinacije == 1) && drugi_omiljen)) && (procenat_pojavljivana_omiljenih_brojeva == 100))
                 || ((broj_omiljenih_brojeva == 1) && ((i % duzina_kombinacije == 0) && (i < (broj_brojeva / 2))) && (procenat_pojavljivana_omiljenih_brojeva == 50))
-                || ((broj_omiljenih_brojeva == 2) && ((((i % duzina_kombinacije == 0) && prvi_omiljen) || ((i % duzina_kombinacije == 1) && prvi_omiljen)) && (i < (broj_brojeva / 2)) && (procenat_pojavljivana_omiljenih_brojeva == 50))))
+                || ((broj_omiljenih_brojeva == 2) && ((((i % duzina_kombinacije == 0) && prvi_omiljen) || ((i % duzina_kombinacije == 1) && drugi_omiljen)) && (i < (broj_brojeva / 2)) && (procenat_pojavljivana_omiljenih_brojeva == 50))))
                 {
                     if (indeks_omiljenog_broja == broj_omiljenih_brojeva)
                         indeks_omiljenog_broja = 0;
