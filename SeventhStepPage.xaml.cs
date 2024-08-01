@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -51,27 +52,26 @@ namespace Loto_App
 
         private void SaveCombinationsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement logic to save combinations to computer
-            MessageBox.Show("Kombinacije su spremljene na računalo.");
-        }
-
-        private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)
-        {
-            StringBuilder combinationsText = new StringBuilder();
-            foreach (var combination in allCombinations)
+            try
             {
-                combinationsText.AppendLine(string.Join(", ", combination));
+                // Create a file path
+                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LotoCombinations.txt");
+
+                // Prepare the content to save
+                StringBuilder combinationsText = new StringBuilder();
+                foreach (var combination in allCombinations)
+                {
+                    combinationsText.AppendLine(string.Join(", ", combination));
+                }
+
+                // Save the content to the file
+                File.WriteAllText(filePath, combinationsText.ToString());
+                MessageBox.Show("Kombinacije su spremljene na računalo u 'My Documents' folder.", "Spremljeno", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-
-            // Implement logic to print combinations
-            // Example: Print the combinationsText.ToString()
-            MessageBox.Show("Kombinacije su poslane na pisač.");
-        }
-
-        private void NextStepButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement logic to navigate to the next step
-            // _mainWindow.NavigateToSixthStepPage();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Došlo je do greške prilikom spremanja kombinacija: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void PreviousStepButton_Click(object sender, RoutedEventArgs e)
@@ -89,7 +89,7 @@ namespace Loto_App
         private void NewCalculationButton_Click(object sender, RoutedEventArgs e)
         {
             // Implement logic to start a new calculation
-            _mainWindow.NavigateToFirstStepPage();
+            _mainWindow.NavigateToStartPage();
         }
     }
 }
