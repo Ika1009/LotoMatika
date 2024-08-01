@@ -84,7 +84,7 @@ namespace Loto_App
         private void NoButton_Click(object sender, RoutedEventArgs e)
         {
             // Implement navigation to the fifth step, skipping the fourth step
-            _mainWindow.NavigateToFifthStepPage(null);
+            _mainWindow.NavigateToSixthStepPage(-1);
         }
 
         private void NextStepButton_Click(object sender, RoutedEventArgs e)

@@ -27,45 +27,20 @@ namespace Loto_App
 
         private void CombinationCountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CombinationCountTextBox.Text = CombinationCountComboBox.SelectedItem.ToString();
-            ValidateAndProcessInput();
-        }
-
-        private void CombinationCountTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
+            if (CombinationCountComboBox.SelectedItem != null)
             {
-                ValidateAndProcessInput();
+                ValidateAndProcessInput(CombinationCountComboBox.SelectedItem.ToString());
             }
         }
 
-        private void CombinationCountTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void ValidateAndProcessInput(string input)
         {
-            // Only allow numeric input
-            e.Handled = !IsTextNumeric(e.Text);
-        }
-
-        private bool IsTextNumeric(string text)
-        {
-            foreach (char c in text)
-            {
-                if (!char.IsDigit(c))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private void ValidateAndProcessInput()
-        {
-            if (int.TryParse(CombinationCountTextBox.Text, out int number))
+            if (int.TryParse(input, out int number))
             {
                 if (number >= 10 && number % 10 == 0)
                 {
                     // The number is valid, store it
                     validNumber = number;
-                    MessageBox.Show($"Uneli ste validan broj: {number}");
                 }
                 else
                 {

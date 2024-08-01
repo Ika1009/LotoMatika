@@ -9,6 +9,7 @@ namespace Loto_App
     public partial class SeventhStepPage : Page
     {
         private MainWindow _mainWindow;
+        private List<List<int>> allCombinations;
 
         public SeventhStepPage(MainWindow mainWindow)
         {
@@ -19,9 +20,9 @@ namespace Loto_App
         private void ShowCombinationsButton_Click(object sender, RoutedEventArgs e)
         {
             // Generate and display combinations
-            List<List<int>> combinations = GenerateCombinations();
-            StringBuilder combinationsText = new ();
-            foreach (var combination in combinations)
+            allCombinations = GenerateCombinations();
+            StringBuilder combinationsText = new StringBuilder();
+            foreach (var combination in allCombinations)
             {
                 combinationsText.AppendLine(string.Join(", ", combination));
             }
@@ -56,7 +57,14 @@ namespace Loto_App
 
         private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)
         {
+            StringBuilder combinationsText = new StringBuilder();
+            foreach (var combination in allCombinations)
+            {
+                combinationsText.AppendLine(string.Join(", ", combination));
+            }
+
             // Implement logic to print combinations
+            // Example: Print the combinationsText.ToString()
             MessageBox.Show("Kombinacije su poslane na pisač.");
         }
 
