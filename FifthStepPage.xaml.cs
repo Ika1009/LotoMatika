@@ -31,5 +31,10 @@ namespace Loto_App
             // Implementirajte prelaz na sledeći korak, prosleđivanjem favoriteUsage
             _mainWindow.NavigateToSixthStepPage(favoriteUsage);
         }
+
+        private void BackButton_Click4(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.BackToFourthStepPage();
+        }
     }
 }

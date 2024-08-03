@@ -68,5 +68,10 @@ namespace Loto_App
                 MessageBox.Show("Molimo vas da odaberete loto igru.", "Upozorenje", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.NavigateToStartPage();
+        }
     }
 }

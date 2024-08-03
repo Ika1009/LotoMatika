@@ -80,6 +80,11 @@ namespace Loto_App
             _mainWindow.NavigateToThirdStepPage(excludedNumbers);
             // Implementirajte prelaz na sledeći korak, prosleđivanjem excludedNumbers liste
         }
+
+        private void BackButton_Click1(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.BackToFirstStepPage();
+        }
     }
 
 }

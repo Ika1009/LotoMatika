@@ -86,5 +86,37 @@
                 </Style>
             </Button.Style>
         </Button>
+
+		<Button Content="PRETHODNI KORAK"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="10"
+                Width="150"
+                Height="50"
+                Background="#FF6666"
+                Foreground="White"
+                FontSize="12"
+                FontWeight="DemiBold"
+                Click="BackButton_Click3">
+			<Button.Style>
+				<Style TargetType="Button">
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="Button">
+								<Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="20">
+									<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+								</Border>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</Button.Style>
+			<Button.Effect>
+				<DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="320" Color="Black"/>
+			</Button.Effect>
+		</Button>
     </Grid>
 </Page>

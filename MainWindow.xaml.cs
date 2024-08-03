@@ -23,10 +23,12 @@ namespace Loto_App
             InitializeComponent();
             NavigateToStartPage();
         }
+
         public void NavigateToStartPage()
         {
             MainFrame.Navigate(new StartPage(this));
         }
+
         public void NavigateToFirstStepPage()
         {
             MainFrame.Navigate(new FirstStepPage(this));
@@ -84,6 +86,31 @@ namespace Loto_App
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        public void BackToFirstStepPage()
+        {
+            MainFrame.Navigate(new FirstStepPage(this));
+        }
+
+        public void BackToSecondStepPage()
+        {
+            MainFrame.Navigate(new SecondStepPage(this));
+        }
+
+        public void BackToThirdStepPage()
+        {
+            MainFrame.Navigate(new ThirdStepPage(this));
+        }
+
+        public void BackToFourthStepPage()
+        {
+            MainFrame.Navigate(new FourthStepPage(this));
+        }
+
+        public void BackToFifthStepPage()
+        {
+            MainFrame.Navigate(new FifthStepPage(this));
         }
     }
 }

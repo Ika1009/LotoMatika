@@ -69,5 +69,10 @@ namespace Loto_App
                 MessageBox.Show("Molimo unesite validan broj pre nego što nastavite.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+
+        private void BackButton_Click5(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.BackToFourthStepPage();
+        }
     }
 }

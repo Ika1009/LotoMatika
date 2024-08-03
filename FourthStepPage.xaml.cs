@@ -8,6 +8,7 @@ namespace Loto_App
 {
     public partial class FourthStepPage : Page
     {
+        private bool odlucio_se = false;
         private int maxFavoriteNumbers = 2;
         private int maxNumber;
         private List<int> favoriteNumbers = new List<int>();
@@ -74,6 +75,7 @@ namespace Loto_App
 
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
+            odlucio_se = true;
             YesButton.Visibility = Visibility.Hidden;
             NoButton.Visibility = Visibility.Hidden;
             QuestionText.Text = "Možete izabrati najviše do 2 favorit broja.";
@@ -91,6 +93,14 @@ namespace Loto_App
         {
             // Navigate to the next step, passing the favoriteNumbers list
             _mainWindow.NavigateToFifthStepPage(favoriteNumbers);
+        }
+
+        private void BackButton_Click3(object sender, RoutedEventArgs e)
+        {
+            if (!odlucio_se)
+                _mainWindow.BackToSecondStepPage();
+            else
+                _mainWindow.BackToFourthStepPage();
         }
     }
 }

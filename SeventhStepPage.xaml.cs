@@ -54,24 +54,46 @@ namespace Loto_App
         {
             try
             {
-                // Create a file path
-                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $"Loto Kombinacije {allCombinations.Count}.txt");
+                // Get the base directory where the executable is located
+                string executablePath = AppDomain.CurrentDomain.BaseDirectory;
 
-                // Prepare the content to save
-                StringBuilder combinationsText = new StringBuilder();
-                foreach (var combination in allCombinations)
+                // Navigate up to the project root directory
+                string projectRootPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\"));
+
+                // Define the relative path for the CSV file in the project root directory
+                string filePath = Path.Combine(projectRootPath, "SacuvaneKombinacije.csv");
+
+                // Check if allCombinations contains data
+                if (allCombinations == null || allCombinations.Count == 0)
                 {
-                    combinationsText.AppendLine(string.Join(", ", combination));
+                    MessageBox.Show("No combinations available to save.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
 
-                // Save the content to the file
-                File.WriteAllText(filePath, combinationsText.ToString());
-                MessageBox.Show("Kombinacije su spremljene na računalo u 'My Documents' folder.", "Spremljeno", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Prepare the content to append
+                StringBuilder combinationsText = new StringBuilder();
+
+                // Add the combinations
+                foreach (var combination in allCombinations)
+                {
+                    combinationsText.AppendLine(string.Join(",", combination));
+                }
+
+                // Append the content to the CSV file
+                File.AppendAllText(filePath, combinationsText.ToString());
+
+                MessageBox.Show("Kombinacije su dodane u 'SacuvaneKombinacije.csv' u istom folderu kao aplikacija.", "Spremljeno", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Došlo je do greške prilikom spremanja kombinacija: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+
+        private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         private void PreviousStepButton_Click(object sender, RoutedEventArgs e)
