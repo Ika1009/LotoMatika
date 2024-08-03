@@ -50,7 +50,12 @@ namespace Loto_App
         public void NavigateToFifthStepPage(List<int> favoriteNumbers)
         {
             this.favoriteNumbers = favoriteNumbers;
-            MainFrame.Navigate(new FifthStepPage(this));
+            if (favoriteNumbers.Count > 0)
+                MainFrame.Navigate(new FifthStepPage(this));
+            else
+            {
+                MainFrame.Navigate(new SixthStepPage(this));
+            }
         }
 
         public void NavigateToSixthStepPage(int favoriteUsage)

@@ -71,7 +71,7 @@ namespace Loto_App
                 {
                     // The number is invalid
                     validNumber = null;
-                    MessageBox.Show("Broj mora biti veći od 10 i deljiv sa 10.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Broj mora biti veći od 10 ili jednak 10, i deljiv sa 10.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
