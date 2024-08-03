@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +10,7 @@ namespace Loto_App
     public partial class SeventhStepPage : Page
     {
         private MainWindow _mainWindow;
+        private List<List<int>> allCombinations;
 
         public SeventhStepPage(MainWindow mainWindow)
         {
@@ -19,9 +21,9 @@ namespace Loto_App
         private void ShowCombinationsButton_Click(object sender, RoutedEventArgs e)
         {
             // Generate and display combinations
-            List<List<int>> combinations = GenerateCombinations();
-            StringBuilder combinationsText = new ();
-            foreach (var combination in combinations)
+            allCombinations = GenerateCombinations();
+            StringBuilder combinationsText = new StringBuilder();
+            foreach (var combination in allCombinations)
             {
                 combinationsText.AppendLine(string.Join(", ", combination));
             }
@@ -50,20 +52,26 @@ namespace Loto_App
 
         private void SaveCombinationsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement logic to save combinations to computer
-            MessageBox.Show("Kombinacije su spremljene na računalo.");
-        }
+            try
+            {
+                // Create a file path
+                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $"Loto Kombinacije {allCombinations.Count}.txt");
 
-        private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement logic to print combinations
-            MessageBox.Show("Kombinacije su poslane na pisač.");
-        }
+                // Prepare the content to save
+                StringBuilder combinationsText = new StringBuilder();
+                foreach (var combination in allCombinations)
+                {
+                    combinationsText.AppendLine(string.Join(", ", combination));
+                }
 
-        private void NextStepButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement logic to navigate to the next step
-            // _mainWindow.NavigateToSixthStepPage();
+                // Save the content to the file
+                File.WriteAllText(filePath, combinationsText.ToString());
+                MessageBox.Show("Kombinacije su spremljene na računalo u 'My Documents' folder.", "Spremljeno", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Došlo je do greške prilikom spremanja kombinacija: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void PreviousStepButton_Click(object sender, RoutedEventArgs e)
@@ -74,14 +82,12 @@ namespace Loto_App
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement logic to exit the program
             Application.Current.Shutdown();
         }
 
         private void NewCalculationButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement logic to start a new calculation
-            _mainWindow.NavigateToFirstStepPage();
+            _mainWindow.NavigateToStartPage();
         }
     }
 }

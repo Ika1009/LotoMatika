@@ -24,23 +24,12 @@
         <ComboBox x:Name="CombinationCountComboBox"
                   HorizontalAlignment="Center" 
                   VerticalAlignment="Center"
-                  Width="200"
-                  Height="40"
-                  Margin="0,20,0,0"
+                  Width="210"
+                  Height="48"
                   FontSize="16"
                   SelectionChanged="CombinationCountComboBox_SelectionChanged">
             <!-- Brojevi će biti dodani programatski -->
         </ComboBox>
-
-        <TextBox x:Name="CombinationCountTextBox"
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center"
-                 Width="200"
-                 Height="40"
-                 Margin="0,80,0,0"
-                 FontSize="16"
-                 KeyDown="CombinationCountTextBox_KeyDown"
-                 PreviewTextInput="CombinationCountTextBox_PreviewTextInput"/>
 
         <Button Content="PRIKAŽI MOJE KOMBINACIJE" 
                 HorizontalAlignment="Center" 

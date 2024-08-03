@@ -21,9 +21,12 @@ namespace Loto_App
         public MainWindow()
         {
             InitializeComponent();
+            NavigateToStartPage();
+        }
+        public void NavigateToStartPage()
+        {
             MainFrame.Navigate(new StartPage(this));
         }
-
         public void NavigateToFirstStepPage()
         {
             MainFrame.Navigate(new FirstStepPage(this));
@@ -71,6 +74,10 @@ namespace Loto_App
         public void NavigateToSeventhStepPage(int combinationsRequested)
         {
             this.combinationsRequested = combinationsRequested;
+            MainFrame.Navigate(new SeventhStepPage(this));
+        }
+        public void NavigateToArhivaPage()
+        {
             MainFrame.Navigate(new SeventhStepPage(this));
         }
 

@@ -31,21 +31,24 @@
         </Style>
     </Page.Resources>
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-            <TextBlock
-                       FontSize="30" FontWeight="Bold" Foreground="Black" TextAlignment="Center" Margin="0,0,0,20"><Run Text="Zavr"/><Run Language="sr-latn-rs" Text="šeno"/></TextBlock>
-            <TextBlock
-                       FontSize="20" FontWeight="Regular" Foreground="Black" TextAlignment="Center" Margin="0,0,0,40"><Run Text="Kliknite na "/><Run Language="sr-latn-rs" Text="gumb"/><Run Text=" ispod kako biste prikazali sve moguće kombinacije."/></TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20">
+            <TextBlock FontSize="30" FontWeight="Bold" Foreground="Black" TextAlignment="Center" Margin="0,0,0,20">Završeno</TextBlock>
             <Button x:Name="ShowCombinationsButton" Content="Prikaži kombinacije" Click="ShowCombinationsButton_Click" Height="38" Width="227" FontSize="18"/>
-            <TextBlock x:Name="CombinationsTextBlock" Text="" TextWrapping="Wrap" Margin="20" Visibility="Collapsed" FontSize="16"/>
             <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="250" Visibility="Collapsed" Margin="0,40,0,0">
                 <Button Content="SPREMI KOMBINACIJE NA RAČUNALO" Click="SaveCombinationsButton_Click"/>
-                <Button Content="ISPIŠI KOMBINACIJE NA PISAČU" Click="PrintCombinationsButton_Click"/>
-                <Button Content="PRIJEĐI NA IDUĆI KORAK" Click="NextStepButton_Click"/>
                 <Button Content="POVRATAK NA PRETHODNI KORAK" Click="PreviousStepButton_Click"/>
                 <Button Content="IZAĐI IZ PROGRAMA" Click="ExitButton_Click"/>
-                <Button Content="NOVI IZRAČUN" Click="NewCalculationButton_Click"/>
+                <Button Content="VRATI SE NA POČETNU" Click="NewCalculationButton_Click"/>
             </StackPanel>
         </StackPanel>
+        <Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TextBlock x:Name="CombinationsTextBlock" Text="" TextWrapping="Wrap" FontSize="16"/>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Page>

@@ -58,6 +58,37 @@
                 <DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="320" Color="Black"/>
             </Button.Effect>
         </Button>
+        <Button Content="ARHIVA"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="0,320,0,0"
+                Width="150"
+                Height="50"
+                Background="#FF6666"
+                Foreground="White"
+                FontSize="16"
+                FontWeight="DemiBold"
+                Click="ArhivaButton_Click">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        CornerRadius="20">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="320" Color="Black"/>
+            </Button.Effect>
+        </Button>
 
         <Button Content="IZAĐI IZ SOFTVERA"
                 HorizontalAlignment="Right"
