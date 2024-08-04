@@ -30,6 +30,7 @@ namespace Loto_App
         {
             _mainWindow.NavigateToFirstStepPage();
         }
+
         private void ArhivaButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToArhivaPage();

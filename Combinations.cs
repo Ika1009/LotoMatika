@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Xml;
+using System.IO;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Loto_App
 {
@@ -374,6 +378,17 @@ namespace Loto_App
 
         static int _generisi_kombinacije(int[][] brojevi, int[] trenutna_kombinacija, int red, int trenutni_broj, int clan_kombinacije, int broj_loptica, int duzina_kombinacije)    //GENERACIJA SVIH KOMBINACIJA
         {
+            /*StringBuilder combinationsText = new StringBuilder();
+
+            // Get the base directory where the executable is located
+            string executablePath = AppDomain.CurrentDomain.BaseDirectory;
+
+            // Navigate up to the project root directory
+            string projectRootPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\"));
+
+            // Define the relative path for the CSV file in the project root directory
+            string filePath = Path.Combine(projectRootPath, "Kombinacije_7_35.csv");*/
+
             if (trenutni_broj > broj_loptica)
                 return red;
             if (clan_kombinacije == duzina_kombinacije)
@@ -382,7 +397,19 @@ namespace Loto_App
                 {
                     trenutna_kombinacija[clan_kombinacije - 1] = i;
                     for (int j = 0; j < duzina_kombinacije; j++)
+                    {
                         brojevi[red][j] = trenutna_kombinacija[j];
+                    }
+
+                        /*// Prepare the content to append
+                        combinationsText = new StringBuilder();
+
+                        // Add the combinations
+                        combinationsText.AppendLine(string.Join(",", brojevi[red]));
+
+                        // Append the content to the CSV file
+                        File.AppendAllText(filePath, combinationsText.ToString());*/
+
                     red++;
                 }
                 return red;

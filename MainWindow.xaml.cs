@@ -68,6 +68,7 @@ namespace Loto_App
             this.favoriteUsage = favoriteUsage;
             MainFrame.Navigate(new SixthStepPage(this));
         }
+
         public void NavigateToSixthStepPage()
         {
             MainFrame.Navigate(new SixthStepPage(this));
@@ -78,9 +79,10 @@ namespace Loto_App
             this.combinationsRequested = combinationsRequested;
             MainFrame.Navigate(new SeventhStepPage(this));
         }
+
         public void NavigateToArhivaPage()
         {
-            MainFrame.Navigate(new SeventhStepPage(this));
+            MainFrame.Navigate(new ArhivaPage(this));
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)

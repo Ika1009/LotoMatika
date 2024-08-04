@@ -57,11 +57,11 @@ namespace Loto_App
                 // Get the base directory where the executable is located
                 string executablePath = AppDomain.CurrentDomain.BaseDirectory;
 
-                // Navigate up to the project root directory
-                string projectRootPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\"));
+                /*// Navigate up to the project root directory
+                string projectRootPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\"));*/
 
                 // Define the relative path for the CSV file in the project root directory
-                string filePath = Path.Combine(projectRootPath, "SacuvaneKombinacije.csv");
+                string filePath = Path.Combine(executablePath, "SacuvaneKombinacije.csv");
 
                 // Check if allCombinations contains data
                 if (allCombinations == null || allCombinations.Count == 0)
