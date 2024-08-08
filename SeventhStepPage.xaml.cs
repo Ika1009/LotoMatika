@@ -57,9 +57,6 @@ namespace Loto_App
                 // Get the base directory where the executable is located
                 string executablePath = AppDomain.CurrentDomain.BaseDirectory;
 
-                /*// Navigate up to the project root directory
-                string projectRootPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\"));*/
-
                 // Define the relative path for the CSV file in the project root directory
                 string filePath = Path.Combine(executablePath, "SacuvaneKombinacije.csv");
 
@@ -73,10 +70,14 @@ namespace Loto_App
                 // Prepare the content to append
                 StringBuilder combinationsText = new StringBuilder();
 
-                // Add the combinations
+                // Get the current date and time
+                string currentDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                // Add the combinations with the current date and time
                 foreach (var combination in allCombinations)
                 {
-                    combinationsText.AppendLine(string.Join(",", combination));
+                    string combinationLine = string.Join(",", combination);
+                    combinationsText.AppendLine($"{currentDateTime}, {combinationLine}");
                 }
 
                 // Append the content to the CSV file
@@ -89,6 +90,7 @@ namespace Loto_App
                 MessageBox.Show($"Došlo je do greške prilikom spremanja kombinacija: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
 
         private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)

@@ -7,49 +7,77 @@
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ArhivaPage">
-	<Page.Background>
-		<SolidColorBrush Color="#FFB3B3"/>
-	</Page.Background>
-	<Page.Resources>
-		<!-- Style for the prettier button -->
-		<Style TargetType="Button">
-			<Setter Property="Background" Value="#FF6F61"/>
-			<Setter Property="Foreground" Value="White"/>
-			<Setter Property="FontWeight" Value="Bold"/>
-			<Setter Property="Padding" Value="10"/>
-			<Setter Property="Margin" Value="10"/>
-			<Setter Property="BorderBrush" Value="Transparent"/>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="Button">
-						<Border Background="{TemplateBinding Background}" CornerRadius="5">
-							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-						</Border>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-	</Page.Resources>
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="3*" />
-			<ColumnDefinition Width="2*" />
-		</Grid.ColumnDefinitions>
-		<StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20">
-			<TextBlock FontSize="30" FontWeight="Bold" Foreground="Black" TextAlignment="Center" Margin="0,0,0,20">Završeno</TextBlock>
-			<Button x:Name="ShowCombinationsButton" Content="Prikaži kombinacije" Click="ShowCombinationsButton_Click" Height="38" Width="227" FontSize="18"/>
-			<StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="250" Visibility="Collapsed" Margin="0,40,0,0">
-				<Button Content="SPREMI KOMBINACIJE NA RAČUNALO" Click="SaveCombinationsButton_Click"/>
-				<Button Content="ISPIŠI NA PISAČU" Click="PrintCombinationsButton_Click"/>
-				<Button Content="POVRATAK NA PRETHODNI KORAK" Click="PreviousStepButton_Click"/>
-				<Button Content="NOVI RACUN" Click="NewCalculationButton_Click"/>
-				<Button Content="IZAĐI IZ PROGRAMA" Click="ExitButton_Click"/>
-			</StackPanel>
-		</StackPanel>
-		<Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
-			<ScrollViewer VerticalScrollBarVisibility="Auto">
-				<TextBlock x:Name="CombinationsTextBlock" Text="" TextWrapping="Wrap" FontSize="16"/>
-			</ScrollViewer>
-		</Border>
-	</Grid>
+    <Page.Background>
+        <SolidColorBrush Color="#FFB3B3"/>
+    </Page.Background>
+    <Page.Resources>
+        <!-- Style for the prettier button -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF6F61"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20">
+            <TextBlock FontSize="30" FontWeight="Bold" Foreground="Black" TextAlignment="Center" Margin="0,0,0,20">Završeno</TextBlock>
+            <!-- Uklonjeno dugme za prikazivanje kombinacija -->
+            <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="250" Visibility="Visible" Margin="0,40,0,0">
+
+            </StackPanel>
+        </StackPanel>
+        <Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TextBlock x:Name="CombinationsTextBlock" Text="" TextWrapping="Wrap" FontSize="9"/>
+            </ScrollViewer>
+        </Border>
+
+        <Button Content="NAZAD"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom"
+        Margin="0,0,10,10"
+        Width="92"
+        Height="50"
+        Background="#FF6666"
+        Foreground="White"
+        FontSize="12"
+        FontWeight="DemiBold"
+        Click="BackButton_Click">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="20">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="320" Color="Black"/>
+            </Button.Effect>
+        </Button>
+    </Grid>
 </Page>

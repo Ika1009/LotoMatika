@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO; // Ensure this is included for file operations
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,100 +9,64 @@ namespace Loto_App
 {
     public partial class ArhivaPage : Page
     {
-        private MainWindow _mainWindow;
-        private List<List<int>> allCombinations; // Declare allCombinations here
+        private readonly MainWindow _mainWindow;
 
         public ArhivaPage(MainWindow mainWindow)
         {
-            _mainWindow = mainWindow;
             InitializeComponent();
+            _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
+            LoadCombinationsFromFile();
         }
 
-        private void ShowCombinationsButton_Click(object sender, RoutedEventArgs e)
+        private void LoadCombinationsFromFile()
         {
-            // Generate and display combinations
-            allCombinations = GenerateCombinations();
-            StringBuilder combinationsText = new StringBuilder();
-            foreach (var combination in allCombinations)
+            string executablePath = AppDomain.CurrentDomain.BaseDirectory;
+            string filePath = Path.Combine(executablePath, "SacuvaneKombinacije.csv");
+
+            if (File.Exists(filePath))
             {
-                combinationsText.AppendLine(string.Join(", ", combination));
+                var lines = File.ReadAllLines(filePath);
+
+                if (lines.Length == 0)
+                {
+                    CombinationsTextBlock.Text = "Trenutno nema kombinacija.";
+                }
+                else
+                {
+                    StringBuilder combinations = new StringBuilder();
+
+                    // Reverse the order of lines
+                    Array.Reverse(lines);
+
+                    foreach (var line in lines)
+                    {
+                        // Assuming the format is "date, combination"
+                        var parts = line.Split(',', 2);
+                        if (parts.Length == 2)
+                        {
+                            // Remove any leading or trailing spaces
+                            string date = parts[0].Trim();
+                            string combination = parts[1].Trim();
+
+                            // Format the combination with the date aligned to the right
+                            string formattedLine = $"{combination.PadRight(40)} {date}";
+                            combinations.AppendLine(formattedLine);
+                        }
+                    }
+
+                    CombinationsTextBlock.Text = combinations.ToString();
+                }
+            }
+            else
+            {
+                CombinationsTextBlock.Text = "CSV fajl nije pronađen.";
             }
 
-            CombinationsTextBlock.Text = combinationsText.ToString();
-            CombinationsTextBlock.Visibility = Visibility.Visible;
-
-            // Show additional options after displaying combinations
-            ShowCombinationsButton.Visibility = Visibility.Collapsed;
             OptionsPanel.Visibility = Visibility.Visible;
         }
 
-        private List<List<int>> GenerateCombinations()
-        {
-            // Placeholder logic for generating combinations
-            // Replace this with your actual combination generation logic
-            int maxNumber = _mainWindow.GetMaxNumber();
-            int combinationLength = _mainWindow.GetCombinationLength();
-            int combinationsRequested = _mainWindow.GetCombinationsRequested();
-            List<int> excludedNumbers = _mainWindow.GetExcludedNumbers();
-            List<int> favoritedNumbers = _mainWindow.GetFavoriteNumbers();
-            int favoriteUsage = _mainWindow.GetFavoriteUsage();
 
-            return Combinations._neke_kombinacije(maxNumber, combinationLength, combinationsRequested, excludedNumbers, favoritedNumbers, favoriteUsage);
-        }
-
-        private void SaveCombinationsButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                // Get the base directory where the executable is located
-                string executablePath = AppDomain.CurrentDomain.BaseDirectory;
-
-                // Define the path for the CSV file in the executable directory
-                string filePath = Path.Combine(executablePath, "SacuvaneKombinacije.csv");
-
-                // Check if allCombinations contains data
-                if (allCombinations == null || allCombinations.Count == 0)
-                {
-                    MessageBox.Show("No combinations available to save.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                // Prepare the content to append
-                StringBuilder combinationsText = new StringBuilder();
-
-                // Add the combinations
-                foreach (var combination in allCombinations)
-                {
-                    combinationsText.AppendLine(string.Join(",", combination));
-                }
-
-                // Append the content to the CSV file
-                File.AppendAllText(filePath, combinationsText.ToString());
-
-                MessageBox.Show("Kombinacije su dodane u 'SacuvaneKombinacije.csv' u istom folderu kao aplikacija.", "Spremljeno", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Došlo je do greške prilikom spremanja kombinacija: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement print functionality here if needed
-        }
-
-        private void PreviousStepButton_Click(object sender, RoutedEventArgs e)
-        {
-            _mainWindow.NavigateToSixthStepPage();
-        }
-
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void NewCalculationButton_Click(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToStartPage();
         }

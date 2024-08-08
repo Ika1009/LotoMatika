@@ -24,6 +24,7 @@ namespace Loto_App
             InitializeComponent();
             _mainWindow = mainWindow;
         }
+
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
             ComboBoxItem selectedGame = (ComboBoxItem)LotoGamesComboBox.SelectedItem;
