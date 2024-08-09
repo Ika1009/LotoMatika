@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -10,19 +9,16 @@ namespace Loto_App
     public partial class ArhivaPage : Page
     {
         private readonly MainWindow _mainWindow;
+        private string FilePath; // Local variable to store the file path
 
         public ArhivaPage(MainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
-            LoadCombinationsFromFile();
         }
 
-        private void LoadCombinationsFromFile()
+        private void LoadCombinationsFromFile(string filePath)
         {
-            string executablePath = AppDomain.CurrentDomain.BaseDirectory;
-            string filePath = Path.Combine(executablePath, "SacuvaneKombinacije.csv");
-
             if (File.Exists(filePath))
             {
                 var lines = File.ReadAllLines(filePath);
@@ -56,15 +52,28 @@ namespace Loto_App
 
                     CombinationsTextBlock.Text = combinations.ToString();
                 }
+
+                // Hide buttons after file load
+                OptionsPanel.Visibility = Visibility.Collapsed;
             }
             else
             {
                 CombinationsTextBlock.Text = "CSV fajl nije pronađen.";
             }
-
-            OptionsPanel.Visibility = Visibility.Visible;
         }
 
+        private void LoadFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                string fileName = button.Tag.ToString();
+                string executablePath = AppDomain.CurrentDomain.BaseDirectory;
+                FilePath = Path.Combine(executablePath, fileName);
+
+                // Load the selected file
+                LoadCombinationsFromFile(FilePath);
+            }
+        }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {

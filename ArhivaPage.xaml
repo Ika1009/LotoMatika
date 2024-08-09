@@ -37,8 +37,30 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20">
             <TextBlock FontSize="30" FontWeight="Bold" Foreground="Black" TextAlignment="Center" Margin="0,0,0,20">Završeno</TextBlock>
-            <!-- Uklonjeno dugme za prikazivanje kombinacija -->
             <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="250" Visibility="Visible" Margin="0,40,0,0">
+                <Button Content="7 od 35 (Hrvatska)"
+        Tag="7od35_Hrvatska.csv"
+        Click="LoadFile_Click" />
+
+                <Button Content="6 od 45 (Hrvatska)"
+        Tag="6od45_Hrvatska.csv"
+        Click="LoadFile_Click" />
+
+                <Button Content="7 od 39 (Srbija)"
+        Tag="7od39_Srbija.csv"
+        Click="LoadFile_Click" />
+
+                <Button Content="6 od 44 (Slovenija)"
+        Tag="6od44_Slovenija.csv"
+        Click="LoadFile_Click" />
+
+                <Button Content="6 od 39 (BiH)"
+        Tag="6od39_BiH.csv"
+        Click="LoadFile_Click" />
+
+                <Button Content="7 od 37 (Makedonija)"
+        Tag="7od37_Makedonija.csv"
+        Click="LoadFile_Click" />
 
             </StackPanel>
         </StackPanel>
@@ -49,25 +71,25 @@
         </Border>
 
         <Button Content="NAZAD"
-        HorizontalAlignment="Right"
-        VerticalAlignment="Bottom"
-        Margin="0,0,10,10"
-        Width="92"
-        Height="50"
-        Background="#FF6666"
-        Foreground="White"
-        FontSize="12"
-        FontWeight="DemiBold"
-        Click="BackButton_Click">
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0,0,10,10"
+                Width="92"
+                Height="50"
+                Background="#FF6666"
+                Foreground="White"
+                FontSize="12"
+                FontWeight="DemiBold"
+                Click="BackButton_Click">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="20">
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="20">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
