@@ -9,7 +9,7 @@ namespace Loto_App
     public partial class ArhivaPage : Page
     {
         private readonly MainWindow _mainWindow;
-        private string FilePath; // Local variable to store the file path
+        private string FilePath;
 
         public ArhivaPage(MainWindow mainWindow)
         {
@@ -26,6 +26,8 @@ namespace Loto_App
                 if (lines.Length == 0)
                 {
                     CombinationsTextBlock.Text = "Trenutno nema kombinacija.";
+                    ButtonsPanel.Visibility = Visibility.Visible;
+                    InputBoxesPanel.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
@@ -36,30 +38,85 @@ namespace Loto_App
 
                     foreach (var line in lines)
                     {
-                        // Assuming the format is "date, combination"
                         var parts = line.Split(',', 2);
                         if (parts.Length == 2)
                         {
-                            // Remove any leading or trailing spaces
                             string date = parts[0].Trim();
                             string combination = parts[1].Trim();
-
-                            // Format the combination with the date aligned to the right
                             string formattedLine = $"{combination.PadRight(40)} {date}";
                             combinations.AppendLine(formattedLine);
                         }
                     }
 
                     CombinationsTextBlock.Text = combinations.ToString();
+
+                    // Prikazivanje unosa kutijica na osnovu maksimalnog broja
+                    int maxNumber = DetermineMaxNumber(filePath); // Pretpostavimo da imate metodu za određivanje maksimalnog broja
+                    ShowInputBoxes(maxNumber);
                 }
 
-                // Hide buttons after file load
-                OptionsPanel.Visibility = Visibility.Collapsed;
+                ButtonsPanel.Visibility = Visibility.Collapsed;
             }
             else
             {
                 CombinationsTextBlock.Text = "CSV fajl nije pronađen.";
+                ButtonsPanel.Visibility = Visibility.Visible;
+                InputBoxesPanel.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private int DetermineMaxNumber(string filePath)
+        {
+            // Pretpostavite da možete odrediti maksimalan broj na osnovu imena datoteke
+            // Na primer, 7 za "7 od 35" itd.
+            if (filePath.Contains("7od35") || filePath.Contains("7od39") || filePath.Contains("7od37"))
+            {
+                return 7;
+            }
+            else if (filePath.Contains("6od45") || filePath.Contains("6od44") || filePath.Contains("6od39"))
+            {
+                return 6;
+            }
+            else
+            {
+                return 6; // Podrazumevano
+            }
+        }
+
+        private void ShowInputBoxes(int numberOfBoxes)
+        {
+            InputBoxesPanel.Children.Clear();
+
+            // Dodavanje glavnih textbox-ova
+            for (int i = 0; i < numberOfBoxes; i++)
+            {
+                TextBox inputBox = new TextBox
+                {
+                    Width = 40, // Kvadratni oblik
+                    Height = 40,
+                    MaxLength = 2, // Omogućava unošenje jednog ili dva broja
+                    HorizontalContentAlignment = HorizontalAlignment.Center,
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5)
+                };
+
+                InputBoxesPanel.Children.Add(inputBox);
+            }
+
+            // Dodavanje dodatnog textbox-a izdvojenog desno
+            TextBox extraInputBox = new TextBox
+            {
+                Width = 40,
+                Height = 40,
+                MaxLength = 2,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(20, 5, 0, 5) // Veća leva margina za razdvajanje
+            };
+
+            InputBoxesPanel.Children.Add(extraInputBox);
+
+            InputBoxesPanel.Visibility = Visibility.Visible;
         }
 
         private void LoadFile_Click(object sender, RoutedEventArgs e)
@@ -70,7 +127,7 @@ namespace Loto_App
                 string executablePath = AppDomain.CurrentDomain.BaseDirectory;
                 FilePath = Path.Combine(executablePath, fileName);
 
-                // Load the selected file
+                // Učitaj izabrani fajl
                 LoadCombinationsFromFile(FilePath);
             }
         }

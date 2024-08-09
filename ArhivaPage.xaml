@@ -35,35 +35,40 @@
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20">
+        <StackPanel x:Name="OptionsPanel" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20">
             <TextBlock FontSize="30" FontWeight="Bold" Foreground="Black" TextAlignment="Center" Margin="0,0,0,20">Završeno</TextBlock>
-            <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="250" Visibility="Visible" Margin="0,40,0,0">
+            <StackPanel x:Name="ButtonsPanel" Orientation="Vertical" Width="250" Visibility="Visible" Margin="0,40,0,0">
                 <Button Content="7 od 35 (Hrvatska)"
-        Tag="7od35_Hrvatska.csv"
-        Click="LoadFile_Click" />
+                        Tag="7od35_Hrvatska.csv"
+                        Click="LoadFile_Click" />
 
                 <Button Content="6 od 45 (Hrvatska)"
-        Tag="6od45_Hrvatska.csv"
-        Click="LoadFile_Click" />
+                        Tag="6od45_Hrvatska.csv"
+                        Click="LoadFile_Click" />
 
                 <Button Content="7 od 39 (Srbija)"
-        Tag="7od39_Srbija.csv"
-        Click="LoadFile_Click" />
+                        Tag="7od39_Srbija.csv"
+                        Click="LoadFile_Click" />
 
                 <Button Content="6 od 44 (Slovenija)"
-        Tag="6od44_Slovenija.csv"
-        Click="LoadFile_Click" />
+                        Tag="6od44_Slovenija.csv"
+                        Click="LoadFile_Click" />
 
                 <Button Content="6 od 39 (BiH)"
-        Tag="6od39_BiH.csv"
-        Click="LoadFile_Click" />
+                        Tag="6od39_BiH.csv"
+                        Click="LoadFile_Click" />
 
                 <Button Content="7 od 37 (Makedonija)"
-        Tag="7od37_Makedonija.csv"
-        Click="LoadFile_Click" />
+                        Tag="7od37_Makedonija.csv"
+                        Click="LoadFile_Click" />
+            </StackPanel>
 
+            <!-- Ovaj StackPanel će se koristiti za prikaz TextBox-ova -->
+            <StackPanel x:Name="InputBoxesPanel" Orientation="Horizontal" Visibility="Collapsed" Margin="0,40,0,0">
+                <!-- TextBox-ovi će biti dodani dinamički ovde -->
             </StackPanel>
         </StackPanel>
+
         <Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <TextBlock x:Name="CombinationsTextBlock" Text="" TextWrapping="Wrap" FontSize="9"/>
