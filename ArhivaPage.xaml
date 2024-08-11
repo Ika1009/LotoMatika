@@ -67,11 +67,28 @@
             <StackPanel x:Name="InputBoxesPanel" Orientation="Horizontal" Visibility="Collapsed" Margin="0,40,0,0">
                 <!-- TextBox-ovi će biti dodani dinamički ovde -->
             </StackPanel>
+
+            <!-- Dugme Sačuvaj ispod kockica -->
+            <Button x:Name="SaveButton"
+                    Content="Sačuvaj"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0,20,0,0"
+                    Width="250"
+                    Visibility="Collapsed"
+                    Click="SaveNumbers_Click" />
+
+            <Button x:Name="NewNumbersButton" Content="Novi brojevi"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0,20,0,0"
+                    Width="250" Click="NewNumbersButton_Click"
+                    Visibility="Collapsed" />
         </StackPanel>
 
         <Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <TextBlock x:Name="CombinationsTextBlock" Text="" TextWrapping="Wrap" FontSize="9"/>
+                <RichTextBox x:Name="CombinationsRichTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
             </ScrollViewer>
         </Border>
 

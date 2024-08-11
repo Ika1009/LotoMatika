@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Loto_App
 {
@@ -10,6 +13,11 @@ namespace Loto_App
     {
         private readonly MainWindow _mainWindow;
         private string FilePath;
+        private int broj_loptica;
+        private List<int> pogodjeni = new List<int> { 0, 0, 0, 0, 0, 0, 0 }; // Lista pogodjenih brojeva
+        private int bonus; // Bonus broj
+        private int[] greenCounts = new int[8]; // Broj kombinacija sa 0 do 7 zelenih brojeva
+        private int[] greenRedCounts = new int[8]; // Broj kombinacija sa 0 do 7 zelenih i crvenih brojeva
 
         public ArhivaPage(MainWindow mainWindow)
         {
@@ -22,44 +30,55 @@ namespace Loto_App
             if (File.Exists(filePath))
             {
                 var lines = File.ReadAllLines(filePath);
+                Array.Reverse(lines);
 
-                if (lines.Length == 0)
+                // Reset brojača
+                Array.Clear(greenCounts, 0, greenCounts.Length);
+                Array.Clear(greenRedCounts, 0, greenRedCounts.Length);
+
+                var document = new FlowDocument();
+                foreach (var line in lines)
                 {
-                    CombinationsTextBlock.Text = "Trenutno nema kombinacija.";
-                    ButtonsPanel.Visibility = Visibility.Visible;
-                    InputBoxesPanel.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    StringBuilder combinations = new StringBuilder();
-
-                    // Reverse the order of lines
-                    Array.Reverse(lines);
-
-                    foreach (var line in lines)
+                    var parts = line.Split(',', 2);
+                    if (parts.Length == 2)
                     {
-                        var parts = line.Split(',', 2);
-                        if (parts.Length == 2)
+                        string date = parts[0].Trim();
+                        string combination = parts[1].Trim();
+                        var paragraph = new Paragraph();
+
+                        var numbers = combination.Split(',').Select(int.Parse).ToList();
+                        int greenCount = numbers.Count(n => pogodjeni.Contains(n));
+                        int redCount = numbers.Contains(bonus) ? 1 : 0;
+
+                        // Ažuriranje brojača
+                        greenCounts[greenCount]++;
+                        greenRedCounts[greenCount + redCount]++;
+
+                        foreach (var number in numbers)
                         {
-                            string date = parts[0].Trim();
-                            string combination = parts[1].Trim();
-                            string formattedLine = $"{combination.PadRight(40)} {date}";
-                            combinations.AppendLine(formattedLine);
+                            var run = new Run(number + " ");
+                            if (pogodjeni.Contains(number))
+                            {
+                                run.Foreground = Brushes.Red;
+                            }
+                            paragraph.Inlines.Add(run);
                         }
+
+                        paragraph.Inlines.Add(new Run(" " + date) { Foreground = Brushes.Black });
+                        document.Blocks.Add(paragraph);
                     }
-
-                    CombinationsTextBlock.Text = combinations.ToString();
-
-                    // Prikazivanje unosa kutijica na osnovu maksimalnog broja
-                    int maxNumber = DetermineMaxNumber(filePath); // Pretpostavimo da imate metodu za određivanje maksimalnog broja
-                    ShowInputBoxes(maxNumber);
                 }
 
+                CombinationsRichTextBox.Document = document;
+                ShowInputBoxes(DetermineMaxNumber(filePath));
                 ButtonsPanel.Visibility = Visibility.Collapsed;
+                InputBoxesPanel.Visibility = Visibility.Visible;
+                SaveButton.Visibility = Visibility.Visible;
             }
             else
             {
-                CombinationsTextBlock.Text = "CSV fajl nije pronađen.";
+                CombinationsRichTextBox.Document.Blocks.Clear();
+                CombinationsRichTextBox.Document.Blocks.Add(new Paragraph(new Run("CSV fajl nije pronađen.")));
                 ButtonsPanel.Visibility = Visibility.Visible;
                 InputBoxesPanel.Visibility = Visibility.Collapsed;
             }
@@ -67,8 +86,6 @@ namespace Loto_App
 
         private int DetermineMaxNumber(string filePath)
         {
-            // Pretpostavite da možete odrediti maksimalan broj na osnovu imena datoteke
-            // Na primer, 7 za "7 od 35" itd.
             if (filePath.Contains("7od35") || filePath.Contains("7od39") || filePath.Contains("7od37"))
             {
                 return 7;
@@ -87,7 +104,6 @@ namespace Loto_App
         {
             InputBoxesPanel.Children.Clear();
 
-            // Dodavanje glavnih textbox-ova
             for (int i = 0; i < numberOfBoxes; i++)
             {
                 TextBox inputBox = new TextBox
@@ -103,7 +119,6 @@ namespace Loto_App
                 InputBoxesPanel.Children.Add(inputBox);
             }
 
-            // Dodavanje dodatnog textbox-a izdvojenog desno
             TextBox extraInputBox = new TextBox
             {
                 Width = 40,
@@ -126,8 +141,7 @@ namespace Loto_App
                 string fileName = button.Tag.ToString();
                 string executablePath = AppDomain.CurrentDomain.BaseDirectory;
                 FilePath = Path.Combine(executablePath, fileName);
-
-                // Učitaj izabrani fajl
+                broj_loptica = DetermineNumberOfBalls(FilePath);
                 LoadCombinationsFromFile(FilePath);
             }
         }
@@ -135,6 +149,182 @@ namespace Loto_App
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToStartPage();
+        }
+
+        private void SaveNumbers_Click(object sender, RoutedEventArgs e)
+        {
+            pogodjeni.Clear();
+            bonus = 0;
+            bool hasError = false;
+            bool hasEmptyField = false;
+            HashSet<int> seenNumbers = new HashSet<int>();
+            HashSet<int> duplicateNumbers = new HashSet<int>();
+
+            for (int i = 0; i < InputBoxesPanel.Children.Count; i++)
+            {
+                if (InputBoxesPanel.Children[i] is TextBox textBox)
+                {
+                    if (string.IsNullOrWhiteSpace(textBox.Text))
+                    {
+                        hasEmptyField = true;
+                    }
+                    else if (int.TryParse(textBox.Text, out int number))
+                    {
+                        if (number > broj_loptica)
+                        {
+                            textBox.Text = "";
+                            hasError = true;
+                        }
+                        else
+                        {
+                            if (i < InputBoxesPanel.Children.Count - 1)
+                            {
+                                if (seenNumbers.Contains(number))
+                                {
+                                    duplicateNumbers.Add(number);
+                                }
+                                else
+                                {
+                                    seenNumbers.Add(number);
+                                    pogodjeni.Add(number);
+                                }
+                            }
+                            else
+                            {
+                                bonus = number;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        textBox.Text = "";
+                        hasError = true;
+                    }
+                }
+            }
+
+            if (duplicateNumbers.Count > 0)
+            {
+                foreach (var number in duplicateNumbers)
+                {
+                    pogodjeni.Remove(number);
+                    foreach (var child in InputBoxesPanel.Children)
+                    {
+                        if (child is TextBox textBox && textBox.Text == number.ToString())
+                        {
+                            textBox.Text = "";
+                        }
+                    }
+                }
+                hasError = true;
+            }
+
+            if (hasEmptyField)
+            {
+                if (!hasError)
+                {
+                    MessageBox.Show("Molimo popunite sva polja.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Preveliki brojevi su izbrisani. Molimo popunite sva polja.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else if (hasError)
+            {
+                MessageBox.Show("Preveliki brojevi ili nevalidni unosi su izbrisani. Molimo proverite unos.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                // Sakrij kockice za unos
+                InputBoxesPanel.Visibility = Visibility.Collapsed;
+
+                // Sakrij dugme za čuvanje
+                SaveButton.Visibility = Visibility.Collapsed;
+
+                // Prikaži dugme za nove brojeve
+                NewNumbersButton.Visibility = Visibility.Visible;
+
+                // Ako nema grešaka i sva polja su popunjena, sačuvaj brojeve i oboji
+                SaveCombinations();
+            }
+        }
+
+        private void SaveCombinations()
+        {
+            var document = CombinationsRichTextBox.Document as FlowDocument;
+            var paragraphs = document?.Blocks.OfType<Paragraph>().ToList();
+
+            if (paragraphs != null)
+            {
+                // Prvo oboji sve brojeve crno
+                foreach (var paragraph in paragraphs)
+                {
+                    foreach (var inline in paragraph.Inlines.OfType<Run>())
+                    {
+                        if (int.TryParse(inline.Text.Trim(), out int number))
+                        {
+                            inline.Foreground = Brushes.Black; // Oboji sve brojeve crno
+                        }
+                        else
+                        {
+                            inline.Foreground = Brushes.Black; // Ako nije broj, postavi crnu boju
+                        }
+                    }
+                }
+
+                // Zatim oboji pogođene brojeve zeleno i bonus broj crveno
+                foreach (var paragraph in paragraphs)
+                {
+                    foreach (var inline in paragraph.Inlines.OfType<Run>())
+                    {
+                        if (int.TryParse(inline.Text.Trim(), out int number))
+                        {
+                            if (pogodjeni.Contains(number))
+                            {
+                                inline.Foreground = Brushes.Green; // Zeleni tekst za pogođene brojeve
+                            }
+                            else if (number == bonus) // Bonus broj
+                            {
+                                inline.Foreground = Brushes.Red; // Crveni tekst za bonus broj
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private int DetermineNumberOfBalls(string filePath)
+        {
+            if (filePath.Contains("35"))
+            {
+                return 35;
+            }
+            else if (filePath.Contains("45"))
+            {
+                return 45;
+            }
+            else if (filePath.Contains("39"))
+            {
+                return 39;
+            }
+            else if (filePath.Contains("44"))
+            {
+                return 44;
+            }
+            else if (filePath.Contains("37"))
+            {
+                return 37;
+            }
+            else
+            {
+                return 35;
+            }
+        }
+
+        private void NewNumbersButton_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.NavigateToArhivaPage();
         }
     }
 }
