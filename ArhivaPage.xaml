@@ -78,6 +78,15 @@
                     Visibility="Collapsed"
                     Click="SaveNumbers_Click" />
 
+            <TextBlock x:Name="CountTextBlock"
+           FontSize="16"
+           FontWeight="Bold"
+           Foreground="Black"
+           Margin="0,20,0,0"
+           Visibility="Collapsed"
+           TextAlignment="Center" />
+
+
             <Button x:Name="NewNumbersButton" Content="Novi brojevi"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"

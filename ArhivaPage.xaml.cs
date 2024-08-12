@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Loto_App
 {
@@ -47,12 +48,6 @@ namespace Loto_App
                         var paragraph = new Paragraph();
 
                         var numbers = combination.Split(',').Select(int.Parse).ToList();
-                        int greenCount = numbers.Count(n => pogodjeni.Contains(n));
-                        int redCount = numbers.Contains(bonus) ? 1 : 0;
-
-                        // Ažuriranje brojača
-                        greenCounts[greenCount]++;
-                        greenRedCounts[greenCount + redCount]++;
 
                         foreach (var number in numbers)
                         {
@@ -245,12 +240,28 @@ namespace Loto_App
                 // Prikaži dugme za nove brojeve
                 NewNumbersButton.Visibility = Visibility.Visible;
 
-                // Ako nema grešaka i sva polja su popunjena, sačuvaj brojeve i oboji
-                SaveCombinations();
+                if (!hasError && !hasEmptyField)
+                {
+                    // Sakrij kockice za unos
+                    InputBoxesPanel.Visibility = Visibility.Collapsed;
+
+                    // Sakrij dugme za čuvanje
+                    SaveButton.Visibility = Visibility.Collapsed;
+
+                    // Prikaži dugme za nove brojeve
+                    NewNumbersButton.Visibility = Visibility.Visible;
+
+                    // Ako nema grešaka i sva polja su popunjena, sačuvaj brojeve i oboji
+                    SaveCombinations(greenCounts, greenRedCounts);
+
+                    // Prikaži brojeve kombinacija
+                    CountTextBlock.Text = GenerateCountText();
+                    CountTextBlock.Visibility = Visibility.Visible;
+                }
             }
         }
 
-        private void SaveCombinations()
+        private void SaveCombinations(int[] greenCounts, int[] greenRedCounts)
         {
             var document = CombinationsRichTextBox.Document as FlowDocument;
             var paragraphs = document?.Blocks.OfType<Paragraph>().ToList();
@@ -276,6 +287,8 @@ namespace Loto_App
                 // Zatim oboji pogođene brojeve zeleno i bonus broj crveno
                 foreach (var paragraph in paragraphs)
                 {
+                    int broj_zelenih = 0;
+                    bool ima_crvenih = false;
                     foreach (var inline in paragraph.Inlines.OfType<Run>())
                     {
                         if (int.TryParse(inline.Text.Trim(), out int number))
@@ -283,11 +296,25 @@ namespace Loto_App
                             if (pogodjeni.Contains(number))
                             {
                                 inline.Foreground = Brushes.Green; // Zeleni tekst za pogođene brojeve
+                                broj_zelenih++; // Broji zelene brojeve
                             }
                             else if (number == bonus) // Bonus broj
                             {
                                 inline.Foreground = Brushes.Red; // Crveni tekst za bonus broj
+                                ima_crvenih = true; // Označava da ima crvenih brojeva
                             }
+                        }
+                    }
+
+                    if (broj_zelenih < greenCounts.Length)
+                    {
+                        if (ima_crvenih)
+                        {
+                            greenRedCounts[broj_zelenih]++;
+                        }
+                        else
+                        {
+                            greenCounts[broj_zelenih]++;
                         }
                     }
                 }
@@ -325,6 +352,74 @@ namespace Loto_App
         private void NewNumbersButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToArhivaPage();
+        }
+
+        private string GenerateCountText()
+        {
+            string text = "";
+
+            if (FilePath.Contains("7od35"))
+            {
+                text += $"7: {greenCounts[7]} \n";
+                text += $"6 + 1: {greenRedCounts[6]} \n";
+                text += $"6: {greenCounts[6]} \n";
+                text += $"5 + 1: {greenRedCounts[5]} \n";
+                text += $"5: {greenCounts[5]} \n";
+                text += $"4 + 1: {greenRedCounts[4]} \n";
+                text += $"4: {greenCounts[4]} \n";
+                text += $"3 + 1: {greenRedCounts[3]} \n";
+                text += $"0 + 1: {greenRedCounts[0]} \n";
+
+            }
+            else if (FilePath.Contains("6od45"))
+            {
+                text += $"6: {greenCounts[6]} \n";
+                text += $"5 + 1: {greenRedCounts[5]} \n";
+                text += $"5: {greenCounts[5]} \n";
+                text += $"4 + 1: {greenRedCounts[4]} \n";
+                text += $"4: {greenCounts[4]} \n";
+                text += $"3 + 1: {greenRedCounts[3]} \n";
+                text += $"3: {greenCounts[3]} \n";
+            }
+            else if (FilePath.Contains("7od39"))
+            {
+                text += $"7: {greenCounts[7]} \n";
+                text += $"6: {greenCounts[6]} \n";
+                text += $"5: {greenCounts[5]} \n";
+                text += $"4: {greenCounts[4]} \n";
+                text += $"3: {greenCounts[3]} \n";
+            }
+            else if (FilePath.Contains("6od44"))
+            {
+                text += $"6: {greenCounts[6]} \n";
+                text += $"5 + 1: {greenRedCounts[5]} \n";
+                text += $"5: {greenCounts[5]} \n";
+                text += $"4 + 1: {greenRedCounts[4]} \n";
+                text += $"4: {greenCounts[4]} \n";
+                text += $"3 + 1: {greenRedCounts[3]} \n";
+                text += $"3: {greenCounts[3]} \n";
+                text += $"0 + 1: {greenRedCounts[0]} \n";
+            }
+            else if (FilePath.Contains("6od39"))
+            {
+                text += $"6: {greenCounts[6]} \n";
+                text += $"5 + 1: {greenRedCounts[5]} \n";
+                text += $"5: {greenCounts[5]} \n";
+                text += $"4 + 1: {greenRedCounts[4]} \n";
+                text += $"4: {greenCounts[4]} \n";
+                text += $"3 + 1: {greenRedCounts[3]} \n";
+                text += $"3: {greenCounts[3]} \n";
+                text += $"2 + 1: {greenRedCounts[2]} \n";
+            }
+            else if (FilePath.Contains("7od37"))
+            {
+                text += $"7: {greenCounts[7]} \n";
+                text += $"6: {greenCounts[6]} \n";
+                text += $"5: {greenCounts[5]} \n";
+                text += $"4: {greenCounts[4]} \n";
+            }
+
+            return text;
         }
     }
 }
