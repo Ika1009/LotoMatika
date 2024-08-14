@@ -368,7 +368,7 @@ namespace Loto_App
                 text += $"4 + 1: {greenRedCounts[4]} \n";
                 text += $"4: {greenCounts[4]} \n";
                 text += $"3 + 1: {greenRedCounts[3]} \n";
-                text += $"0 + 1: {greenRedCounts[0]} \n";
+                text += $"0 + 1: {greenRedCounts[0]}";
 
             }
             else if (FilePath.Contains("6od45"))
@@ -379,7 +379,7 @@ namespace Loto_App
                 text += $"4 + 1: {greenRedCounts[4]} \n";
                 text += $"4: {greenCounts[4]} \n";
                 text += $"3 + 1: {greenRedCounts[3]} \n";
-                text += $"3: {greenCounts[3]} \n";
+                text += $"3: {greenCounts[3]}";
             }
             else if (FilePath.Contains("7od39"))
             {
@@ -387,7 +387,7 @@ namespace Loto_App
                 text += $"6: {greenCounts[6]} \n";
                 text += $"5: {greenCounts[5]} \n";
                 text += $"4: {greenCounts[4]} \n";
-                text += $"3: {greenCounts[3]} \n";
+                text += $"3: {greenCounts[3]}";
             }
             else if (FilePath.Contains("6od44"))
             {
@@ -398,7 +398,7 @@ namespace Loto_App
                 text += $"4: {greenCounts[4]} \n";
                 text += $"3 + 1: {greenRedCounts[3]} \n";
                 text += $"3: {greenCounts[3]} \n";
-                text += $"0 + 1: {greenRedCounts[0]} \n";
+                text += $"0 + 1: {greenRedCounts[0]}";
             }
             else if (FilePath.Contains("6od39"))
             {
@@ -409,14 +409,14 @@ namespace Loto_App
                 text += $"4: {greenCounts[4]} \n";
                 text += $"3 + 1: {greenRedCounts[3]} \n";
                 text += $"3: {greenCounts[3]} \n";
-                text += $"2 + 1: {greenRedCounts[2]} \n";
+                text += $"2 + 1: {greenRedCounts[2]}";
             }
             else if (FilePath.Contains("7od37"))
             {
                 text += $"7: {greenCounts[7]} \n";
                 text += $"6: {greenCounts[6]} \n";
                 text += $"5: {greenCounts[5]} \n";
-                text += $"4: {greenCounts[4]} \n";
+                text += $"4: {greenCounts[4]}";
             }
 
             return text;

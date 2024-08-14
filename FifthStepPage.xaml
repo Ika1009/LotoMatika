@@ -8,7 +8,25 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Četvrti Korak">
     <Page.Background>
-        <SolidColorBrush Color="#FFB3B3"/>
+        <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute" Viewbox="0,0,100,100" ViewboxUnits="Absolute">
+            <VisualBrush.Visual>
+                <Rectangle Width="100" Height="100" Fill="#EEEEEE">
+                    <Rectangle.OpacityMask>
+                        <DrawingBrush Viewport="0,0,0.5,0.5" ViewportUnits="RelativeToBoundingBox" TileMode="Tile">
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing Brush="White">
+                                    <GeometryDrawing.Geometry>
+                                        <GeometryGroup>
+                                            <RectangleGeometry Rect="0,0,10,10" />
+                                        </GeometryGroup>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </VisualBrush.Visual>
+        </VisualBrush>
     </Page.Background>
     <Grid>
         <TextBlock Text="Favorit broj ili brojeve možete koristiti u 100% kombinacija ili u 50% kombinacija. Molimo da odaberete klikom na jednu od dvije mogućnosti ispod." 
