@@ -8,7 +8,25 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Četvrti Korak">
     <Page.Background>
-        <SolidColorBrush Color="#FFB3B3"/>
+        <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute" Viewbox="0,0,100,100" ViewboxUnits="Absolute">
+            <VisualBrush.Visual>
+                <Rectangle Width="100" Height="100" Fill="#EEEEEE">
+                    <Rectangle.OpacityMask>
+                        <DrawingBrush Viewport="0,0,0.5,0.5" ViewportUnits="RelativeToBoundingBox" TileMode="Tile">
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing Brush="White">
+                                    <GeometryDrawing.Geometry>
+                                        <GeometryGroup>
+                                            <RectangleGeometry Rect="0,0,10,10" />
+                                        </GeometryGroup>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </VisualBrush.Visual>
+        </VisualBrush>
     </Page.Background>
     <Grid>
         <TextBlock x:Name="QuestionText" 
@@ -34,7 +52,24 @@
                     FontSize="16"
                     FontWeight="Bold"
                     Margin="20"
-                    Click="YesButton_Click"/>
+                    Click="YesButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="0" 
+                                            CornerRadius="30">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button x:Name="NoButton"
                     Content="NE" 
                     Width="100" 
@@ -43,7 +78,24 @@
                     FontSize="16"
                     FontWeight="Bold"
                     Margin="20"
-                    Click="NoButton_Click"/>
+                    Click="NoButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="0" 
+                                            CornerRadius="30">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
 
         <UniformGrid x:Name="NumberGrid"
@@ -75,7 +127,7 @@
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
                                         BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        BorderThickness="0" 
                                         CornerRadius="30">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
@@ -104,7 +156,7 @@
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}"
                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        BorderThickness="0"
                                         CornerRadius="30">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
