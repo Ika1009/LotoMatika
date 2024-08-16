@@ -60,7 +60,7 @@
 
         <!-- StackPanel for buttons and input fields -->
         <StackPanel x:Name="OptionsPanel" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20">
-            <TextBlock FontSize="24" FontWeight="Bold" Foreground="#333333" TextAlignment="Center" Margin="0,0,0,15">Završeno</TextBlock>
+            <TextBlock FontSize="24" FontWeight="Bold" Foreground="#333333" TextAlignment="Center" Margin="0,0,0,15">Arhiva</TextBlock>
 
             <!-- Buttons Panel -->
             <StackPanel x:Name="ButtonsPanel" Orientation="Vertical" Width="180" Visibility="Visible" Margin="0,15,0,0">
