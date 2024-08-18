@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace Loto_App
 {
@@ -106,10 +107,52 @@ namespace Loto_App
             }
         }
 
-        private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)
+        /*private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
+            try
+            {
+                // Check if there are combinations to print
+                if (allCombinations == null || allCombinations.Count == 0)
+                {
+                    MessageBox.Show("No combinations available to print.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Create a StringBuilder to store the combinations as a single string
+                StringBuilder combinationsText = new StringBuilder();
+
+                // Get the current date and time
+                string currentDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                // Add the combinations with the current date and time
+                foreach (var combination in allCombinations)
+                {
+                    string combinationLine = string.Join(", ", combination);
+                    combinationsText.AppendLine($"{currentDateTime}, {combinationLine}");
+                }
+
+                // Convert the combinationsText to a FlowDocument for printing
+                FlowDocument doc = new FlowDocument(new Paragraph(new Run(combinationsText.ToString())))
+                {
+                    FontSize = 14,
+                    PagePadding = new Thickness(50)
+                };
+
+                // Create a PrintDialog
+                PrintDialog printDialog = new PrintDialog();
+
+                // Show the print dialog and print the document if the user clicks 'Print'
+                if (printDialog.ShowDialog() == true)
+                {
+                    IDocumentPaginatorSource idpSource = doc;
+                    printDialog.PrintDocument(idpSource.DocumentPaginator, "Combinations Printout");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred during printing: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }<Button Content="ISPIŠI NA PISAČU" Click="PrintCombinationsButton_Click"/>*/
 
         private void PreviousStepButton_Click(object sender, RoutedEventArgs e)
         {

@@ -72,7 +72,6 @@
             <!-- Options Panel -->
             <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="250" Visibility="Collapsed" Margin="0,40,0,0">
                 <Button Content="SPREMI KOMBINACIJE NA RAČUNALO" Click="SaveCombinationsButton_Click"/>
-                <Button Content="ISPIŠI NA PISAČU" Click="PrintCombinationsButton_Click"/>
                 <Button Content="POVRATAK NA PRETHODNI KORAK" Click="PreviousStepButton_Click"/>
                 <Button Content="NOVI RACUN" Click="NewCalculationButton_Click"/>
                 <Button Content="IZAĐI IZ PROGRAMA" Click="ExitButton_Click"/>
