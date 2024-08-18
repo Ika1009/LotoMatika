@@ -5,12 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 namespace Loto_App
@@ -18,7 +14,7 @@ namespace Loto_App
     public partial class SecondStepPage : Page
     {
         private int maxNumbersToExclude = 5;
-        private List<int> excludedNumbers = [];
+        private List<int> excludedNumbers = new();
         private readonly MainWindow _mainWindow;
 
         public SecondStepPage(MainWindow mainWindow)
@@ -32,7 +28,7 @@ namespace Loto_App
         {
             for (int i = 1; i <= totalNumbers; i++)
             {
-                Button numberButton = new ()
+                Button numberButton = new()
                 {
                     Content = i.ToString(),
                     Width = 35,
@@ -75,16 +71,45 @@ namespace Loto_App
             }
         }
 
-        private void NextStepButton_Click(object sender, RoutedEventArgs e)
+        private async void NextStepButton_Click(object sender, RoutedEventArgs e)
         {
+            ShowLoadingIndicator();
+
+            // Simulacija čekanja za dugotrajnu operaciju
+            await Task.Delay(2000);
+
             _mainWindow.NavigateToThirdStepPage(excludedNumbers);
-            // Implementirajte prelaz na sledeći korak, prosleđivanjem excludedNumbers liste
+
+            HideLoadingIndicator();
         }
 
         private void BackButton_Click1(object sender, RoutedEventArgs e)
         {
             _mainWindow.BackToFirstStepPage();
         }
-    }
 
+        private void ShowLoadingIndicator()
+        {
+            LoadingIndicator.Visibility = Visibility.Visible;
+
+            // Stop any previous animation
+            LoadingRotateTransform.BeginAnimation(RotateTransform.AngleProperty, null);
+
+            DoubleAnimation rotateAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 360,
+                Duration = TimeSpan.FromSeconds(1),
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            LoadingRotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
+        }
+
+        private void HideLoadingIndicator()
+        {
+            LoadingRotateTransform.BeginAnimation(RotateTransform.AngleProperty, null);
+            LoadingIndicator.Visibility = Visibility.Hidden;
+        }
+    }
 }

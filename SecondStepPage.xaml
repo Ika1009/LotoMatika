@@ -48,6 +48,22 @@
             <!-- Brojevi će biti dodani programatski -->
         </UniformGrid>
 
+        <Path x:Name="LoadingIndicator"
+      Stroke="Cyan"
+      StrokeThickness="5"
+      Visibility="Hidden"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center"
+      Data="M 25,0 A 25,25 90 1 1 0,25">
+            <Path.RenderTransform>
+                <RotateTransform x:Name="LoadingRotateTransform" Angle="0" CenterX="25" CenterY="25"/>
+            </Path.RenderTransform>
+        </Path>
+
+
+
+
+
         <Button Content="PRIJEĐI NA IDUĆI KORAK" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
