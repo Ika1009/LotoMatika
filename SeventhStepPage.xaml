@@ -78,6 +78,18 @@
             </StackPanel>
         </StackPanel>
 
+        <Path x:Name="LoadingIndicator"
+            Stroke="Cyan"
+            StrokeThickness="5"
+            Visibility="Hidden"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Data="M 25,0 A 25,25 90 1 1 0,25">
+            <Path.RenderTransform>
+                <RotateTransform x:Name="LoadingRotateTransform" Angle="0" CenterX="25" CenterY="25"/>
+            </Path.RenderTransform>
+        </Path>
+
         <!-- Display Combinations -->
         <Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
             <ScrollViewer VerticalScrollBarVisibility="Auto">

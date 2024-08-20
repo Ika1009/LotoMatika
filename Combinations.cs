@@ -1410,7 +1410,7 @@ namespace Loto_App
             bool drugi_omiljen = true;
             for (int i = 0; i < ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i++)
             {
-                if (i % duzina_kombinacije == 0)
+                /*if (i % duzina_kombinacije == 0)
                     if (broj_omiljenih_brojeva == 2)
                     {
                         int nasumican_izbor = random.Next(1, 4);
@@ -1429,7 +1429,7 @@ namespace Loto_App
                             prvi_omiljen = false;
                             drugi_omiljen = true;
                         }
-                    }
+                    }*/
 
                 if (indeks_omiljenog_broja == broj_omiljenih_brojeva)
                     indeks_omiljenog_broja = 0;
@@ -1513,7 +1513,7 @@ namespace Loto_App
             bool broj_nadjen = false;
             for (int i = ((broj_brojeva - pocetak_kruga) / broj_brojeva_u_ciklusu * broj_brojeva_u_ciklusu + pocetak_kruga); i < broj_brojeva; i++)
             {
-                if (broj_omiljenih_brojeva == 2)
+                /*if (broj_omiljenih_brojeva == 2)
                 {
                     int nasumican_izbor = random.Next(1, 4);
                     if (nasumican_izbor == 1)
@@ -1531,7 +1531,7 @@ namespace Loto_App
                         prvi_omiljen = false;
                         drugi_omiljen = true;
                     }
-                }
+                }*/
 
                 if (((broj_omiljenih_brojeva == 1) && (i % duzina_kombinacije == 0) && (procenat_pojavljivana_omiljenih_brojeva == 100))
                 || ((broj_omiljenih_brojeva == 2) && (((i % duzina_kombinacije == 0) && prvi_omiljen) || ((i % duzina_kombinacije == 1) && drugi_omiljen)) && (procenat_pojavljivana_omiljenih_brojeva == 100))

@@ -5,6 +5,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media.Animation;
+using System.Windows.Media;
 
 namespace Loto_App
 {
@@ -23,8 +25,12 @@ namespace Loto_App
             InitializeComponent();
         }
 
-        private void ShowCombinationsButton_Click(object sender, RoutedEventArgs e)
+        private async void ShowCombinationsButton_Click(object sender, RoutedEventArgs e)
         {
+            ShowLoadingIndicator();
+
+            await Task.Delay(2000);
+
             // Generate and display combinations
             allCombinations = GenerateCombinations();
             StringBuilder combinationsText = new StringBuilder();
@@ -39,6 +45,8 @@ namespace Loto_App
             // Show additional options after displaying combinations
             ShowCombinationsButton.Visibility = Visibility.Collapsed;
             OptionsPanel.Visibility = Visibility.Visible;
+
+            HideLoadingIndicator();
         }
 
         private List<List<int>> GenerateCombinations()
@@ -168,6 +176,27 @@ namespace Loto_App
         private void NewCalculationButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToStartPage();
+        }
+
+        private void ShowLoadingIndicator()
+        {
+            LoadingIndicator.Visibility = Visibility.Visible;
+
+            DoubleAnimation rotateAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 360,
+                Duration = TimeSpan.FromSeconds(1),
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+
+            LoadingRotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
+        }
+
+        private void HideLoadingIndicator()
+        {
+            LoadingRotateTransform.BeginAnimation(RotateTransform.AngleProperty, null);
+            LoadingIndicator.Visibility = Visibility.Hidden;
         }
     }
 }
