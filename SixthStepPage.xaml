@@ -29,7 +29,7 @@
         </VisualBrush>
     </Page.Background>
     <Grid>
-        <TextBlock Text="Koliko želite kombinacija koristiti od ukupnog broja kombinacija? Najmanji broj kombinacija je 10, a najveći može biti i ukupan broj svih kombinacija." 
+        <TextBlock Text="Koliko želite kombinacija koristiti od ukupnog broja kombinacija? Najmanji broj kombinacija je 10, a najveći može biti 1000." 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top"
                    Margin="20,20,20,0"

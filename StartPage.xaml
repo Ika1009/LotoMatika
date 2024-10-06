@@ -8,10 +8,6 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Početna Stranica">
 
-    <Page.Resources>
-        <FontFamily x:Key="CustomFont">Assets/Fonts/BAHNSCHRIFT.TTF#Bahnshrift</FontFamily>
-    </Page.Resources>
-
     <Page.Background>
         <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute" Viewbox="0,0,100,100" ViewboxUnits="Absolute">
             <VisualBrush.Visual>
