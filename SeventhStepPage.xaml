@@ -59,14 +59,13 @@
 
         <!-- StackPanel for buttons and options -->
         <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20">
-            <TextBlock FontSize="30" FontWeight="Bold" Foreground="Black" TextAlignment="Center" Margin="0,0,0,20">Zavrseno</TextBlock>
 
             <!-- Show Combinations Button -->
             <Button x:Name="ShowCombinationsButton" 
                     Content="Prikaži kombinacije" 
                     Click="ShowCombinationsButton_Click" 
-                    Height="35" 
-                    Width="180" 
+                    Height="38" 
+                    Width="185" 
                     FontSize="16"/>
 
             <!-- Options Panel -->

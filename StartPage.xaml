@@ -127,7 +127,7 @@
                 Margin="10"
                 Width="150"
                 Height="50"
-                Background="#ff3434"
+                Background="#e80000"
                 Foreground="White"
                 FontSize="14"
                 FontWeight="Bold"
