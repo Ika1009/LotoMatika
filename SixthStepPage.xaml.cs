@@ -37,7 +37,7 @@ namespace Loto_App
         {
             if (int.TryParse(input, out int number))
             {
-                if (number >= 10 && number % 10 == 0)
+                if (number >= 10 && number % 10 == 0 && number < 1000)
                 {
                     // The number is valid, store it
                     validNumber = number;
@@ -46,7 +46,7 @@ namespace Loto_App
                 {
                     // The number is invalid
                     validNumber = null;
-                    MessageBox.Show("Broj mora biti veći od 10 ili jednak 10, i deljiv sa 10.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Broj mora biti veći od 10 ili jednak 10, deljiv sa 10, manji od 1000.", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else

@@ -28,6 +28,7 @@
             </VisualBrush.Visual>
         </VisualBrush>
     </Page.Background>
+
     <Grid>
         <TextBlock Text="DRUGI KORAK: Odaberite brojeve koje NE ŽELITE u svojim kombinacijama" 
                    HorizontalAlignment="Center" 
@@ -49,33 +50,29 @@
         </UniformGrid>
 
         <Path x:Name="LoadingIndicator"
-      Stroke="Cyan"
-      StrokeThickness="5"
-      Visibility="Hidden"
-      HorizontalAlignment="Center"
-      VerticalAlignment="Center"
-      Data="M 25,0 A 25,25 90 1 1 0,25">
+              Stroke="Cyan"
+              StrokeThickness="5"
+              Visibility="Hidden"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Data="M 25,0 A 25,25 90 1 1 0,25">
             <Path.RenderTransform>
                 <RotateTransform x:Name="LoadingRotateTransform" Angle="0" CenterX="25" CenterY="25"/>
             </Path.RenderTransform>
         </Path>
 
-
-
-
-
+        <!-- Adjusted Button Styles -->
         <Button Content="PRIJEĐI NA IDUĆI KORAK" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
                 Margin="0,0,0,30"
                 Width="240"
                 Height="60"
-                Background="#FF5733"
+                Background="#373737"
                 Foreground="White"
                 FontSize="18"
                 FontWeight="Bold"
-                Effect="{DynamicResource ShadowEffect}"
-                Click="NextStepButton_Click">
+                FontFamily="{StaticResource CustomFont}">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
@@ -83,37 +80,8 @@
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
                                         BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="0" 
-                                        CornerRadius="30">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
-
-        <Button Content="PRETHODNI KORAK"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Margin="10"
-                Width="200"
-                Height="60"
-                Background="#2ECC71"
-                Foreground="White"
-                FontSize="14"
-                FontWeight="Bold"
-                Click="BackButton_Click1">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="0" 
-                                        CornerRadius="30">
+                                        BorderThickness="2" 
+                                        CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -122,7 +90,39 @@
                 </Style>
             </Button.Style>
             <Button.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="4" Direction="320" Color="#888888"/>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
+            </Button.Effect>
+        </Button>
+
+        <Button Content="PRETHODNI KORAK"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="10"
+                Width="200"
+                Height="60"
+                Background="#e80000"
+                Foreground="White"
+                FontSize="14"
+                FontWeight="Bold"
+                FontFamily="{StaticResource CustomFont}">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        BorderThickness="2" 
+                                        CornerRadius="0">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
             </Button.Effect>
         </Button>
     </Grid>
