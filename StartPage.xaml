@@ -9,7 +9,7 @@
       Title="Početna Stranica">
 
     <Page.Resources>
-        <FontFamily x:Key="CustomFont">Bahnshrift SemiLight Condensed</FontFamily>
+        <FontFamily x:Key="CustomFont">Assets/Fonts/BAHNSCHRIFT.TTF#Bahnshrift</FontFamily>
     </Page.Resources>
 
     <Page.Background>
@@ -43,31 +43,32 @@
         </Grid.RowDefinitions>
 
         <!-- Logo u vrhu -->
-        <Image Source="logo.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10"/>
+        <Image Source="Assets/Images/logo.png" Width="384" Height="235" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-70,0,0" Grid.RowSpan="2"/>
 
         <!-- Tekst dobrodošlice -->
         <TextBlock Text="Dobro došli u aplikaciju LotoMatika – najmoćniji sustav za izradu loto kombinacija! Da biste krenuli samo kliknite na gumb ZAPOČNI."
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top"
-                    Margin="0,20,0,0"
-                    FontSize="25"
+                    Margin="0,98,0,0"
+                    FontSize="22
+                   "
                     FontWeight="DemiBold"
                     FontFamily="{StaticResource CustomFont}"
                     TextWrapping="Wrap"
-                    TextAlignment="Center"/>
+                    TextAlignment="Center" Grid.RowSpan="2"/>
 
         <!-- ZAPOČNI gumb -->
         <Button Content="ZAPOČNI!"
                 Grid.Row="1"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 Width="200"
                 Height="60"
-                Background="#FF5733"
+                Background="#373737"
                 Foreground="White"
                 FontSize="18"
                 FontWeight="Bold"
-                FontFamily="{StaticResource CustomFont}">
+                FontFamily="{StaticResource CustomFont}" Margin="0,225,0,0">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
@@ -96,7 +97,7 @@
                 VerticalAlignment="Center"
                 Width="150"
                 Height="50"
-                Background="#3498DB"
+                Background="#373737"
                 Foreground="White"
                 FontSize="16"
                 FontWeight="Bold"
@@ -123,14 +124,14 @@
         </Button>
 
         <!-- IZAĐI IZ SOFTVERA gumb -->
-        <Button Content="IZAĐI IZ SOFTVERA"
+        <Button Content="IZAĐI"
                 Grid.Row="3"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="10"
                 Width="150"
                 Height="50"
-                Background="#2ECC71"
+                Background="#ff3434"
                 Foreground="White"
                 FontSize="14"
                 FontWeight="Bold"
