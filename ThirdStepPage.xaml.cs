@@ -22,17 +22,32 @@ namespace Loto_App
         {
             _mainWindow = mainWindow;
             InitializeComponent();
-            CalculateTotalCombinations();
+
+            int remainingCombinations = CalculateTotalCombinations();
+            TotalCombinationsTextBlock.Text = $"{remainingCombinations}";
+
+            // Ukupan broj mogućih kombinacija za loto 6/45, treba za svaki
+            int totalPossibleCombinations = 8145060;
+
+            // Izračunaj broj eliminisanih kombinacija
+            int excludedCombinations = totalPossibleCombinations - remainingCombinations;
+
+            // Izračunaj procenat eliminisanih kombinacija
+            double excludedPercentage = (double)excludedCombinations / totalPossibleCombinations * 100;
+
+
+            // Prikazivanje broja eliminisanih kombinacija i procenta
+            ExcludedCombinationsTextBlock.Text = $"Iz igre je izbačeno ukupno: {excludedCombinations:N0} kombinacija, što je {excludedPercentage:F2}% od svih mogućih kombinacija.";
         }
 
-        private void CalculateTotalCombinations()
+        private int CalculateTotalCombinations()
         {
             // Implementirajte logiku za izračunavanje kombinacija
             int maxNumber = _mainWindow.GetMaxNumber();
             int combLenght = _mainWindow.GetCombinationLength();
             int totalCombinations = Combinations._sve_kombinacije(maxNumber, combLenght, _mainWindow.GetExcludedNumbers());
 
-            TotalCombinationsTextBlock.Text = $"{totalCombinations}";
+            return totalCombinations;
         }
 
         private void NextStepButton_Click(object sender, RoutedEventArgs e)
