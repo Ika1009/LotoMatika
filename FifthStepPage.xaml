@@ -7,6 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Peti Korak">
+
     <Page.Background>
         <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute" Viewbox="0,0,100,100" ViewboxUnits="Absolute">
             <VisualBrush.Visual>
@@ -28,6 +29,7 @@
             </VisualBrush.Visual>
         </VisualBrush>
     </Page.Background>
+
     <Grid>
         <TextBlock Text="Favorit broj ili brojeve možete koristiti u 100% kombinacija ili u 50% kombinacija. Molimo da odaberete klikom na jednu od dvije mogućnosti ispod." 
                    HorizontalAlignment="Center" 
@@ -43,13 +45,16 @@
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
                     Margin="0,100,0,0">
+
+            <!-- FAVORIT 100% dugme -->
             <Button Content="FAVORIT 100%" 
                     Width="200" 
                     Height="60" 
-                    Background="#2ECC71"
-                    FontSize="18"
+                    Background="#373737"
+                    FontSize="16"
                     FontWeight="Bold"
                     Foreground="White"
+                    FontFamily="{StaticResource CustomFont}"
                     Margin="20"
                     Click="Favorite100Button_Click">
                 <Button.Style>
@@ -59,8 +64,8 @@
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}" 
                                             BorderBrush="{TemplateBinding BorderBrush}" 
-                                            BorderThickness="0" 
-                                            CornerRadius="30">
+                                            BorderThickness="2" 
+                                            CornerRadius="0">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
@@ -69,16 +74,19 @@
                     </Style>
                 </Button.Style>
                 <Button.Effect>
-                    <DropShadowEffect BlurRadius="8" ShadowDepth="4" Direction="320" Color="#888888"/>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
                 </Button.Effect>
             </Button>
+
+            <!-- FAVORIT 50% dugme -->
             <Button Content="FAVORIT 50%" 
                     Width="200" 
                     Height="60" 
-                    Background="#FF5733"
-                    FontSize="18"
+                    Background="#373737"
+                    FontSize="16"
                     FontWeight="Bold"
                     Foreground="White"
+                    FontFamily="{StaticResource CustomFont}"
                     Margin="20"
                     Click="Favorite50Button_Click">
                 <Button.Style>
@@ -88,8 +96,8 @@
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}" 
                                             BorderBrush="{TemplateBinding BorderBrush}" 
-                                            BorderThickness="0" 
-                                            CornerRadius="30">
+                                            BorderThickness="2" 
+                                            CornerRadius="0">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
@@ -98,24 +106,25 @@
                     </Style>
                 </Button.Style>
                 <Button.Effect>
-                    <DropShadowEffect BlurRadius="8" ShadowDepth="4" Direction="320" Color="#888888"/>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
                 </Button.Effect>
             </Button>
+
         </StackPanel>
 
+        <!-- Dugme za sledeći korak -->
         <Button x:Name="NextStepButton"
         Content="PRIJEĐI NA SLIJEDEĆI KORAK" 
         HorizontalAlignment="Center" 
         VerticalAlignment="Bottom" 
         Margin="0,0,0,30"
         Width="280"
-            Height="60"
-        Background="#FF5733"
+        Height="60"
+        Background="#373737"
         Foreground="White"
         FontSize="18"
         FontWeight="Bold"
-        Click="NextStepButton_Click"
-        Visibility="Collapsed">
+        Click="NextStepButton_Click">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
@@ -123,8 +132,8 @@
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="0" 
-                                CornerRadius="30">
+                                BorderThickness="2" 
+                                CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -134,13 +143,14 @@
             </Button.Style>
         </Button>
 
+        <!-- Dugme za prethodni korak -->
         <Button Content="PRETHODNI KORAK"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="10"
                 Width="200"
                 Height="60"
-                Background="#2ECC71"
+                Background="#e80000"
                 Foreground="White"
                 FontSize="14"
                 FontWeight="Bold"
@@ -152,8 +162,8 @@
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}"
                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="0"
-                                        CornerRadius="30">
+                                        BorderThickness="2"
+                                        CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -162,7 +172,7 @@
                 </Style>
             </Button.Style>
             <Button.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="4" Direction="320" Color="#888888"/>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
             </Button.Effect>
         </Button>
     </Grid>
