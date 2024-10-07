@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -38,15 +39,38 @@ namespace Loto_App
                 Array.Clear(greenRedCounts, 0, greenRedCounts.Length);
 
                 var document = new FlowDocument();
+                string lastDateTime = string.Empty; // Zapamti poslednji datum i vreme
+
                 foreach (var line in lines)
                 {
                     var parts = line.Split(',', 2);
                     if (parts.Length == 2)
                     {
-                        string date = parts[0].Trim();
+                        string dateTime = parts[0].Trim();
                         string combination = parts[1].Trim();
-                        var paragraph = new Paragraph();
 
+                        // Proveri da li se datum/vreme promenio
+                        if (dateTime != lastDateTime)
+                        {
+                            // Dodaj novi red sa datumom/vremenom u plavoj boji
+                            var dateParagraph = new Paragraph();
+                            var dateRun = new Run(dateTime)
+                            {
+                                Foreground = Brushes.Blue,
+                                FontWeight = FontWeights.Bold
+                            };
+                            var dateBlock = new TextBlock(dateRun)
+                            {
+                                IsHitTestVisible = false // Onemogući selektovanje
+                            };
+                            dateParagraph.Inlines.Add(dateBlock); // Dodaj TextBlock u paragraf
+                            document.Blocks.Add(dateParagraph);
+
+                            lastDateTime = dateTime; // Ažuriraj poslednji datum/vreme
+                        }
+
+                        // Dodaj kombinaciju
+                        var paragraph = new Paragraph();
                         var numbers = combination.Split(',').Select(int.Parse).ToList();
 
                         foreach (var number in numbers)
@@ -59,8 +83,7 @@ namespace Loto_App
                             paragraph.Inlines.Add(run);
                         }
 
-                        paragraph.Inlines.Add(new Run(" " + date) { Foreground = Brushes.Black });
-                        document.Blocks.Add(paragraph);
+                        document.Blocks.Add(paragraph); // Dodaj kombinaciju
                     }
                 }
 
@@ -111,6 +134,9 @@ namespace Loto_App
                     Margin = new Thickness(5)
                 };
 
+                // Dodavanje KeyDown događaja
+                inputBox.KeyDown += InputBox_KeyDown;
+
                 InputBoxesPanel.Children.Add(inputBox);
             }
 
@@ -124,10 +150,36 @@ namespace Loto_App
                 Margin = new Thickness(20, 5, 0, 5) // Veća leva margina za razdvajanje
             };
 
-            InputBoxesPanel.Children.Add(extraInputBox);
+            // Dodavanje KeyDown događaja
+            extraInputBox.KeyDown += InputBox_KeyDown;
 
-            InputBoxesPanel.Visibility = Visibility.Visible;
+            InputBoxesPanel.Children.Add(extraInputBox);
         }
+
+        private void InputBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                // Pronađi trenutni TextBox
+                TextBox currentTextBox = sender as TextBox;
+                if (currentTextBox != null)
+                {
+                    // Pronađi indeks trenutnog TextBox-a
+                    int currentIndex = InputBoxesPanel.Children.IndexOf(currentTextBox);
+
+                    // Ako nije poslednji TextBox, pređi na sledeći
+                    if (currentIndex < InputBoxesPanel.Children.Count - 1)
+                    {
+                        TextBox nextTextBox = InputBoxesPanel.Children[currentIndex + 1] as TextBox;
+                        nextTextBox.Focus(); // Postavi fokus na sledeći TextBox
+                    }
+
+                    // Spreči zvučni signal
+                    e.Handled = true;
+                }
+            }
+        }
+
 
         private void LoadFile_Click(object sender, RoutedEventArgs e)
         {
@@ -353,6 +405,141 @@ namespace Loto_App
         {
             _mainWindow.NavigateToArhivaPage();
         }
+
+        // Field to store the selected combination and previous selection
+        private string selectedCombination = null;
+        private TextRange previousSelection = null; // To store the previous selection for clearing
+
+        // Mouse click event handler
+        private void CombinationsRichTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Dobavi trenutni red (liniju) na koju je kliknuto
+            var richTextBox = sender as RichTextBox;
+            var point = e.GetPosition(richTextBox);
+
+            // Dobavi tekst na koji je kliknuto
+            TextPointer textPointer = richTextBox.GetPositionFromPoint(point, true);
+            if (textPointer != null)
+            {
+                // Pronađi celu liniju koja sadrži kliknutu tačku
+                var lineStart = textPointer.GetLineStartPosition(0);
+                var lineEnd = textPointer.GetLineStartPosition(1) ?? richTextBox.Document.ContentEnd;
+                TextRange clickedLineRange = new TextRange(lineStart, lineEnd);
+
+                // Clear previous selection highlight
+                if (previousSelection != null)
+                {
+                    // Reset the background of the previously selected line
+                    previousSelection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+                }
+
+                // Set the selected combination to the text of the clicked line
+                selectedCombination = clickedLineRange.Text.Trim();
+
+                // Highlight the clicked line
+                clickedLineRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightBlue); // Change the highlight color as needed
+                previousSelection = clickedLineRange; // Store the current selection
+
+                // Proveri da li linija sadrži znak '-'
+                if (selectedCombination.Contains("-") || (selectedCombination == ""))
+                {
+                    // Sakrij Delete dugme ako linija sadrži '-'
+                    DeleteButton.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    // Prikaži Delete dugme za ostale tekstove
+                    DeleteButton.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+
+
+        // Click event for the delete button
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedCombination != null)
+            {
+                // Prvo, ukloni liniju iz RichTextBox-a
+                var richTextBox = CombinationsRichTextBox; // Your RichTextBox instance
+
+                // Očekivani format: "kombinacija - dd.MM.yyyy HH:mm"
+                foreach (var block in richTextBox.Document.Blocks)
+                {
+                    var textRange = new TextRange(block.ContentStart, block.ContentEnd);
+                    // Proveri da li tekst u RichTextBox-u sadrži selectedCombination
+                    if (textRange.Text.Trim() == selectedCombination)
+                    {
+                        richTextBox.Document.Blocks.Remove(block);
+                        break; // Ukloni samo prvu pronađenu kombinaciju
+                    }
+                }
+
+                // Sada obriši kombinaciju iz CSV fajla
+                DeleteCombination(selectedCombination);
+
+                // Reset selection
+                selectedCombination = null;
+                previousSelection = null; // Clear previous selection
+                DeleteButton.Visibility = Visibility.Collapsed; // Hide delete button
+            }
+        }
+
+
+        private void DeleteCombination(string combinationToDelete)
+        {
+            try
+            {
+                // Učitaj sve linije iz CSV fajla
+                var lines = File.ReadAllLines(FilePath).ToList();
+
+                // Pronađi liniju koju treba obrisati bez korišćenja lambda funkcije
+                string lineToRemove = null;
+                foreach (var line in lines)
+                {
+                    string[] parts = line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    // Inicijalizuje niz za kombinaciju
+                    string[] combination = new string[parts.Length - 2]; // Prva dva dela su datum i vreme
+
+                    // Popunjava niz kombinacije
+                    for (int i = 2; i < parts.Length; i++)
+                    {
+                        combination[i - 2] = parts[i];
+                    }
+
+                    // Spaja kombinaciju u jedan string sa razmacima
+                    string result = string.Join(" ", combination);
+
+                    if (result.Trim() == combinationToDelete)
+                    {
+                        lineToRemove = line;
+                        break; // Izlaz iz petlje kada je linija pronađena
+                    }
+                }
+
+                if (lineToRemove != null)
+                {
+                    // Ukloni liniju
+                    lines.Remove(lineToRemove);
+
+                    // Sačuvaj nazad u fajl
+                    File.WriteAllLines(FilePath, lines);
+
+                    MessageBox.Show("Kombinacija je uspešno obrisana!");
+                }
+                else
+                {
+                    MessageBox.Show("Kombinacija nije pronađena.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Došlo je do greške: {ex.Message}");
+            }
+        }
+
 
         private string GenerateCountText()
         {

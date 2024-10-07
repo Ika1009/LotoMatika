@@ -1427,7 +1427,7 @@ namespace Loto_App
                     if (broj_parnih_brojeva_kombinacija[i] < _broj_parnih(brojevi[i], duzina_kombinacije))  //RESAVANJE PARNIH (SMANJIVANJE)
                     {
                         sve_dobro = false;
-                        if (!_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
+                        if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                         && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2 != 0))
                         {
                             broj_ponavljanja_brojeva[brojevi[i][_indeks_parni_omiljeni(brojevi[i], duzina_kombinacije, omiljeni_brojevi)]]--;
@@ -1454,7 +1454,7 @@ namespace Loto_App
                     else if (broj_parnih_brojeva_kombinacija[i] > _broj_parnih(brojevi[i], duzina_kombinacije))  //RESAVANJE PARNIH (POVECAVANJE)
                     {
                         sve_dobro = false;
-                        if (!(_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]))
+                        if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && !(_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]))
                         && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2 == 0))
                         {
                             broj_ponavljanja_brojeva[brojevi[i][_indeks_neparni_omiljeni(brojevi[i], duzina_kombinacije, omiljeni_brojevi)]]--;
@@ -1481,7 +1481,7 @@ namespace Loto_App
                     else if (broj_malih_brojeva_kombinacija[i] < _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))  //RESAVANJE MALIH (SMANJIVANJE)
                     {
                         sve_dobro = false;
-                        if (((brojevi[i][_indeks_mali_omiljeni(brojevi[i], duzina_kombinacije, granica_malih, omiljeni_brojevi)] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
+                        if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && ((brojevi[i][_indeks_mali_omiljeni(brojevi[i], duzina_kombinacije, granica_malih, omiljeni_brojevi)] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                         && !(_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]))
                         && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))
                         {
@@ -1509,7 +1509,7 @@ namespace Loto_App
                     else if (broj_malih_brojeva_kombinacija[i] > _broj_malih(brojevi[i], duzina_kombinacije, granica_malih))  //RESAVANJE MALIH (POVECAVANJE)
                     {
                         sve_dobro = false;
-                        if (((brojevi[i][_indeks_veliki_omiljeni(brojevi[i], duzina_kombinacije, granica_malih, omiljeni_brojevi)] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
+                        if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && ((brojevi[i][_indeks_veliki_omiljeni(brojevi[i], duzina_kombinacije, granica_malih, omiljeni_brojevi)] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                         && !(_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]))
                         && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih))
                         {
@@ -1547,7 +1547,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) >= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) >= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -1597,7 +1597,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -1647,7 +1647,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_skupova(brojevi[i], duzina_kombinacije, velicina_skupa) <= _broj_skupova(nova_kombinacija1, duzina_kombinacije, velicina_skupa))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -1697,7 +1697,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_susednih(brojevi[i], duzina_kombinacije) <= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_susednih(brojevi[i], duzina_kombinacije) <= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -1748,7 +1748,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -1798,7 +1798,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_susednih(brojevi[i], duzina_kombinacije) >= _broj_susednih(nova_kombinacija1, duzina_kombinacije))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -1848,7 +1848,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) <= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) <= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -1898,7 +1898,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) >= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) >= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -1948,7 +1948,7 @@ namespace Loto_App
                                 nova_kombinacija1[l] = brojevi[i][l];
                             nova_kombinacija1[nasumicni_element] = rasporedjeni_brojevi_po_ponavljanju[indeks_zamene];
 
-                            if ((_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) >= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
+                            if (!_zabranjen_je(zabranjeni_brojevi, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene]) && (_broj_zadnjih_cifara(brojevi[i], duzina_kombinacije) >= _broj_zadnjih_cifara(nova_kombinacija1, duzina_kombinacije))
                             && !_poseduje_element(brojevi[i], duzina_kombinacije, rasporedjeni_brojevi_po_ponavljanju[indeks_zamene])
                             && ((brojevi[i][nasumicni_element] % 2) == (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] % 2))
                             && (((brojevi[i][nasumicni_element] <= granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] <= granica_malih)) || ((brojevi[i][nasumicni_element] > granica_malih) && (rasporedjeni_brojevi_po_ponavljanju[indeks_zamene] > granica_malih))))
@@ -2402,7 +2402,13 @@ namespace Loto_App
                             trenutni_broj = 1;
                         }
 
-                        if (upotrebljeni_brojevi[trenutni_broj - 1] == true)
+                        if (_zabranjen_je(zabranjeni_brojevi, trenutni_broj))
+                        {
+                            trenutni_broj++;
+                            if (trenutni_broj > broj_loptica)
+                                trenutni_broj = 1;
+                        }
+                        else if(upotrebljeni_brojevi[trenutni_broj - 1] == true)
                         {
                             trenutni_broj++;
                             if (trenutni_broj > broj_loptica)
@@ -2921,12 +2927,12 @@ namespace Loto_App
 
             //////////////////////////////////////////////////////////////////////
 
-            /*for (int i = 0; i < broj_kombinacija; i++)  //SORTIRANJE KOMBINACIJA POSEBNO
+            for (int i = 0; i < broj_kombinacija; i++)  //SORTIRANJE KOMBINACIJA POSEBNO
             {
                 Array.Sort(brojevi[i], 0, duzina_kombinacije);
             }
 
-            for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
+            /*for (int i = 0; i < broj_kombinacija; i++)  //ISPIS
             {
                 Console.Write((i + 1) + ": ");    //REDNI BROJEVI
 

@@ -114,12 +114,23 @@
                     <DropShadowEffect BlurRadius="6" ShadowDepth="3" Direction="320" Color="#888888"/>
                 </Button.Effect>
             </Button>
+
+            <!-- New Delete Button -->
+            <Button x:Name="DeleteButton" Content="Obriši datu kombinaciju" 
+HorizontalAlignment="Center" 
+VerticalAlignment="Top" 
+Margin="0,15,0,0" 
+Width="180" 
+Height="35" 
+Visibility="Collapsed" 
+Click="DeleteButton_Click"/>
         </StackPanel>
 
         <!-- RichTextBox for displaying combinations -->
         <Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <RichTextBox x:Name="CombinationsRichTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+                <RichTextBox x:Name="CombinationsRichTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                     PreviewMouseLeftButtonDown="CombinationsRichTextBox_PreviewMouseLeftButtonDown" />
             </ScrollViewer>
         </Border>
 
