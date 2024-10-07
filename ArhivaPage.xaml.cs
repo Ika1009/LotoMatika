@@ -433,17 +433,28 @@ namespace Loto_App
                     previousSelection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
                 }
 
-                // Set the selected combination
+                // Set the selected combination to the text of the clicked line
                 selectedCombination = clickedLineRange.Text.Trim();
 
                 // Highlight the clicked line
                 clickedLineRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightBlue); // Change the highlight color as needed
                 previousSelection = clickedLineRange; // Store the current selection
 
-                // Prikaži dugme za brisanje
-                DeleteButton.Visibility = Visibility.Visible;
+                // Proveri da li linija sadrži znak '-'
+                if (selectedCombination.Contains("-") || (selectedCombination == ""))
+                {
+                    // Sakrij Delete dugme ako linija sadrži '-'
+                    DeleteButton.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    // Prikaži Delete dugme za ostale tekstove
+                    DeleteButton.Visibility = Visibility.Visible;
+                }
             }
         }
+
+
 
         // Click event for the delete button
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
