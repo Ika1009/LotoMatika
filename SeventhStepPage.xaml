@@ -29,28 +29,6 @@
         </VisualBrush>
     </Page.Background>
 
-    <Page.Resources>
-        <!-- Button Style -->
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#FF5733"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="5,5"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Height" Value="35"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="15">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -64,19 +42,131 @@
             <Button x:Name="ShowCombinationsButton" 
                     Content="Prikaži kombinacije" 
                     Click="ShowCombinationsButton_Click" 
-                    Height="38" 
                     Width="185" 
-                    FontSize="16"/>
+                    Height="50" 
+                    Background="#e80000" 
+                    Foreground="White" 
+                    FontSize="16" 
+                    FontWeight="Bold" 
+                    FontFamily="{StaticResource CustomFont}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="2"
+                                            CornerRadius="0">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
+                </Button.Effect>
+            </Button>
 
             <!-- Options Panel -->
             <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="250" Visibility="Collapsed" Margin="0,40,0,0">
-                <Button Content="SPREMI KOMBINACIJE NA RAČUNALO" Click="SaveCombinationsButton_Click"/>
-                <Button Content="POVRATAK NA PRETHODNI KORAK" Click="PreviousStepButton_Click"/>
-                <Button Content="NOVI RACUN" Click="NewCalculationButton_Click"/>
-                <Button Content="IZAĐI IZ PROGRAMA" Click="ExitButton_Click"/>
+                <Button Content="SPREMI KOMBINACIJE NA RAČUNALO" Click="SaveCombinationsButton_Click"
+                        Width="200" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                BorderThickness="2"
+                                                CornerRadius="0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
+                    </Button.Effect>
+                </Button>
+
+                <Button Content="POVRATAK NA PRETHODNI KORAK" Click="PreviousStepButton_Click"
+                        Width="200" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                BorderThickness="2"
+                                                CornerRadius="0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
+                    </Button.Effect>
+                </Button>
+
+                <Button Content="NOVI RACUN" Click="NewCalculationButton_Click"
+                        Width="200" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                BorderThickness="2"
+                                                CornerRadius="0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
+                    </Button.Effect>
+                </Button>
+
+                <Button Content="IZAĐI IZ PROGRAMA" Click="ExitButton_Click"
+                        Width="200" Height="50" Background="#e80000" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                BorderThickness="2"
+                                                CornerRadius="0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
+                    </Button.Effect>
+                </Button>
             </StackPanel>
         </StackPanel>
 
+        <!-- Loading Indicator -->
         <Path x:Name="LoadingIndicator"
             Stroke="Cyan"
             StrokeThickness="5"
