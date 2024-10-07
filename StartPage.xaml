@@ -55,6 +55,7 @@
 
         <!-- ZAPOČNI gumb -->
         <Button Content="ZAPOČNI!"
+                Click="StartButton_Click"
                 Grid.Row="1"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
@@ -88,6 +89,7 @@
 
         <!-- ARHIVA gumb -->
         <Button Content="ARHIVA"
+                Click="ArhivaButton_Click"
                 Grid.Row="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -121,6 +123,7 @@
 
         <!-- IZAĐI IZ SOFTVERA gumb -->
         <Button Content="IZAĐI"
+                Click="ExitButton_Click"
                 Grid.Row="3"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"

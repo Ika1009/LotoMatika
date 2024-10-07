@@ -63,6 +63,7 @@
 
         <!-- Adjusted Button Styles -->
         <Button Content="PRIJEĐI NA IDUĆI KORAK" 
+                Click="NextStepButton_Click"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
                 Margin="0,0,0,30"
@@ -95,6 +96,7 @@
         </Button>
 
         <Button Content="PRETHODNI KORAK"
+                Click="BackButton_Click1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="10"
