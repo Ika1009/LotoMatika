@@ -71,10 +71,10 @@
                 Width="240"
                 Height="60"
                 Click="NextStepButton_Click"
-                Background="#373737">
-            <Button.Foreground>White</Button.Foreground>
-            <Button.FontSize>18</Button.FontSize>
-            <Button.FontWeight>Bold</Button.FontWeight>
+                Background="#373737"
+                Foreground="White"
+                FontSize="18"
+                FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
