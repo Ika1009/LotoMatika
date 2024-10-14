@@ -56,7 +56,7 @@ namespace Loto_App
             _mainWindow.NavigateToFourthStepPage();
         }
 
-        private void BackButton_Click2(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.BackToSecondStepPage();
         }

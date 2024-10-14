@@ -83,7 +83,7 @@ namespace Loto_App
             HideLoadingIndicator();
         }
 
-        private void BackButton_Click1(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.BackToFirstStepPage();
         }

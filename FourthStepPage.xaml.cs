@@ -95,7 +95,7 @@ namespace Loto_App
             _mainWindow.NavigateToFifthStepPage(favoriteNumbers);
         }
 
-        private void BackButton_Click3(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if (!odlucio_se)
                 _mainWindow.BackToSecondStepPage();

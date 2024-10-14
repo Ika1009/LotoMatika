@@ -112,7 +112,9 @@
 
         </StackPanel>
 
-        <Button Content="PRIJEĐI NA IDUĆI KORAK" 
+        <Button x:Name="NextStepButton"
+                Visibility="Hidden"
+                Content="PRIJEĐI NA IDUĆI KORAK" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
                 Margin="0,0,0,50"
