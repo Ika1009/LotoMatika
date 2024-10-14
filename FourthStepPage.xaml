@@ -166,19 +166,18 @@
                 Margin="10"
                 Width="200"
                 Height="60"
+                Click="BackButton_Click"
                 Background="#e80000"
                 Foreground="White"
                 FontSize="14"
-                FontWeight="Bold"
-                FontFamily="{StaticResource CustomFont}"
-                Click="BackButton_Click3">
+                FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="Transparent"
                                         BorderThickness="2"
                                         CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>

@@ -56,7 +56,7 @@
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}" 
                                             BorderBrush="{TemplateBinding BorderBrush}" 
-                                            BorderThickness="2"
+                                            BorderThickness="0"
                                             CornerRadius="0">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
