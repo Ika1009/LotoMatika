@@ -4,38 +4,8 @@
              xmlns:local="clr-namespace:Loto_App"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <DropShadowEffect x:Key="ShadowEffect"
-                          BlurRadius="5"
-                          ShadowDepth="2"
-                          Direction="320"
-                          Color="Black"/>
-        <FontFamily x:Key="CustomFont">Assets/Fonts/BAHNSCHRIFT.TTF#Bahnshrift</FontFamily>
-        
-        <Style TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="{StaticResource CustomFont}"/>
-            <Setter Property="FontSize" Value="16"/>
-        </Style>
 
-        <Style TargetType="Button">
-            <Setter Property="FontFamily" Value="{StaticResource CustomFont}"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Background" Value="#C0392B"/> <!-- Default background color -->
-            <Setter Property="Foreground" Value="White"/> <!-- Default text color -->
-            <Setter Property="Effect" Value="{StaticResource ShadowEffect}"/> <!-- Default shadow effect -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="0">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <FontFamily x:Key="CustomFont">Assets/Fonts/BAHNSCHRIFT.TTF#Bahnshrift</FontFamily>
+
     </Application.Resources>
 </Application>

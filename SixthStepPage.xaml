@@ -57,7 +57,7 @@
                 Height="60"
                 Background="#373737"
                 Foreground="White"
-                FontSize="18"
+                FontSize="17"
                 FontWeight="Bold"
                 FontFamily="{StaticResource CustomFont}"
                 Click="NextStepButton_Click">

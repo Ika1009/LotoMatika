@@ -63,7 +63,7 @@
                 Height="60"
                 Background="#373737"
                 Foreground="White"
-                FontSize="21"
+                FontSize="19"
                 FontWeight="Bold"
                 FontFamily="{StaticResource CustomFont}" Margin="0,225,0,0">
             <Button.Style>

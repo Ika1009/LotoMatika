@@ -123,28 +123,26 @@
                      Visibility="Collapsed">
         </UniformGrid>
 
-        <!-- Next Step Button -->
         <Button x:Name="NextStepButton"
+                Visibility="Hidden"
                 Content="PRIJEĐI NA IDUĆI KORAK" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
-                Margin="0,0,0,30"
+                Margin="0,0,0,50"
                 Width="240"
                 Height="60"
-                Background="#FF5733"
-                Foreground="White"
-                FontSize="18"
-                FontWeight="Bold"
-                FontFamily="{StaticResource CustomFont}"
                 Click="NextStepButton_Click"
-                Visibility="Collapsed">
+                Background="#373737"
+                Foreground="White"
+                FontSize="17"
+                FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        BorderBrush="Transparent"
                                         BorderThickness="2"
                                         CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>

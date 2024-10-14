@@ -69,7 +69,7 @@
                 Click="NextStepButton_Click"
                 Background="#373737"
                 Foreground="White"
-                FontSize="18"
+                FontSize="17"
                 FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
