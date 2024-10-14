@@ -28,6 +28,7 @@
             </VisualBrush.Visual>
         </VisualBrush>
     </Page.Background>
+
     <Grid>
         <TextBlock Text="PRVI KORAK: Odaberite loto igru" 
                     HorizontalAlignment="Center" 
@@ -62,56 +63,27 @@
             </ComboBox>
         </Border>
 
+        <!-- Modified button: "PRIJEĐI NA IDUĆI KORAK" -->
         <Button Content="PRIJEĐI NA IDUĆI KORAK" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom" 
                 Margin="0,0,0,50"
                 Width="240"
                 Height="60"
-                Background="#FF5733"
-                Foreground="White"
-                FontSize="18"
-                FontWeight="Bold"
-                Effect="{DynamicResource ShadowEffect}"
-                Click="NextStepButton_Click" RenderTransformOrigin="0.508,-0.483">
+                Click="NextStepButton_Click"
+                Background="#373737">
+            <Button.Foreground>White</Button.Foreground>
+            <Button.FontSize>18</Button.FontSize>
+            <Button.FontWeight>Bold</Button.FontWeight>
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="0" 
-                                        CornerRadius="30">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
-
-        <Button Content="PRETHODNI KORAK"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Margin="10"
-                Width="200"
-                Height="60"
-                Background="#2ECC71"
-                Foreground="White"
-                FontSize="14"
-                FontWeight="Bold"
-                Click="BackButton_Click">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="0" 
-                                        CornerRadius="30">
+                                        BorderBrush="Transparent"
+                                        BorderThickness="2"
+                                        CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -120,7 +92,40 @@
                 </Style>
             </Button.Style>
             <Button.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="4" Direction="320" Color="#888888"/>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
+            </Button.Effect>
+        </Button>
+
+        <!-- Modified button: "PRETHODNI KORAK" -->
+        <Button Content="PRETHODNI KORAK"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="10"
+                Width="200"
+                Height="60"
+                Click="BackButton_Click"
+                Background="#e80000">
+            <Button.Foreground>White</Button.Foreground>
+            <Button.FontSize>14</Button.FontSize>
+            <Button.FontWeight>Bold</Button.FontWeight>
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="Transparent"
+                                        BorderThickness="2"
+                                        CornerRadius="0">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
             </Button.Effect>
         </Button>
     </Grid>
