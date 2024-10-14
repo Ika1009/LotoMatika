@@ -59,11 +59,11 @@
                 Grid.Row="1"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                Width="200"
+                Width="235"
                 Height="60"
                 Background="#373737"
                 Foreground="White"
-                FontSize="18"
+                FontSize="21"
                 FontWeight="Bold"
                 FontFamily="{StaticResource CustomFont}" Margin="0,225,0,0">
             <Button.Style>
@@ -142,7 +142,7 @@
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
                                         BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="2"
+                                        BorderThickness="0"
                                         CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
