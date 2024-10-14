@@ -96,7 +96,6 @@
             </Button.Effect>
         </Button>
 
-        <!-- Modified button: "PRETHODNI KORAK" -->
         <Button Content="PRETHODNI KORAK"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
@@ -104,10 +103,10 @@
                 Width="200"
                 Height="60"
                 Click="BackButton_Click"
-                Background="#e80000">
-            <Button.Foreground>White</Button.Foreground>
-            <Button.FontSize>14</Button.FontSize>
-            <Button.FontWeight>Bold</Button.FontWeight>
+                Background="#e80000"
+                Foreground="White"
+                FontSize="14"
+                FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">

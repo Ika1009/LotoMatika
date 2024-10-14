@@ -61,28 +61,26 @@
             </Path.RenderTransform>
         </Path>
 
-        <!-- Adjusted Button Styles -->
         <Button Content="PRIJEĐI NA IDUĆI KORAK" 
-                Click="NextStepButton_Click"
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Bottom" 
-                Margin="0,0,0,30"
-                Width="240"
-                Height="60"
-                Background="#373737"
-                Foreground="White"
-                FontSize="18"
-                FontWeight="Bold"
-                FontFamily="{StaticResource CustomFont}">
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Bottom" 
+        Margin="0,0,0,50"
+        Width="240"
+        Height="60"
+        Click="NextStepButton_Click"
+        Background="#373737">
+            <Button.Foreground>White</Button.Foreground>
+            <Button.FontSize>18</Button.FontSize>
+            <Button.FontWeight>Bold</Button.FontWeight>
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="2" 
-                                        CornerRadius="0">
+                                BorderBrush="Transparent"
+                                BorderThickness="2"
+                                CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -96,25 +94,24 @@
         </Button>
 
         <Button Content="PRETHODNI KORAK"
-                Click="BackButton_Click1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="10"
                 Width="200"
                 Height="60"
+                Click="BackButton_Click"
                 Background="#e80000"
                 Foreground="White"
                 FontSize="14"
-                FontWeight="Bold"
-                FontFamily="{StaticResource CustomFont}">
+                FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="2" 
+                                        BorderBrush="Transparent"
+                                        BorderThickness="2"
                                         CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>

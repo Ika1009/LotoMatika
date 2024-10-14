@@ -60,27 +60,26 @@
            Width="332" Margin="0,210,0,0"/>
 
         <!-- Dugme: PRIJEĐI NA IDUĆI KORAK -->
-        <Button Content="PRIJEĐI NA IDUĆI KORAK"
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Top"
-                Margin="0,370,0,0"
-                Width="238"
-                Height="50"
-                Background="#373737"
-                Foreground="White"
-                FontSize="16"
-                FontWeight="Bold"
-                FontFamily="{StaticResource CustomFont}"
-                Click="NextStepButton_Click">
+        <Button Content="PRIJEĐI NA IDUĆI KORAK" 
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Bottom" 
+        Margin="0,0,0,50"
+        Width="240"
+        Height="60"
+        Click="NextStepButton_Click"
+        Background="#373737">
+            <Button.Foreground>White</Button.Foreground>
+            <Button.FontSize>18</Button.FontSize>
+            <Button.FontWeight>Bold</Button.FontWeight>
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="2"
-                                        CornerRadius="0">
+                                BorderBrush="Transparent"
+                                BorderThickness="2"
+                                CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -93,26 +92,24 @@
             </Button.Effect>
         </Button>
 
-        <!-- Dugme: PRETHODNI KORAK -->
         <Button Content="PRETHODNI KORAK"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Margin="0,0,10,10"
-                Width="170"
-                Height="50"
+                Margin="10"
+                Width="200"
+                Height="60"
+                Click="BackButton_Click"
                 Background="#e80000"
                 Foreground="White"
                 FontSize="14"
-                FontWeight="Bold"
-                FontFamily="{StaticResource CustomFont}"
-                Click="BackButton_Click2">
+                FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        BorderBrush="Transparent"
                                         BorderThickness="2"
                                         CornerRadius="0">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
