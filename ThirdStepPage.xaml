@@ -48,7 +48,8 @@
                    FontWeight="Bold"
                    Foreground="Black"
                    TextAlignment="Center" 
-                   Width="332" Margin="0,157,0,0"/>
+                   Width="332" Margin="0,157,0,0"
+                   TextWrapping="Wrap"/>
         
         <TextBlock x:Name="ExcludedCombinationsTextBlock"
            HorizontalAlignment="Center" 
@@ -57,7 +58,8 @@
            FontWeight="Bold"
            Foreground="Black"
            TextAlignment="Center" 
-           Width="332" Margin="0,210,0,0"/>
+           Width="332" Margin="0,210,0,0"
+           TextWrapping="Wrap"/>
 
         <!-- Dugme: PRIJEĐI NA IDUĆI KORAK -->
         <Button Content="PRIJEĐI NA IDUĆI KORAK" 
