@@ -39,13 +39,13 @@
         </Grid.RowDefinitions>
 
         <!-- Logo u vrhu -->
-        <Image Source="Assets/Images/logo.png" Width="384" Height="235" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-70,0,0" Grid.RowSpan="2"/>
+        <Image Source="Assets/Images/logo.png" Width="250" Height="240" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="278,-75,0,0" Grid.Row="1"/>
 
         <!-- Tekst dobrodošlice -->
         <TextBlock Text="Dobro došli u aplikaciju LotoMatika – najmoćniji sustav za izradu loto kombinacija! Da biste krenuli samo kliknite na gumb ZAPOČNI."
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top"
-                    Margin="0,98,0,0"
+                    Margin="0,112,0,0"
                     FontSize="22
                    "
                     FontWeight="DemiBold"
@@ -90,16 +90,16 @@
         <!-- ARHIVA gumb -->
         <Button Content="ARHIVA"
                 Click="ArhivaButton_Click"
-                Grid.Row="2"
+                Grid.Row="1"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 Width="150"
                 Height="50"
                 Background="#373737"
                 Foreground="White"
                 FontSize="16"
                 FontWeight="Bold"
-                FontFamily="{StaticResource CustomFont}">
+                FontFamily="{StaticResource CustomFont}" Margin="0,350,0,0" Grid.RowSpan="3">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Template">
