@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <!-- Logo u vrhu -->
-        <Image Source="Assets/Images/logo.png" Width="250" Height="240" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="278,-75,0,0" Grid.Row="1"/>
+        <Image Source="pack://application:,,,/Assets/Images/logo.png" Width="250" Height="240" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="278,-75,0,0" Grid.Row="1"/>
 
         <!-- Tekst dobrodošlice -->
         <TextBlock Text="Dobro došli u aplikaciju LotoMatika – najmoćniji sustav za izradu loto kombinacija! Da biste krenuli samo kliknite na gumb ZAPOČNI."
