@@ -82,7 +82,7 @@
 
             <!-- Save Button -->
             <Button x:Name="SaveButton"
-                    Content="Sačuvaj"
+                    Content="POKAŽI DOBITKE"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Margin="0,15,0,0"

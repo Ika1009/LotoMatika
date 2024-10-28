@@ -2718,7 +2718,7 @@ namespace Loto_App
                 }
                 else if (duzina_kombinacije == 6)
                 {
-                    if (i < (broj_kombinacija / 10 * 4))
+                    if (i < (broj_kombinacija / 10 * 6))
                         sa_zadnjim_ciframa_kombinacija[i] = true;
                     else
                         sa_zadnjim_ciframa_kombinacija[i] = false;
@@ -3590,7 +3590,7 @@ namespace Loto_App
                 }
                 else if (duzina_kombinacije == 6)
                 {
-                    if (i < (broj_kombinacija / 10 * 4))
+                    if (i < (broj_kombinacija / 10 * 6))
                         sa_zadnjim_ciframa_kombinacija[i] = true;
                     else
                         sa_zadnjim_ciframa_kombinacija[i] = false;

@@ -45,11 +45,10 @@
         <TextBlock Text="Dobro došli u aplikaciju LotoMatika – najmoćniji sustav za izradu loto kombinacija! Da biste krenuli samo kliknite na gumb ZAPOČNI."
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top"
-                    Margin="0,98,0,0"
-                    FontSize="22
-                   "
+                    Margin="0,100,0,0"
+                    FontSize="22"
                     FontWeight="DemiBold"
-                    FontFamily="{StaticResource CustomFont}"
+                    FontFamily="Bahnschrift"
                     TextWrapping="Wrap"
                     TextAlignment="Center" Grid.RowSpan="2"/>
 

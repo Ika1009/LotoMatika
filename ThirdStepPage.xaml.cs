@@ -34,7 +34,7 @@ namespace Loto_App
             // Ukupan broj mogućih kombinacija za loto 6/45, treba za svaki
             int totalPossibleCombinations = 8145060;
 
-            if (duzina_kombinacije == 7 && broj_loptica == 35) // 7 od 35 (Hrvatska)
+            /*if (duzina_kombinacije == 7 && broj_loptica == 35) // 7 od 35 (Hrvatska)
             {
                 if (broj_brojeva == 35)
                 {
@@ -195,6 +195,31 @@ namespace Loto_App
                 {
                     totalPossibleCombinations = 3365855;
                 }
+            }*/
+
+            if (duzina_kombinacije == 7 && broj_loptica == 35)
+            {
+                totalPossibleCombinations = 6724520;
+            }
+            else if (duzina_kombinacije == 6 && broj_loptica == 45)
+            {
+                totalPossibleCombinations = 8145060;
+            }
+            else if (duzina_kombinacije == 7 && broj_loptica == 39)
+            {
+                totalPossibleCombinations = 15380937;
+            }
+            else if (duzina_kombinacije == 6 && broj_loptica == 44)
+            {
+                totalPossibleCombinations = 7059052;
+            }
+            else if (duzina_kombinacije == 6 && broj_loptica == 39)
+            {
+                totalPossibleCombinations = 3262623;
+            }
+            else if (duzina_kombinacije == 7 && broj_loptica == 37)
+            {
+                totalPossibleCombinations = 10295472;
             }
 
 

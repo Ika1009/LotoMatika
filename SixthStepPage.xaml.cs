@@ -37,7 +37,7 @@ namespace Loto_App
         {
             if (int.TryParse(input, out int number))
             {
-                if (number >= 10 && number % 10 == 0 && number < 1000)
+                if (number >= 10 && number % 10 == 0 && number <= 1000)
                 {
                     // The number is valid, store it
                     validNumber = number;

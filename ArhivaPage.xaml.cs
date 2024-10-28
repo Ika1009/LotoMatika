@@ -347,12 +347,14 @@ namespace Loto_App
                         {
                             if (pogodjeni.Contains(number))
                             {
-                                inline.Foreground = Brushes.Green; // Zeleni tekst za pogođene brojeve
+                                inline.Foreground = Brushes.White; // Zeleni tekst za pogođene brojeve
+                                inline.Background = Brushes.Green;
                                 broj_zelenih++; // Broji zelene brojeve
                             }
                             else if (number == bonus) // Bonus broj
                             {
-                                inline.Foreground = Brushes.Red; // Crveni tekst za bonus broj
+                                inline.Foreground = Brushes.White; // Crveni tekst za bonus broj
+                                inline.Background = Brushes.Red;
                                 ima_crvenih = true; // Označava da ima crvenih brojeva
                             }
                         }

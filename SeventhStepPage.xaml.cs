@@ -173,6 +173,11 @@ namespace Loto_App
             Application.Current.Shutdown();
         }
 
+        private void Archive_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.NavigateToArhivaPage();
+        }
+
         private void NewCalculationButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToStartPage();
