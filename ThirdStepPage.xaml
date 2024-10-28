@@ -31,7 +31,8 @@
     </Page.Background>
 
     <Grid>
-        <TextBlock Text="Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi:" 
+        <TextBlock x:Name="TotalCombinationsTextBlock"
+                   Text="Softver je izračunao sveukupni broj mogućih kombinacija, a on iznosi:" 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top"
                    Margin="0,20,0,0"
@@ -39,26 +40,16 @@
                    FontWeight="DemiBold"
                    Foreground="Black"
                    TextAlignment="Center"
-                   TextWrapping="Wrap"/>
+                   TextWrapping="Wrap" Width="640"/>
 
-        <TextBlock x:Name="TotalCombinationsTextBlock"
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Top"
-                   FontSize="30"
-                   FontWeight="Bold"
-                   Foreground="Black"
-                   TextAlignment="Center" 
-                   Width="332" Margin="0,157,0,0"
-                   TextWrapping="Wrap"/>
-        
         <TextBlock x:Name="ExcludedCombinationsTextBlock"
            HorizontalAlignment="Center" 
            VerticalAlignment="Top"
-           FontSize="20"
-           FontWeight="Bold"
+           FontSize="22"
+           FontWeight="DemiBold"
            Foreground="Black"
            TextAlignment="Center" 
-           Width="332" Margin="0,210,0,0"
+           Width="640" Margin="0,100,0,0"
            TextWrapping="Wrap"/>
 
         <!-- Dugme: PRIJEĐI NA IDUĆI KORAK -->

@@ -24,7 +24,7 @@ namespace Loto_App
             InitializeComponent();
 
             int remainingCombinations = CalculateTotalCombinations();
-            TotalCombinationsTextBlock.Text = $"{remainingCombinations}";
+            TotalCombinationsTextBlock.Text += $" {remainingCombinations}";
 
             int duzina_kombinacije = _mainWindow.GetCombinationLength();
             int broj_loptica = _mainWindow.GetMaxNumber();
