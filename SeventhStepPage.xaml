@@ -71,7 +71,7 @@
             </Button>
 
             <!-- Options Panel -->
-            <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="344" Margin="0,40,0,0" Height="320">
+            <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="344" Margin="0,40,0,0" Visibility="Collapsed" Height="320">
                 <Button Content="SPREMI KOMBINACIJE NA RAČUNALU" Click="SaveCombinationsButton_Click"
                         Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
                     <Button.Style>
