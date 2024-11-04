@@ -453,51 +453,47 @@ namespace Loto_App
             return broj_skupova;
         }
 
-        static int _generisi_kombinacije(int[][] brojevi, int[] trenutna_kombinacija, int red, int trenutni_broj, int clan_kombinacije, int broj_loptica, int duzina_kombinacije)    //GENERACIJA SVIH KOMBINACIJA
+        static int _generisi_kombinacije(int[][] brojevi, int[][] drugiBrojevi, int[] trenutna_kombinacija, int red, int trenutni_broj, int clan_kombinacije, int broj_loptica, int duzina_kombinacije)
         {
-            /*StringBuilder combinationsText = new StringBuilder();
-
-            // Get the base directory where the executable is located
-            string executablePath = AppDomain.CurrentDomain.BaseDirectory;
-
-            // Navigate up to the project root directory
-            string projectRootPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\"));
-
-            // Define the relative path for the CSV file in the project root directory
-            string filePath = Path.Combine(projectRootPath, "Kombinacije_7_35.csv");*/
-
             if (trenutni_broj > broj_loptica)
                 return red;
+
             if (clan_kombinacije == duzina_kombinacije)
             {
                 for (int i = trenutni_broj; i <= broj_loptica; i++)
                 {
                     trenutna_kombinacija[clan_kombinacije - 1] = i;
-                    for (int j = 0; j < duzina_kombinacije; j++)
+
+                    // Fill the first array first
+                    if (red < brojevi.Length)
                     {
-                        brojevi[red][j] = trenutna_kombinacija[j];
+                        for (int j = 0; j < duzina_kombinacije; j++)
+                        {
+                            brojevi[red][j] = trenutna_kombinacija[j];
+                        }
+                        red++;
                     }
-
-                    /*// Prepare the content to append
-                    combinationsText = new StringBuilder();
-
-                    // Add the combinations
-                    combinationsText.AppendLine(string.Join(",", brojevi[red]));
-
-                    // Append the content to the CSV file
-                    File.AppendAllText(filePath, combinationsText.ToString());*/
-
-                    red++;
+                    // If the first array is full, start filling the second array
+                    else if (red < brojevi.Length + drugiBrojevi.Length)
+                    {
+                        for (int j = 0; j < duzina_kombinacije; j++)
+                        {
+                            drugiBrojevi[red - brojevi.Length][j] = trenutna_kombinacija[j];
+                        }
+                        red++;
+                    }
                 }
                 return red;
             }
+
             for (int i = trenutni_broj; i <= broj_loptica; i++)
             {
                 trenutna_kombinacija[clan_kombinacije - 1] = i;
-                red = _generisi_kombinacije(brojevi, trenutna_kombinacija, red, i + 1, clan_kombinacije + 1, broj_loptica, duzina_kombinacije);
+                red = _generisi_kombinacije(brojevi, drugiBrojevi, trenutna_kombinacija, red, i + 1, clan_kombinacije + 1, broj_loptica, duzina_kombinacije);
             }
             return red;
         }
+
 
         static void _resi_100_kombinacija(int[][] brojevi, int[] sume_kombinacija, int[] razlike_kombinacija, int pocetak, int kraj, int duzina_kombinacije, int broj_loptica, int granica_malih, int suma_min, int suma_max, int razlika_min, int razlika_max, int[] broj_parnih_brojeva_kombinacija, int[] broj_malih_brojeva_kombinacija, int velicina_skupa, bool[] petoskupovna_kombinacija, bool[] sa_susednima_kombinacija, bool[] sa_zadnjim_ciframa_kombinacija, int[] omiljeni_brojevi, int broj_omiljenih_brojeva)
         {
@@ -3822,21 +3818,37 @@ namespace Loto_App
                     rezervisano_mesto = 15400000;
             }
 
-            int[][] brojevi = new int[15400000][];  //STVARANJE SVIH KOMBINACIJA
+            int[][] brojevi = new int[7700000][];  //STVARANJE SVIH KOMBINACIJA
+            int[][] brojevi2 = new int[7700000][];
             int[] trenutna_kombinacija = new int[7];
             for (int i = 0; i < rezervisano_mesto; i++)
-                brojevi[i] = new int[7];
+            {
+                if (i < 7700000)
+                    brojevi[i] = new int[7];
+                else
+                    brojevi2[i - 7700000] = new int[7];
+            }
             int red = 0;
-            red = _generisi_kombinacije(brojevi, trenutna_kombinacija, red, 1, 1, broj_loptica, duzina_kombinacije);
+            red = _generisi_kombinacije(brojevi, brojevi2, trenutna_kombinacija, red, 1, 1, broj_loptica, duzina_kombinacije);
 
-            int[] sume_kombinacija = new int[15400000]; //STVARANJE SUMA
+            int[] sume_kombinacija = new int[7700000]; //STVARANJE SUMA
+            int[] sume_kombinacija2 = new int[7700000];
             int suma;
             for (int i = 0; i < red; i++)
             {
                 suma = 0;
-                for (int j = 0; j < duzina_kombinacije; j++)
-                    suma += brojevi[i][j];
-                sume_kombinacija[i] = suma;
+                if (i < 7700000)
+                {
+                    for (int j = 0; j < duzina_kombinacije; j++)
+                        suma += brojevi[i][j];
+                    sume_kombinacija[i] = suma;
+                }
+                else
+                {
+                    for (int j = 0; j < duzina_kombinacije; j++)
+                        suma += brojevi2[i - 7700000][j];
+                    sume_kombinacija2[i - 7700000] = suma;
+                } 
             }
             int suma_min = int.MinValue, suma_max = int.MaxValue;
             if (duzina_kombinacije == 6)
@@ -3876,9 +3888,12 @@ namespace Loto_App
                 }
             }
 
-            int[] razlike_kombinacija = new int[15400000]; //STVARANJE RAZLIKA
-            for (int i = 0; i < red; i++)
+            int[] razlike_kombinacija = new int[77400000]; //STVARANJE RAZLIKA
+            int[] razlike_kombinacija2 = new int[77400000];
+            for (int i = 0; (i < red) && (i < 7700000); i++)
                 razlike_kombinacija[i] = brojevi[i][_indeks_max(brojevi[i], duzina_kombinacije)] - brojevi[i][_indeks_min(brojevi[i], duzina_kombinacije)];
+            for (int i = 0; i < (red - 7700000); i++)
+                razlike_kombinacija2[i] = brojevi2[i][_indeks_max(brojevi2[i], duzina_kombinacije)] - brojevi2[i][_indeks_min(brojevi2[i], duzina_kombinacije)];
             int razlika_min = int.MinValue, razlika_max = int.MaxValue;
             if (duzina_kombinacije == 6)
             {
@@ -3917,9 +3932,12 @@ namespace Loto_App
                 }
             }
 
-            int[] broj_parnih_brojeva_kombinacija = new int[15400000];  //STVARANJE PARNIH
-            for (int i = 0; i < red; i++)
+            int[] broj_parnih_brojeva_kombinacija = new int[7700000];  //STVARANJE PARNIH
+            int[] broj_parnih_brojeva_kombinacija2 = new int[7700000];
+            for (int i = 0; (i < red) && (i < 7700000); i++)
                 broj_parnih_brojeva_kombinacija[i] = _broj_parnih(brojevi[i], duzina_kombinacije);
+            for (int i = 0; i < (red - 7700000); i++)
+                broj_parnih_brojeva_kombinacija2[i] = _broj_parnih(brojevi2[i], duzina_kombinacije);
             int parni_min = 0;
             int parni_max = 0;
             if (duzina_kombinacije == 6)
@@ -3933,7 +3951,8 @@ namespace Loto_App
                 parni_max = 4;
             }
 
-            int[] broj_malih_brojeva_kombinacija = new int[15400000];  //STVARANJE MALIH
+            int[] broj_malih_brojeva_kombinacija = new int[7700000];  //STVARANJE MALIH
+            int[] broj_malih_brojeva_kombinacija2 = new int[7700000];
             int mali_min = 0;
             int mali_max = 0;
             int granica_malih = 0;
@@ -3961,15 +3980,26 @@ namespace Loto_App
                 else if (broj_loptica == 39)
                     granica_malih = 19;
             }
-            for (int i = 0; i < red; i++)
+            for (int i = 0; (i < red) && (i < 7700000); i++)
                 broj_malih_brojeva_kombinacija[i] = _broj_malih(brojevi[i], duzina_kombinacije, granica_malih);
+            for (int i = 0; i < (red - 7700000); i++)
+                broj_malih_brojeva_kombinacija2[i] = _broj_malih(brojevi2[i], duzina_kombinacije, granica_malih);
 
-            int[][] zadnje_cifre = new int[15400000][];   //STVARANJE ZADNJIH CIFARA
-            for (int i = 0; i < red; i++)
+
+            int[][] zadnje_cifre = new int[7700000][];   //STVARANJE ZADNJIH CIFARA
+            int[][] zadnje_cifre2 = new int[7700000][];
+
+            for (int i = 0; (i < red) && (i < 7700000); i++)
             {
                 zadnje_cifre[i] = new int[10];
                 for (int j = 0; j < duzina_kombinacije; j++)
                     zadnje_cifre[i][brojevi[i][j] % 10]++;
+            }
+            for (int i = 0; i < (red - 7700000); i++)
+            {
+                zadnje_cifre2[i] = new int[10];
+                for (int j = 0; j < duzina_kombinacije; j++)
+                    zadnje_cifre2[i][brojevi2[i][j] % 10]++;
             }
 
             int velicina_skupa = 0;
@@ -3993,7 +4023,7 @@ namespace Loto_App
             }
 
             int red2 = 0;
-            for (int i = 0; i < red; i++)   //IZBACIVANJE NEPOTREBNIH KOMBINACIJA
+            for (int i = 0; (i < red) && (i < 7700000); i++)   //IZBACIVANJE NEPOTREBNIH KOMBINACIJA
                 if ((sume_kombinacija[i] <= suma_max) && (sume_kombinacija[i] >= suma_min)
                 && (razlike_kombinacija[i] <= razlika_max) && (razlike_kombinacija[i] >= razlika_min)
                 && (broj_parnih_brojeva_kombinacija[i] <= parni_max) && (broj_parnih_brojeva_kombinacija[i] >= parni_min)
@@ -4008,8 +4038,23 @@ namespace Loto_App
                     || ((broj_zabranjenih_brojeva == 4) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[2]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[3]))
                     || ((broj_zabranjenih_brojeva == 5) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[2]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[3]) && !_poseduje_element(brojevi[i], duzina_kombinacije, zabranjeni_brojevi[4]))))
                 {
-                    /*for (int j = 0; j < duzina_kombinacije; j++)
-                        brojevi[red2][j] = brojevi[i][j];*/
+                    red2++;
+                }
+            for (int i = 0; i < (red - 7700000); i++)
+                if ((sume_kombinacija2[i] <= suma_max) && (sume_kombinacija2[i] >= suma_min)
+                && (razlike_kombinacija2[i] <= razlika_max) && (razlike_kombinacija2[i] >= razlika_min)
+                && (broj_parnih_brojeva_kombinacija2[i] <= parni_max) && (broj_parnih_brojeva_kombinacija2[i] >= parni_min)
+                && (broj_malih_brojeva_kombinacija2[i] <= mali_max) && (broj_malih_brojeva_kombinacija2[i] >= mali_min)
+                && (_indeks_zadnja_cifra(brojevi2[i], duzina_kombinacije, zadnje_cifre2[i]) == -1)
+                && (_indeks_susedni_2_plus_para(brojevi2[i], duzina_kombinacije) == -1)
+                && (_indeks_skupovi_visak_4(brojevi2[i], duzina_kombinacije, velicina_skupa) == -1)
+                && ((broj_zabranjenih_brojeva == -1)
+                    || ((broj_zabranjenih_brojeva == 1) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[0]))
+                    || ((broj_zabranjenih_brojeva == 2) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[1]))
+                    || ((broj_zabranjenih_brojeva == 3) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[2]))
+                    || ((broj_zabranjenih_brojeva == 4) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[2]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[3]))
+                    || ((broj_zabranjenih_brojeva == 5) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[0]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[1]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[2]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[3]) && !_poseduje_element(brojevi2[i], duzina_kombinacije, zabranjeni_brojevi[4]))))
+                {
                     red2++;
                 }
 
