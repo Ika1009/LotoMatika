@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -14,8 +15,8 @@ namespace Loto_App
     public partial class ArhivaPage : Page
     {
         private readonly MainWindow _mainWindow;
-        private string FilePath;
-        private int broj_loptica;
+        string FilePath;
+        int broj_loptica;
         private List<int> pogodjeni = new List<int> { 0, 0, 0, 0, 0, 0, 0 }; // Lista pogodjenih brojeva
         private int bonus; // Bonus broj
         private int[] greenCounts = new int[8]; // Broj kombinacija sa 0 do 7 zelenih brojeva
@@ -180,18 +181,74 @@ namespace Loto_App
             }
         }
 
-
         private void LoadFile_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
             {
-                string fileName = button.Tag.ToString();
+                // Extract the button's text and clean it up by removing spaces and everything after '('
+                string buttonName = button.Content.ToString();
+                int parenthesisIndex = buttonName.IndexOf('(');
+
+                if (parenthesisIndex > -1)
+                {
+                    buttonName = buttonName.Substring(0, parenthesisIndex);
+                }
+
+                // Remove spaces from the cleaned name
+                string cleanedButtonName = buttonName.Replace(" ", "");
+
                 string executablePath = AppDomain.CurrentDomain.BaseDirectory;
-                FilePath = Path.Combine(executablePath, fileName);
-                broj_loptica = DetermineNumberOfBalls(FilePath);
-                LoadCombinationsFromFile(FilePath);
+
+                // Search for CSV files that start with the cleaned button name
+                string[] files = Directory.GetFiles(executablePath, cleanedButtonName + "*.csv");
+
+                if (files.Length > 0)
+                {
+                    // Clear previous text in RichTextBox
+                    CombinationsRichTextBox.Document.Blocks.Clear();
+
+                    foreach (var file in files)
+                    {
+                        // Get file name without path and extension
+                        string fileName = Path.GetFileNameWithoutExtension(file);
+
+                        // Create a new paragraph to hold the file name
+                        Paragraph para = new Paragraph();
+
+                        // Create a hyperlink-like Run for the file name
+                        Run fileNameRun = new Run(fileName)
+                        {
+                            Foreground = Brushes.Green, // Set the text color to green
+                            TextDecorations = TextDecorations.Underline // Make it look clickable
+                        };
+
+                        // Add a mouse event to simulate click behavior
+                        fileNameRun.MouseDown += (s, args) =>
+                        {
+                            if (args.ChangedButton == MouseButton.Left)
+                            {
+                                FilePath = file;
+                                LoadCombinationsFromFile(file); // Call the function with the file path
+                            }
+                        };
+
+                        // Add the Run to the paragraph
+                        para.Inlines.Add(fileNameRun);
+
+                        // Add the paragraph to the RichTextBox
+                        CombinationsRichTextBox.Document.Blocks.Add(para);
+                    }
+                }
+                else
+                {
+                    // If no files found, display a message in green
+                    TextRange range = new TextRange(CombinationsRichTextBox.Document.ContentStart, CombinationsRichTextBox.Document.ContentEnd);
+                    range.Text = "Nema fajlova koji počinju sa: " + cleanedButtonName;
+                    range.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Green); // Set the message color to green
+                }
             }
         }
+
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
@@ -200,6 +257,7 @@ namespace Loto_App
 
         private void SaveNumbers_Click(object sender, RoutedEventArgs e)
         {
+
             pogodjeni.Clear();
             bonus = 0;
             bool hasError = false;
@@ -217,7 +275,7 @@ namespace Loto_App
                     }
                     else if (int.TryParse(textBox.Text, out int number))
                     {
-                        if (number > broj_loptica)
+                        if (number > DetermineNumberOfBalls(FilePath))
                         {
                             textBox.Text = "";
                             hasError = true;
@@ -323,7 +381,7 @@ namespace Loto_App
                 // Prvo oboji sve brojeve crno
                 foreach (var paragraph in paragraphs)
                 {
-                    foreach (var inline in paragraph.Inlines.OfType<Run>())
+                    foreach (var inline in paragraph.Inlines.OfType<Run>().ToList())
                     {
                         if (int.TryParse(inline.Text.Trim(), out int number))
                         {
@@ -341,21 +399,31 @@ namespace Loto_App
                 {
                     int broj_zelenih = 0;
                     bool ima_crvenih = false;
-                    foreach (var inline in paragraph.Inlines.OfType<Run>())
+
+                    foreach (var inline in paragraph.Inlines.OfType<Run>().ToList())
                     {
                         if (int.TryParse(inline.Text.Trim(), out int number))
                         {
+                            InlineUIContainer wrappedNumber = null;
+
                             if (pogodjeni.Contains(number))
                             {
-                                inline.Foreground = Brushes.White; // Zeleni tekst za pogođene brojeve
-                                inline.Background = Brushes.Green;
+                                // Kreiraj zaokružen zeleni broj
+                                wrappedNumber = CreateRoundedNumber(number.ToString(), Brushes.Green, Brushes.White);
                                 broj_zelenih++; // Broji zelene brojeve
                             }
                             else if (number == bonus) // Bonus broj
                             {
-                                inline.Foreground = Brushes.White; // Crveni tekst za bonus broj
-                                inline.Background = Brushes.Red;
+                                // Kreiraj zaokružen crveni broj
+                                wrappedNumber = CreateRoundedNumber(number.ToString(), Brushes.Red, Brushes.White);
                                 ima_crvenih = true; // Označava da ima crvenih brojeva
+                            }
+
+                            if (wrappedNumber != null)
+                            {
+                                // Zameni postojeći `Run` sa `InlineUIContainer`
+                                paragraph.Inlines.InsertAfter(inline, wrappedNumber);
+                                paragraph.Inlines.Remove(inline);
                             }
                         }
                     }
@@ -373,6 +441,30 @@ namespace Loto_App
                     }
                 }
             }
+        }
+
+        // Funkcija koja kreira zaokružen broj
+        private InlineUIContainer CreateRoundedNumber(string text, Brush background, Brush foreground)
+        {
+            var border = new Border
+            {
+                Background = background,
+                BorderBrush = foreground,
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(8), // Slightly smaller corner radius for compact appearance
+                Padding = new Thickness(3, 0, 3, 0), // Reduced vertical padding to minimize height
+                Child = new TextBlock
+                {
+                    Text = text,
+                    Foreground = foreground,
+                    FontSize = 12, // Keep font size small and readable
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    TextAlignment = TextAlignment.Center
+                }
+            };
+
+            return new InlineUIContainer(border);
         }
 
         private int DetermineNumberOfBalls(string filePath)
@@ -479,7 +571,7 @@ namespace Loto_App
                 }
 
                 // Sada obriši kombinaciju iz CSV fajla
-                DeleteCombination(selectedCombination);
+                DeleteCombination(selectedCombination, FilePath);
 
                 // Reset selection
                 selectedCombination = null;
@@ -489,14 +581,27 @@ namespace Loto_App
         }
 
 
-        private void DeleteCombination(string combinationToDelete)
+        private void DeleteCombination(string combinationToDelete, string FilePath)
         {
             try
             {
                 // Učitaj sve linije iz CSV fajla
+                if (!File.Exists(FilePath))
+                {
+                    MessageBox.Show("Fajl ne postoji na putanji!");
+                    return;
+                }
+
                 var lines = File.ReadAllLines(FilePath).ToList();
 
-                // Pronađi liniju koju treba obrisati bez korišćenja lambda funkcije
+                // Proveri da li kombinacija počinje sa "Nema"
+                if (combinationToDelete.StartsWith("Nema", StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("Kombinacija počinje sa 'Nema' i nije obrisana.");
+                    return; // Prekini izvršavanje funkcije
+                }
+
+                // Pronađi liniju koju treba obrisati
                 string lineToRemove = null;
                 foreach (var line in lines)
                 {
@@ -526,21 +631,24 @@ namespace Loto_App
                     // Ukloni liniju
                     lines.Remove(lineToRemove);
 
-                    // Sačuvaj nazad u fajl
-                    File.WriteAllLines(FilePath, lines);
-
-                    MessageBox.Show("Kombinacija je uspešno obrisana!");
+                    MessageBox.Show($"Linija za brisanje: {lineToRemove}");
                 }
                 else
                 {
                     MessageBox.Show("Kombinacija nije pronađena.");
                 }
+
+                // Sačuvaj sve nazad u fajl (uvek, na kraju)
+                File.WriteAllLines(FilePath, lines);
+
+                MessageBox.Show("Promene su sačuvane.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Došlo je do greške: {ex.Message}");
             }
         }
+
 
 
         private string GenerateCountText()

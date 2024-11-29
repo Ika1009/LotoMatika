@@ -30,7 +30,7 @@
     </Page.Background>
 
     <Grid>
-        <TextBlock Text="PRVI KORAK: Odaberite loto igru" 
+        <TextBlock Text="ODABERITE LOTO IGRU:" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top"
                     Margin="0,20,0,0"

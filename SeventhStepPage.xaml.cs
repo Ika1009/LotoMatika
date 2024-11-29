@@ -36,7 +36,7 @@ namespace Loto_App
             StringBuilder combinationsText = new StringBuilder();
             foreach (var combination in allCombinations)
             {
-                combinationsText.AppendLine(string.Join(", ", combination));
+                combinationsText.AppendLine(string.Join("   ", combination));
             }
 
             CombinationsTextBlock.Text = combinationsText.ToString();
@@ -70,17 +70,21 @@ namespace Loto_App
                 // Get the base directory where the executable is located
                 string executablePath = AppDomain.CurrentDomain.BaseDirectory;
 
-                // Determine the file name based on max_number and combination_length
-                string fileName = (max_number, combination_length) switch
+                // Determine the base file name based on max_number and combination_length
+                string baseFileName = (max_number, combination_length) switch
                 {
-                    (35, 7) => "7od35_Hrvatska.csv",
-                    (45, 6) => "6od45_Hrvatska.csv",
-                    (39, 7) => "7od39_Srbija.csv",
-                    (44, 6) => "6od44_Slovenija.csv",
-                    (39, 6) => "6od39_BiH.csv",
-                    (37, 7) => "7od37_Makedonija.csv",
+                    (35, 7) => "7od35-Hrvatska",
+                    (45, 6) => "6od45-Hrvatska",
+                    (39, 7) => "7od39-Srbija",
+                    (44, 6) => "6od44-Slovenija",
+                    (39, 6) => "6od39-BiH",
+                    (37, 7) => "7od37-Makedonija",
                     _ => throw new InvalidOperationException("Unknown game type")
                 };
+
+                // Add the current date and time to the file name in a readable format
+                string dateTimeSuffix = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                string fileName = $"{baseFileName}_{dateTimeSuffix}.csv";
 
                 string filePath = Path.Combine(executablePath, fileName);
 
@@ -91,7 +95,7 @@ namespace Loto_App
                     return;
                 }
 
-                // Prepare the content to append
+                // Prepare the content to save
                 StringBuilder combinationsText = new StringBuilder();
 
                 // Get the current date and time
@@ -104,16 +108,17 @@ namespace Loto_App
                     combinationsText.AppendLine($"{currentDateTime}, {combinationLine}");
                 }
 
-                // Append the content to the correct CSV file
-                File.AppendAllText(filePath, combinationsText.ToString());
+                // Save the content to a new CSV file
+                File.WriteAllText(filePath, combinationsText.ToString());
 
-                MessageBox.Show($"Kombinacije su dodane u '{fileName}' u istom folderu kao aplikacija.", "Spremljeno", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Kombinacije su sačuvane u '{fileName}' u istom folderu kao aplikacija.", "Spremljeno", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Došlo je do greške prilikom spremanja kombinacija: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         /*private void PrintCombinationsButton_Click(object sender, RoutedEventArgs e)
         {

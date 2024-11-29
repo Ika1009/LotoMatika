@@ -30,7 +30,7 @@
     </Page.Background>
 
     <Grid>
-        <TextBlock Text="DRUGI KORAK: Odaberite brojeve koje NE ŽELITE u svojim kombinacijama" 
+        <TextBlock Text="ODABERITE BROJEVE KOJE NE ŽELITE U SVOJIM KOMBINACIJAMA:" 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top"
                    Margin="0,20,0,0"
