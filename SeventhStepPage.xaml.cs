@@ -36,7 +36,7 @@ namespace Loto_App
             StringBuilder combinationsText = new StringBuilder();
             foreach (var combination in allCombinations)
             {
-                combinationsText.AppendLine(string.Join("   ", combination));
+                combinationsText.AppendLine(string.Join("    ", combination));
             }
 
             CombinationsTextBlock.Text = combinationsText.ToString();
@@ -104,7 +104,7 @@ namespace Loto_App
                 // Add the combinations with the current date and time
                 foreach (var combination in allCombinations)
                 {
-                    string combinationLine = string.Join(",", combination);
+                    string combinationLine = string.Join(" ", combination);
                     combinationsText.AppendLine($"{currentDateTime}, {combinationLine}");
                 }
 

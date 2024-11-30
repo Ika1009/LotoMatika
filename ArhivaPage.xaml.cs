@@ -72,7 +72,7 @@ namespace Loto_App
 
                         // Dodaj kombinaciju
                         var paragraph = new Paragraph();
-                        var numbers = combination.Split(',').Select(int.Parse).ToList();
+                        var numbers = combination.Split(' ').Select(int.Parse).ToList();
 
                         foreach (var number in numbers)
                         {
