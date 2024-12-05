@@ -115,7 +115,7 @@
             </Button>
 
             <!-- New Delete Button -->
-            <Button x:Name="DeleteButton" Content="Obriši datu kombinaciju" 
+            <Button x:Name="DeleteButton" Content="OBRIŠI KOMBINACIJU" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Top" 
                     Margin="0,15,0,0" 
@@ -130,7 +130,8 @@
         <Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <RichTextBox x:Name="CombinationsRichTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                             PreviewMouseLeftButtonDown="CombinationsRichTextBox_PreviewMouseLeftButtonDown" />
+                             PreviewMouseLeftButtonDown="CombinationsRichTextBox_PreviewMouseLeftButtonDown"
+                               PreviewMouseMove="CombinationsRichTextBox_PreviewMouseMove" />
             </ScrollViewer>
         </Border>
 

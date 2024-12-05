@@ -5,11 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Loto_App"
         mc:Ignorable="d"
-        Title="Loto Aplikacija" Height="450" Width="800">
+        Title="LotoMatika" Height="450" Width="800">
     <Window.Background>
         <SolidColorBrush Color="#FFB3B3"/>
     </Window.Background>
     <Grid>
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="48*"/>
+            <ColumnDefinition Width="11*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="741*"/>
+        </Grid.ColumnDefinitions>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.ColumnSpan="4"/>
     </Grid>
 </Window>

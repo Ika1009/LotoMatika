@@ -42,6 +42,7 @@ namespace Loto_App
                 var document = new FlowDocument();
                 string lastDateTime = string.Empty; // Zapamti poslednji datum i vreme
 
+                int brojac = 1;
                 foreach (var line in lines)
                 {
                     var parts = line.Split(',', 2);
@@ -74,6 +75,7 @@ namespace Loto_App
                         var paragraph = new Paragraph();
                         var numbers = combination.Split(' ').Select(int.Parse).ToList();
 
+                        paragraph.Inlines.Add(brojac.ToString() + ".)     ");
                         foreach (var number in numbers)
                         {
                             var run = new Run(number + " ");
@@ -85,6 +87,8 @@ namespace Loto_App
                         }
 
                         document.Blocks.Add(paragraph); // Dodaj kombinaciju
+
+                        brojac++;
                     }
                 }
 
@@ -141,20 +145,24 @@ namespace Loto_App
                 InputBoxesPanel.Children.Add(inputBox);
             }
 
-            TextBox extraInputBox = new TextBox
+            if (!((DetermineNumberOfBalls(FilePath) == 39 && DetermineMaxNumber(FilePath) == 7)
+            || (DetermineNumberOfBalls(FilePath) == 37 && DetermineMaxNumber(FilePath) == 7)))
             {
-                Width = 40,
-                Height = 40,
-                MaxLength = 2,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(20, 5, 0, 5) // Veća leva margina za razdvajanje
-            };
+                TextBox extraInputBox = new TextBox
+                {
+                    Width = 40,
+                    Height = 40,
+                    MaxLength = 2,
+                    HorizontalContentAlignment = HorizontalAlignment.Center,
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(20, 5, 0, 5) // Veća leva margina za razdvajanje
+                };
 
-            // Dodavanje KeyDown događaja
-            extraInputBox.KeyDown += InputBox_KeyDown;
+                // Dodavanje KeyDown događaja
+                extraInputBox.KeyDown += InputBox_KeyDown;
 
-            InputBoxesPanel.Children.Add(extraInputBox);
+                InputBoxesPanel.Children.Add(extraInputBox);
+            }
         }
 
         private void InputBox_KeyDown(object sender, KeyEventArgs e)
@@ -265,7 +273,9 @@ namespace Loto_App
             HashSet<int> seenNumbers = new HashSet<int>();
             HashSet<int> duplicateNumbers = new HashSet<int>();
 
-            for (int i = 0; i < InputBoxesPanel.Children.Count; i++)
+            for (int i = 0; ((i < (DetermineMaxNumber(FilePath) + 1)) && !((DetermineNumberOfBalls(FilePath) == 39 && DetermineMaxNumber(FilePath) == 7)
+            || (DetermineNumberOfBalls(FilePath) == 37 && DetermineMaxNumber(FilePath) == 7))) || ((i < DetermineMaxNumber(FilePath)) && ((DetermineNumberOfBalls(FilePath) == 39 && DetermineMaxNumber(FilePath) == 7)
+            || (DetermineNumberOfBalls(FilePath) == 37 && DetermineMaxNumber(FilePath) == 7))); i++)
             {
                 if (InputBoxesPanel.Children[i] is TextBox textBox)
                 {
@@ -282,7 +292,9 @@ namespace Loto_App
                         }
                         else
                         {
-                            if (i < InputBoxesPanel.Children.Count - 1)
+                            if (((i < (DetermineMaxNumber(FilePath) + 1)) && !((DetermineNumberOfBalls(FilePath) == 39 && DetermineMaxNumber(FilePath) == 7)
+                            || (DetermineNumberOfBalls(FilePath) == 37 && DetermineMaxNumber(FilePath) == 7))) || ((i < DetermineMaxNumber(FilePath)) && ((DetermineNumberOfBalls(FilePath) == 39 && DetermineMaxNumber(FilePath) == 7)
+                            || (DetermineNumberOfBalls(FilePath) == 37 && DetermineMaxNumber(FilePath) == 7))))
                             {
                                 if (seenNumbers.Contains(number))
                                 {
@@ -548,6 +560,52 @@ namespace Loto_App
             }
         }
 
+        private void CombinationsRichTextBox_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            var richTextBox = sender as RichTextBox;
+            var point = e.GetPosition(richTextBox);
+
+            // Get the TextPointer at the mouse position
+            TextPointer textPointer = richTextBox.GetPositionFromPoint(point, true);
+            if (textPointer != null)
+            {
+                // Get the line containing the mouse position
+                TextPointer lineStart = textPointer.GetLineStartPosition(0);
+                TextPointer lineEnd = textPointer.GetLineStartPosition(1) ?? richTextBox.Document.ContentEnd;
+
+                if (lineStart != null && lineEnd != null)
+                {
+                    // Extract the text for the line
+                    var textRange = new TextRange(lineStart, lineEnd);
+                    string lineText = textRange.Text.Trim();
+
+                    // Ensure the line is not empty
+                    if (!string.IsNullOrEmpty(lineText))
+                    {
+                        // Check the color of the text in the line
+                        var foreground = textRange.GetPropertyValue(TextElement.ForegroundProperty) as Brush;
+
+                        if (foreground is SolidColorBrush solidColorBrush)
+                        {
+                            // Change the cursor to a hand if the color is green or black
+                            if (solidColorBrush.Color == Colors.Green || solidColorBrush.Color == Colors.Black)
+                            {
+                                richTextBox.Cursor = Cursors.Hand;
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        richTextBox.Cursor = Cursors.Arrow;
+                    }
+                }
+            }
+
+            // Reset the cursor to default if not over a valid line
+            richTextBox.Cursor = Cursors.Arrow;
+        }
+
 
 
         // Click event for the delete button
@@ -571,12 +629,14 @@ namespace Loto_App
                 }
 
                 // Sada obriši kombinaciju iz CSV fajla
-                DeleteCombination(selectedCombination, FilePath);
+                DeleteCombination(selectedCombination.Contains(")     ") ? selectedCombination.Substring(selectedCombination.IndexOf(")     ") + 6) : selectedCombination, FilePath);
 
                 // Reset selection
                 selectedCombination = null;
                 previousSelection = null; // Clear previous selection
                 DeleteButton.Visibility = Visibility.Collapsed; // Hide delete button
+
+                LoadCombinationsFromFile(FilePath);
             }
         }
 
@@ -673,9 +733,7 @@ namespace Loto_App
                 text += $"6: {greenCounts[6]} \n";
                 text += $"5 + 1: {greenRedCounts[5]} \n";
                 text += $"5: {greenCounts[5]} \n";
-                text += $"4 + 1: {greenRedCounts[4]} \n";
                 text += $"4: {greenCounts[4]} \n";
-                text += $"3 + 1: {greenRedCounts[3]} \n";
                 text += $"3: {greenCounts[3]}";
             }
             else if (FilePath.Contains("7od39"))
@@ -706,7 +764,6 @@ namespace Loto_App
                 text += $"4: {greenCounts[4]} \n";
                 text += $"3 + 1: {greenRedCounts[3]} \n";
                 text += $"3: {greenCounts[3]} \n";
-                text += $"2 + 1: {greenRedCounts[2]}";
             }
             else if (FilePath.Contains("7od37"))
             {
