@@ -21,7 +21,11 @@ namespace Loto_App
         public MainWindow()
         {
             InitializeComponent();
-            NavigateToStartPage();
+            NavigateToLoginPage();
+        }
+        public void NavigateToLoginPage()
+        {
+            MainFrame.Navigate(new LoginPage(this));
         }
 
         public void NavigateToStartPage()

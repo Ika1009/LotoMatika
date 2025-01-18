@@ -21,11 +21,16 @@ namespace Loto_App
 /// </summary>
 public partial class LoginPage : Page
 {
-        public LoginPage()
+        private readonly MainWindow _mainWindow;
+
+        public LoginPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
         }
-
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // Placeholder for any initialization logic
@@ -41,8 +46,7 @@ public partial class LoginPage : Page
                 string deviceId = GetDeviceSerialNumber();
                 if (IsDeviceAllowed(deviceId))
                 {
-                    MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    // Navigate to the next page or perform further actions
+                    _mainWindow.NavigateToStartPage();
                 }
                 else
                 {
