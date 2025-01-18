@@ -50,12 +50,12 @@ public partial class LoginPage : Page
                 }
                 else
                 {
-                    MessageBox.Show("This device is not authorized.", "Access Denied", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Ovaj uređaj nema dozvolu.", "Pristup Odbijen", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("Invalid username or password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Pogrešno korisničko ime ili šifra.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -74,18 +74,21 @@ public partial class LoginPage : Page
         {
             try
             {
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT SerialNumber FROM Win32_BIOS");
+                // Query for CPU information (ProcessorId)
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT ProcessorId FROM Win32_Processor");
                 foreach (ManagementObject queryObj in searcher.Get())
                 {
-                    return queryObj["SerialNumber"].ToString();
+                    return queryObj["ProcessorId"]?.ToString();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error retrieving device serial number: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error retrieving CPU ID: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return string.Empty;
         }
+
+
 
         private bool IsDeviceAllowed(string deviceId)
         {
