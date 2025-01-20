@@ -23,6 +23,7 @@ namespace Loto_App
     public partial class AdminPage : Page
     {
         private static readonly HttpClient httpClient = new HttpClient();
+        private static readonly string ApiUrl = "https://weatheronthegogh.com/";
 
         public AdminPage()
         {
@@ -38,7 +39,7 @@ namespace Loto_App
             try
             {
                 var response = await httpClient.PostAsync(
-                    "http://your-api-url/add_user.php",
+                    ApiUrl + "/add_user.php",
                     new StringContent(json, Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode)
@@ -92,7 +93,7 @@ namespace Loto_App
             try
             {
                 var response = await httpClient.PostAsync(
-                    "http://your-api-url/reset_device.php",
+                    ApiUrl + "reset_device.php",
                     new StringContent(json, Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode)
