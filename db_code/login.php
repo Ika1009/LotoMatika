@@ -1,30 +1,50 @@
 ﻿<?php
-header('Content-Type: application/json');
+// Assuming you have a database connection
+include('db_connection.php');
 
-// Include database connection
-include 'db_conn.php';
+// Get the data sent via POST
+$data = json_decode(file_get_contents('php://input'), true);
 
-$data = json_decode(file_get_contents("php://input"), true);
-$password = $data['password'] ?? '';
+// Extract the variables
+$password = $data['password'];
+$deviceId = $data['deviceId'];
 
-if (empty($password)) {
-    echo json_encode(['success' => false, 'message' => 'Password is required.']);
-    exit;
-}
+// Query to get the user info
+$query = "SELECT * FROM Users WHERE Password = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('s', $password);
+$stmt->execute();
+$result = $stmt->get_result();
 
-$query = $conn->prepare("SELECT UID FROM Users WHERE Password = ?");
-$query->bind_param("s", $password);
-$query->execute();
-$result = $query->get_result();
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    
+    // Check if the deviceId matches or if second device is allowed
+    $response = [
+        'success' => true,
+        'isAdmin' => $user['isAdmin'], // If there's an 'isAdmin' field, include it
+        'message' => 'Login successful.',
+        'deviceId' => $user['DeviceID'],
+        'secondDeviceAllowed' => $user['SecondDeviceAllowed'],
+        'secondDeviceId' => $user['SecondDeviceID'],
+        'password' => $user['Password'], // you may not want to return password
+        'createdAt' => $user['CreatedAt'],
+    ];
 
-if ($row = $result->fetch_assoc()) {
-    $uid = $row['UID'];
-    $isAdmin = ($uid == 1);
-    echo json_encode(['success' => true, 'isAdmin' => $isAdmin, 'message' => 'Login successful.']);
+    if ($user['SecondDeviceAllowed'] == 1) {
+        // Check if the provided deviceId matches the second device ID
+        if ($user['SecondDeviceID'] && $user['SecondDeviceID'] !== $deviceId) {
+            $response['success'] = false;
+            $response['message'] = 'This device is not allowed for login.';
+        }
+    } elseif ($user['DeviceID'] !== $deviceId) {
+        // If second device is not allowed, check the primary device ID
+        $response['success'] = false;
+        $response['message'] = 'This device is not registered for login.';
+    }
+
+    echo json_encode($response);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid password.']);
+    echo json_encode(['success' => false, 'message' => 'Incorrect credentials or device ID.']);
 }
-
-$query->close();
-$conn->close();
 ?>

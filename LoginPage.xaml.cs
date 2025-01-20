@@ -39,7 +39,9 @@ namespace Loto_App
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var payload = new { password = password };
+                    string deviceId = GetDeviceSerialNumber(); // Get current device's CPU ID
+
+                    var payload = new { password = password, deviceId = deviceId };
                     string jsonPayload = JsonSerializer.Serialize(payload);
                     StringContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
@@ -54,9 +56,19 @@ namespace Loto_App
                         bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
                         bool isAdmin = parsed.TryGetProperty("isAdmin", out var isAdminProp) && isAdminProp.GetBoolean();
                         string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString()! : "Nema poruke.";
+                        string deviceIdFromServer = parsed.TryGetProperty("deviceId", out var deviceIdProp) ? deviceIdProp.GetString() : "";
+                        bool secondDeviceAllowed = parsed.TryGetProperty("secondDeviceAllowed", out var secondDeviceAllowedProp) && secondDeviceAllowedProp.GetBoolean();
+                        string secondDeviceId = parsed.TryGetProperty("secondDeviceId", out var secondDeviceIdProp) ? secondDeviceIdProp.GetString() : "";
 
                         if (success)
                         {
+                            if (secondDeviceAllowed && secondDeviceId != null && secondDeviceId != deviceId)
+                            {
+                                MessageBox.Show("Ovaj uređaj nije dozvoljen za prijavu.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+
+                            // If it's an admin user, navigate to the admin page
                             if (isAdmin)
                             {
                                 _mainWindow.NavigateToAdminPage();
@@ -89,6 +101,24 @@ namespace Loto_App
             {
                 MessageBox.Show($"Greška: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private string GetDeviceSerialNumber()
+        {
+            try
+            {
+                // Query for CPU information (ProcessorId)
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT ProcessorId FROM Win32_Processor");
+                foreach (ManagementObject queryObj in searcher.Get())
+                {
+                    return queryObj["ProcessorId"]?.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Greška pri dobijanju CPU ID: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return string.Empty;
         }
 
     }
