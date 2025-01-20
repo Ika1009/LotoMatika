@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Management;
+using System.Security.Policy;
 
 namespace Loto_App
 {
     public partial class LoginPage : Page
     {
         private readonly MainWindow _mainWindow;
-
+        private static readonly string ApiUrl = "https://weatheronthegogh.com/";
         public LoginPage(MainWindow mainWindow)
         {
             InitializeComponent();
@@ -42,7 +43,7 @@ namespace Loto_App
                     string jsonPayload = JsonSerializer.Serialize(payload);
                     StringContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync("http://your-api-url/login.php", content);
+                    HttpResponseMessage response = await client.PostAsync(ApiUrl + "/login.php", content);
 
                     if (response.IsSuccessStatusCode)
                     {
