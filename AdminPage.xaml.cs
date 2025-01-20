@@ -1,25 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Loto_App
 {
-    /// <summary>
-    /// Interaction logic for AdminPage.xaml
-    /// </summary>
     public partial class AdminPage : Page
     {
         private static readonly HttpClient httpClient = new HttpClient();
@@ -44,14 +32,19 @@ namespace Loto_App
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = JsonSerializer.Deserialize<ApiResponse>(await response.Content.ReadAsStringAsync());
-                    if (result.Success)
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    var parsed = JsonSerializer.Deserialize<JsonElement>(responseData);
+
+                    bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
+                    string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString() : "Nema poruke.";
+
+                    if (success)
                     {
                         GeneratedPassword.Text = $"Nova šifra: {newPassword}";
                     }
                     else
                     {
-                        GeneratedPassword.Text = "Kreiranje korisnika nije uspelo.";
+                        GeneratedPassword.Text = message ?? "Kreiranje korisnika nije uspelo.";
                     }
                 }
                 else
@@ -98,14 +91,19 @@ namespace Loto_App
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = JsonSerializer.Deserialize<ApiResponse>(await response.Content.ReadAsStringAsync());
-                    if (result.Success)
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    var parsed = JsonSerializer.Deserialize<JsonElement>(responseData);
+
+                    bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
+                    string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString()! : "Nema poruke.";
+
+                    if (success)
                     {
                         ResetStatusMessage.Text = "Uređaj je uspešno resetovan.";
                     }
                     else
                     {
-                        ResetStatusMessage.Text = "Korisnik sa unetom šifrom ne postoji.";
+                        ResetStatusMessage.Text = message ?? "Korisnik sa unetom šifrom ne postoji.";
                     }
                 }
                 else
@@ -118,11 +116,5 @@ namespace Loto_App
                 ResetStatusMessage.Text = $"Greška: {ex.Message}";
             }
         }
-    }
-
-    public class ApiResponse
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
     }
 }
