@@ -63,10 +63,17 @@
                         Foreground="White" 
                         FontWeight="Bold"/>
                 <TextBlock x:Name="GeneratedPassword" 
-                           FontSize="16" 
-                           FontWeight="DemiBold" 
-                           Foreground="#373737" 
-                           Margin="0,10,0,0"/>
+           FontSize="16" 
+           FontWeight="DemiBold" 
+           Foreground="#373737" 
+           Margin="0,10,0,0">
+                    <TextBlock.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Copy" Click="CopyPassword_Click"/>
+                        </ContextMenu>
+                    </TextBlock.ContextMenu>
+                </TextBlock>
+
             </StackPanel>
 
             <!-- Resetovanje uređaja -->

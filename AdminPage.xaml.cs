@@ -116,5 +116,13 @@ namespace Loto_App
                 ResetStatusMessage.Text = $"Greška: {ex.Message}";
             }
         }
+        private void CopyPassword_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(GeneratedPassword.Text))
+            {
+                string password = GeneratedPassword.Text.Replace("Nova šifra: ", "").Trim();
+                Clipboard.SetText(password);
+            }
+        }
     }
 }
