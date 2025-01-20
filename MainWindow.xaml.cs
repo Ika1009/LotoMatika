@@ -27,7 +27,10 @@ namespace Loto_App
         {
             MainFrame.Navigate(new LoginPage(this));
         }
-
+        public void NavigateToAdminPage()
+        {
+            MainFrame.Navigate(new AdminPage());
+        }
         public void NavigateToStartPage()
         {
             MainFrame.Navigate(new StartPage(this));
