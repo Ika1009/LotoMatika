@@ -48,13 +48,17 @@ namespace Loto_App
                     if (response.IsSuccessStatusCode)
                     {
                         string responseData = await response.Content.ReadAsStringAsync();
-                        var result = JsonSerializer.Deserialize<LoginResponse>(responseData);
+                        var parsed = JsonSerializer.Deserialize<JsonElement>(responseData);
 
-                        if (result != null && result.Success)
+                        // Safely extracting properties
+                        bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
+                        bool isAdmin = parsed.TryGetProperty("isAdmin", out var isAdminProp) && isAdminProp.GetBoolean();
+                        string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString()! : "Nema poruke.";
+
+                        if (success)
                         {
-                            if (result.IsAdmin)
+                            if (isAdmin)
                             {
-                                MessageBox.Show("Dobrodošli na Admin Panel.", "Uspešno", MessageBoxButton.OK, MessageBoxImage.Information);
                                 _mainWindow.NavigateToAdminPage();
                             }
                             else
@@ -64,7 +68,7 @@ namespace Loto_App
                         }
                         else
                         {
-                            MessageBox.Show(result?.Message ?? "Pogrešno uneseni podaci.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(message ?? "Pogrešno uneseni podaci.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                     else
@@ -73,17 +77,19 @@ namespace Loto_App
                     }
                 }
             }
+            catch (JsonException jsonEx)
+            {
+                MessageBox.Show($"Greška pri parsiranju podataka: {jsonEx.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (HttpRequestException httpEx)
+            {
+                MessageBox.Show($"Greška u vezi sa serverom: {httpEx.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Greška: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        public class LoginResponse
-        {
-            public bool Success { get; set; }
-            public string Message { get; set; }
-            public bool IsAdmin { get; set; }
-        }
     }
 }
