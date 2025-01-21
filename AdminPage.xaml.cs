@@ -124,5 +124,52 @@ namespace Loto_App
                 Clipboard.SetText(password);
             }
         }
+        private async void ApproveTwoDevicesButton_Click(object sender, RoutedEventArgs e)
+        {
+            string userPassword = UserPasswordInput.Text;  // Assuming this TextBox contains the user password.
+
+            if (string.IsNullOrEmpty(userPassword))
+            {
+                ResetStatusMessage.Text = "Unesite šifru korisnika!";
+                return;
+            }
+
+            var payload = new { password = userPassword };
+            string json = JsonSerializer.Serialize(payload);
+
+            try
+            {
+                var response = await httpClient.PostAsync(
+                    ApiUrl + "/approve_two_devices.php",  // Adjust the API endpoint to handle this.
+                    new StringContent(json, Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    var parsed = JsonSerializer.Deserialize<JsonElement>(responseData);
+
+                    bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
+                    string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString() : "Nema poruke.";
+
+                    if (success)
+                    {
+                        ResetStatusMessage.Text = "Korisniku je dozvoljeno korišćenje dva uređaja.";
+                    }
+                    else
+                    {
+                        ResetStatusMessage.Text = message ?? "Greška u odobravanju dva uređaja.";
+                    }
+                }
+                else
+                {
+                    ResetStatusMessage.Text = "Greška u komunikaciji sa serverom.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ResetStatusMessage.Text = $"Greška: {ex.Message}";
+            }
+        }
+
     }
 }

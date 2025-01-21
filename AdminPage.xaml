@@ -46,7 +46,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Generisanje novog korisnika -->
@@ -63,22 +62,21 @@
                         Foreground="White" 
                         FontWeight="Bold"/>
                 <TextBlock x:Name="GeneratedPassword" 
-           FontSize="16" 
-           FontWeight="DemiBold" 
-           Foreground="#373737" 
-           Margin="0,10,0,0">
+                          FontSize="16" 
+                          FontWeight="DemiBold" 
+                          Foreground="#373737" 
+                          Margin="0,10,0,0">
                     <TextBlock.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Copy" Click="CopyPassword_Click"/>
                         </ContextMenu>
                     </TextBlock.ContextMenu>
                 </TextBlock>
-
             </StackPanel>
 
-            <!-- Resetovanje uređaja -->
+            <!-- Resetovanje uređaja i odobravanje dva uređaja -->
             <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,20,0,0">
-                <TextBlock Text="Resetovanje uređaja korisnika" 
+                <TextBlock Text="Unesite šifru korisnika" 
                            FontSize="18" 
                            FontWeight="Bold" 
                            Margin="0,0,0,10"/>
@@ -92,6 +90,17 @@
                         Background="#e80000" 
                         Foreground="White" 
                         FontWeight="Bold"/>
+
+
+                <Button Content="Odobri 2 Uređaja" 
+                        Click="ApproveTwoDevicesButton_Click" 
+                        Width="200" 
+                        Height="40" 
+                        Margin="10"
+                        Background="#e80000" 
+                        Foreground="White" 
+                        FontWeight="Bold"/>
+                
                 <TextBlock x:Name="ResetStatusMessage" 
                            FontSize="16" 
                            FontWeight="DemiBold" 
