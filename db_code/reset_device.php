@@ -20,11 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute() && $stmt->affected_rows > 0) {
             echo json_encode(["success" => true, "message" => "Devices reset successfully"]);
         } else {
-            echo json_encode(["success" => false, "message" => "User not found or no changes made"]);
+            echo json_encode(["success" => false, "message" => "Korisniku je nalog već resetovan."]);
         }
         $stmt->close();
     } else {
-        echo json_encode(["success" => false, "message" => "Database error"]);
+        echo json_encode(["success" => false, "message" => "Serverska Greška."]);
     }
 
     $conn->close();

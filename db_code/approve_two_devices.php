@@ -30,7 +30,7 @@ if ($result->num_rows > 0) {
     if ($updateStmt->affected_rows > 0) {
         echo json_encode(['success' => true, 'message' => 'User is now allowed to use two devices.']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to update the user.']);
+        echo json_encode(['success' => false, 'message' => 'Korisnik već ima dozvolu za dva uređaja.']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid password.']);
