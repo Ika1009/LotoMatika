@@ -55,9 +55,9 @@ namespace Loto_App
                         bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
                         bool isAdmin = parsed.TryGetProperty("isAdmin", out var isAdminProp) && isAdminProp.GetBoolean();
                         string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString()! : "Nema poruke.";
-                        string deviceIdFromServer = parsed.TryGetProperty("deviceId", out var deviceIdProp) ? deviceIdProp.GetString() : null;
+                        string? deviceIdFromServer = parsed.TryGetProperty("deviceId", out var deviceIdProp) ? deviceIdProp.GetString() : null;
                         bool secondDeviceAllowed = parsed.TryGetProperty("secondDeviceAllowed", out var secondDeviceAllowedProp) && secondDeviceAllowedProp.GetBoolean();
-                        string secondDeviceId = parsed.TryGetProperty("secondDeviceId", out var secondDeviceIdProp) ? secondDeviceIdProp.GetString() : null;
+                        string? secondDeviceId = parsed.TryGetProperty("secondDeviceId", out var secondDeviceIdProp) ? secondDeviceIdProp.GetString() : null;
 
                         if (success)
                         {

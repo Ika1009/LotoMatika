@@ -51,18 +51,18 @@ if ($result->num_rows > 0) {
             } elseif ($user['SecondDeviceID'] !== $deviceId) {
                 // Device doesn't match either DeviceID or SecondDeviceID
                 $response['success'] = false;
-                $response['message'] = 'This device is not allowed.';
+                $response['message'] = 'Ovom uređaju nije odobren pristup.';
             }
         } else {
             // SecondDeviceAllowed is not enabled
             $response['success'] = false;
-            $response['message'] = 'This device is not allowed.';
+            $response['message'] = 'Ovom uređaju nije odobren pristup.';
         }
     }
 
     echo json_encode($response);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid password.']);
+    echo json_encode(['success' => false, 'message' => 'Pogrešna šifra.']);
 }
 
 $conn->close();
