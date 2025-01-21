@@ -12,13 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $query = "UPDATE Users SET DeviceID = NULL WHERE Password = ?";
+    $query = "UPDATE Users SET DeviceID = NULL, SecondDeviceID = NULL WHERE Password = ?";
     $stmt = $conn->prepare($query);
 
     if ($stmt) {
         $stmt->bind_param("s", $password);
         if ($stmt->execute() && $stmt->affected_rows > 0) {
-            echo json_encode(["success" => true, "message" => "Device reset successfully"]);
+            echo json_encode(["success" => true, "message" => "Devices reset successfully"]);
         } else {
             echo json_encode(["success" => false, "message" => "User not found or no changes made"]);
         }

@@ -35,12 +35,12 @@ if ($result->num_rows > 0) {
         // Check if the provided deviceId matches the second device ID
         if ($user['SecondDeviceID'] && $user['SecondDeviceID'] !== $deviceId) {
             $response['success'] = false;
-            $response['message'] = 'This device is not allowed for login.';
+            $response['message'] = 'Ovom uređaju nije dozvoljen pristup.';
         }
     } elseif ($user['DeviceID'] !== $deviceId) {
         // If second device is not allowed, check the primary device ID
         $response['success'] = false;
-        $response['message'] = 'This device is not registered for login.';
+        $response['message'] = 'Ovom uređaju nije dozvoljen pristup.';
     }
 
     echo json_encode($response);
