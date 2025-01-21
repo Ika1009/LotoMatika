@@ -41,7 +41,7 @@ namespace Loto_App
                 {
                     string deviceId = GetDeviceSerialNumber(); // Get current device's CPU ID
 
-                    var payload = new { password = password, deviceId = deviceId };
+                    var payload = new { password, deviceId };
                     string jsonPayload = JsonSerializer.Serialize(payload);
                     StringContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 

@@ -1,15 +1,18 @@
 ﻿<?php
-// Assuming you have a database connection
-include('db_connection.php');
+include('db_conn.php');
+
+header('Content-Type: application/json');
 
 // Get the data sent via POST
 $data = json_decode(file_get_contents('php://input'), true);
+$password = $data['password'] ?? '';
+$deviceId = $data['deviceId'] ?? '';
 
-// Extract the variables
-$password = $data['password'];
-$deviceId = $data['deviceId'];
+if (empty($password) || empty($deviceId)) {
+    echo json_encode(['success' => false, 'message' => 'Password and Device ID are required.']);
+    exit;
+}
 
-// Query to get the user info
 $query = "SELECT * FROM Users WHERE Password = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('s', $password);
@@ -18,33 +21,48 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
-    
-    // Check if the deviceId matches or if second device is allowed
     $response = [
         'success' => true,
-        'isAdmin' => $user['isAdmin'], // If there's an 'isAdmin' field, include it
         'message' => 'Login successful.',
+        'isAdmin' => $user['isAdmin'] ?? false,
         'deviceId' => $user['DeviceID'],
         'secondDeviceAllowed' => $user['SecondDeviceAllowed'],
-        'secondDeviceId' => $user['SecondDeviceID'],
-        'password' => $user['Password'], // you may not want to return password
-        'createdAt' => $user['CreatedAt'],
+        'secondDeviceId' => $user['SecondDeviceID']
     ];
 
-    if ($user['SecondDeviceAllowed'] == 1) {
-        // Check if the provided deviceId matches the second device ID
-        if ($user['SecondDeviceID'] && $user['SecondDeviceID'] !== $deviceId) {
-            $response['success'] = false;
-            $response['message'] = 'Ovom uređaju nije dozvoljen pristup.';
-        }
+    // Check and update DeviceID and SecondDeviceID
+    if (is_null($user['DeviceID'])) {
+        // Update DeviceID if it's NULL
+        $updateQuery = "UPDATE Users SET DeviceID = ? WHERE Password = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bind_param('ss', $deviceId, $password);
+        $updateStmt->execute();
+        $response['deviceId'] = $deviceId;
     } elseif ($user['DeviceID'] !== $deviceId) {
-        // If second device is not allowed, check the primary device ID
-        $response['success'] = false;
-        $response['message'] = 'Ovom uređaju nije dozvoljen pristup.';
+        if ($user['SecondDeviceAllowed'] == 1) {
+            if (is_null($user['SecondDeviceID'])) {
+                // Update SecondDeviceID if allowed and NULL
+                $updateQuery = "UPDATE Users SET SecondDeviceID = ? WHERE Password = ?";
+                $updateStmt = $conn->prepare($updateQuery);
+                $updateStmt->bind_param('ss', $deviceId, $password);
+                $updateStmt->execute();
+                $response['secondDeviceId'] = $deviceId;
+            } elseif ($user['SecondDeviceID'] !== $deviceId) {
+                // SecondDeviceID does not match the current device ID
+                $response['success'] = false;
+                $response['message'] = 'This device is not allowed.';
+            }
+        } else {
+            // SecondDeviceAllowed is not enabled, deny access
+            $response['success'] = false;
+            $response['message'] = 'This device is not allowed.';
+        }
     }
 
     echo json_encode($response);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Incorrect credentials or device ID.']);
+    echo json_encode(['success' => false, 'message' => 'Invalid password or device ID.']);
 }
+
+$conn->close();
 ?>
