@@ -39,7 +39,7 @@ namespace Loto_App
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string deviceId = GetDeviceSerialNumber(); // Get current device's CPU ID
+                    string deviceId = GetDeviceSerialNumber(); // Get the current device's CPU ID
 
                     var payload = new { password, deviceId };
                     string jsonPayload = JsonSerializer.Serialize(payload);
@@ -52,23 +52,21 @@ namespace Loto_App
                         string responseData = await response.Content.ReadAsStringAsync();
                         var parsed = JsonSerializer.Deserialize<JsonElement>(responseData);
 
-                        // Safely extracting properties
                         bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
                         bool isAdmin = parsed.TryGetProperty("isAdmin", out var isAdminProp) && isAdminProp.GetBoolean();
                         string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString()! : "Nema poruke.";
-                        string deviceIdFromServer = parsed.TryGetProperty("deviceId", out var deviceIdProp) ? deviceIdProp.GetString()! : "";
+                        string deviceIdFromServer = parsed.TryGetProperty("deviceId", out var deviceIdProp) ? deviceIdProp.GetString() : null;
                         bool secondDeviceAllowed = parsed.TryGetProperty("secondDeviceAllowed", out var secondDeviceAllowedProp) && secondDeviceAllowedProp.GetBoolean();
-                        string secondDeviceId = parsed.TryGetProperty("secondDeviceId", out var secondDeviceIdProp) ? secondDeviceIdProp.GetString()! : "";
+                        string secondDeviceId = parsed.TryGetProperty("secondDeviceId", out var secondDeviceIdProp) ? secondDeviceIdProp.GetString() : null;
 
                         if (success)
                         {
-                            if (secondDeviceAllowed && secondDeviceId != null && secondDeviceId != deviceId)
+                            if (secondDeviceAllowed && !string.IsNullOrEmpty(secondDeviceId) && secondDeviceId != deviceId)
                             {
                                 MessageBox.Show("Ovaj uređaj nije dozvoljen za prijavu.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
                             }
 
-                            // If it's an admin user, navigate to the admin page
                             if (isAdmin)
                             {
                                 _mainWindow.NavigateToAdminPage();
@@ -80,7 +78,7 @@ namespace Loto_App
                         }
                         else
                         {
-                            MessageBox.Show(message ?? "Pogrešno uneseni podaci.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(message, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                     else
@@ -102,6 +100,7 @@ namespace Loto_App
                 MessageBox.Show($"Greška: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private static string GetDeviceSerialNumber()
         {

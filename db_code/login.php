@@ -8,8 +8,8 @@ $data = json_decode(file_get_contents('php://input'), true);
 $password = $data['password'] ?? '';
 $deviceId = $data['deviceId'] ?? '';
 
-if (empty($password) || empty($deviceId)) {
-    echo json_encode(['success' => false, 'message' => 'Password and Device ID are required.']);
+if (empty($password)) {
+    echo json_encode(['success' => false, 'message' => 'Password is required.']);
     exit;
 }
 
@@ -24,15 +24,16 @@ if ($result->num_rows > 0) {
     $response = [
         'success' => true,
         'message' => 'Login successful.',
-        'isAdmin' => $user['isAdmin'] ?? false,
+        // Admin is identified if UID equals 1
+        'isAdmin' => isset($user['UID']) && $user['UID'] == 1, 
         'deviceId' => $user['DeviceID'],
-        'secondDeviceAllowed' => $user['SecondDeviceAllowed'],
+        'secondDeviceAllowed' => $user['SecondDeviceAllowed'] == 1, // Convert to boolean
         'secondDeviceId' => $user['SecondDeviceID']
     ];
 
-    // Check and update DeviceID and SecondDeviceID
+    // Check and handle DeviceID and SecondDeviceID
     if (is_null($user['DeviceID'])) {
-        // Update DeviceID if it's NULL
+        // Update DeviceID if NULL
         $updateQuery = "UPDATE Users SET DeviceID = ? WHERE Password = ?";
         $updateStmt = $conn->prepare($updateQuery);
         $updateStmt->bind_param('ss', $deviceId, $password);
@@ -41,19 +42,19 @@ if ($result->num_rows > 0) {
     } elseif ($user['DeviceID'] !== $deviceId) {
         if ($user['SecondDeviceAllowed'] == 1) {
             if (is_null($user['SecondDeviceID'])) {
-                // Update SecondDeviceID if allowed and NULL
+                // Update SecondDeviceID if NULL and allowed
                 $updateQuery = "UPDATE Users SET SecondDeviceID = ? WHERE Password = ?";
                 $updateStmt = $conn->prepare($updateQuery);
                 $updateStmt->bind_param('ss', $deviceId, $password);
                 $updateStmt->execute();
                 $response['secondDeviceId'] = $deviceId;
             } elseif ($user['SecondDeviceID'] !== $deviceId) {
-                // SecondDeviceID does not match the current device ID
+                // Device doesn't match either DeviceID or SecondDeviceID
                 $response['success'] = false;
                 $response['message'] = 'This device is not allowed.';
             }
         } else {
-            // SecondDeviceAllowed is not enabled, deny access
+            // SecondDeviceAllowed is not enabled
             $response['success'] = false;
             $response['message'] = 'This device is not allowed.';
         }
@@ -61,7 +62,7 @@ if ($result->num_rows > 0) {
 
     echo json_encode($response);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid password or device ID.']);
+    echo json_encode(['success' => false, 'message' => 'Invalid password.']);
 }
 
 $conn->close();
