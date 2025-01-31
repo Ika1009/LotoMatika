@@ -31,11 +31,25 @@
     </Page.Background>
 
     <Grid>
+        <!-- Row Definitions -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- IZADJI Button added here -->
+        <Button Content="NAZAD" 
+                Width="80" 
+                Height="40" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                Click="Back_Button_Click" 
+                Margin="10"
+                Background="#373737"
+                Foreground="White" 
+                FontWeight="Bold"/>
+
+        <!-- Title TextBlock -->
         <TextBlock Text="Lista Korisnika" 
                    HorizontalAlignment="Center" 
                    FontSize="24" 
@@ -43,6 +57,7 @@
                    Margin="10" 
                    Grid.Row="0"/>
 
+        <!-- User Data Grid -->
         <Grid Grid.Row="1" Margin="15">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <DataGrid x:Name="UserDataGrid"

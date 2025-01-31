@@ -14,7 +14,6 @@ namespace Loto_App
     /// </summary>
     public partial class ListOfUsersPage : Page
     {
-        private static readonly HttpClient httpClient = new HttpClient();
         private static readonly string ApiUrl = "https://tvojluksuz.rs/"; // Replace with actual API URL
         private readonly MainWindow _mainWindow;
 
@@ -23,6 +22,10 @@ namespace Loto_App
             _mainWindow = mainWindow;
             InitializeComponent();
             LoadUsers();
+        }
+        private void Back_Button_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.NavigateToAdminPage();
         }
 
         private async void LoadUsers()
@@ -73,7 +76,7 @@ namespace Loto_App
                         else
                         {
                             // Handle failure response
-                            string message = parsed.TryGetProperty("message", out JsonElement messageProp) ? messageProp.GetString() : "No message provided.";
+                            string message = parsed.TryGetProperty("message", out JsonElement messageProp) ? messageProp.GetString()! : "No message provided.";
                             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
