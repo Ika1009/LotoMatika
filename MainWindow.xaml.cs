@@ -31,6 +31,15 @@ namespace Loto_App
         {
             MainFrame.Navigate(new AdminPage(this));
         }
+
+        public void LenghtenWindowHeight()
+        {
+            this.Height += 50;
+        }
+        public void ShortenWindowHeight()
+        {
+            this.Height -= 50;
+        }
         public void NavigateToUserListPage()
         {
             MainFrame.Navigate(new ListOfUsersPage(this));

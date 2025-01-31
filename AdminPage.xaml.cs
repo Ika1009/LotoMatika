@@ -18,12 +18,31 @@ namespace Loto_App
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+            _mainWindow.LenghtenWindowHeight();
         }
 
         private async void GenerateUser_Click(object sender, RoutedEventArgs e)
         {
+            string email = EmailInput.Text.Trim();
+
+            // Email Validation
+            if (string.IsNullOrEmpty(email))
+            {
+                EmailErrorMessage.Text = "Email je obavezan!";
+                return;
+            }
+
+            if (!IsValidEmail(email))
+            {
+                EmailErrorMessage.Text = "Unesite validan email!";
+                return;
+            }
+
+            // Clear error message if valid email
+            EmailErrorMessage.Text = string.Empty;
+
             string newPassword = GenerateRandomPassword();
-            var payload = new { password = newPassword };
+            var payload = new { email, password = newPassword };
             string json = JsonSerializer.Serialize(payload);
 
             try
@@ -59,6 +78,21 @@ namespace Loto_App
                 GeneratedPassword.Text = $"Greška: {ex.Message}";
             }
         }
+
+        // Email validation function
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var mailAddress = new System.Net.Mail.MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
         private string GenerateRandomPassword()
         {
@@ -129,6 +163,7 @@ namespace Loto_App
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToLoginPage();
+            _mainWindow.ShortenWindowHeight();
         }
         private void OpenUserListPage_Click(object sender, RoutedEventArgs e)
         {
