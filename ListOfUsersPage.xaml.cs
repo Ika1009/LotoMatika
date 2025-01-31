@@ -22,7 +22,7 @@ namespace Loto_App
     public partial class ListOfUsersPage : Page
     {
         private static readonly HttpClient httpClient = new HttpClient();
-        private static readonly string ApiUrl = "https://weatheronthegogh.com/";
+        private static readonly string ApiUrl = "https://tvojluksuz.rs/";
         private readonly MainWindow _mainWindow;
         public ListOfUsersPage(MainWindow mainWindow)
         {
