@@ -6,22 +6,26 @@ header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     $password = $data['password'] ?? '';
+    $email = $data['email'] ?? '';
 
-    if (empty($password)) {
-        echo json_encode(["success" => false, "message" => "Password is required"]);
+    if (empty($password) || empty($email)) {
+        echo json_encode(["success" => false, "message" => "Both password and email are required"]);
         exit;
     }
 
-    $query = "INSERT INTO Users (Password, DeviceID) VALUES (?, NULL)";
+    $query = "INSERT INTO Users (Password, Email, DeviceID) VALUES (?, ?, NULL)";
     $stmt = $conn->prepare($query);
 
     if ($stmt) {
-        $stmt->bind_param("s", $password);
+        // Bind the parameters for the prepared statement (password, email)
+        $stmt->bind_param("ss", $password, $email);
+
         if ($stmt->execute()) {
             echo json_encode(["success" => true, "message" => "User added successfully"]);
         } else {
             echo json_encode(["success" => false, "message" => "Failed to add user"]);
         }
+
         $stmt->close();
     } else {
         echo json_encode(["success" => false, "message" => "Database error"]);

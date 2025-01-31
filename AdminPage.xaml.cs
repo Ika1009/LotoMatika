@@ -130,6 +130,10 @@ namespace Loto_App
         {
             _mainWindow.NavigateToLoginPage();
         }
+        private void OpenUserListPage_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.NavigateToLoginPage();
+        }
 
         private async void ApproveTwoDevicesButton_Click(object sender, RoutedEventArgs e)
         {
