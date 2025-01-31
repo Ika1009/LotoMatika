@@ -35,6 +35,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- IZADJI Button added here -->
+        <Button Content="IZADJI" 
+                Width="80" 
+                Height="40" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                Click="ExitButton_Click" 
+                Margin="10"
+                Background="#373737"
+                Foreground="White" 
+                FontWeight="Bold"/>
+
         <TextBlock Text="Administrativni Panel" 
                    HorizontalAlignment="Center" 
                    FontSize="24" 

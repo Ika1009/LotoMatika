@@ -12,10 +12,12 @@ namespace Loto_App
     {
         private static readonly HttpClient httpClient = new HttpClient();
         private static readonly string ApiUrl = "https://weatheronthegogh.com/";
+        private readonly MainWindow _mainWindow;
 
-        public AdminPage()
+        public AdminPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
         }
 
         private async void GenerateUser_Click(object sender, RoutedEventArgs e)
@@ -124,6 +126,11 @@ namespace Loto_App
                 Clipboard.SetText(password);
             }
         }
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.NavigateToLoginPage();
+        }
+
         private async void ApproveTwoDevicesButton_Click(object sender, RoutedEventArgs e)
         {
             string userPassword = UserPasswordInput.Text;  // Assuming this TextBox contains the user password.
