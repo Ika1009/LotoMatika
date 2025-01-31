@@ -37,7 +37,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- IZADJI Button added here -->
+        <!-- NAZAD Button -->
         <Button Content="NAZAD" 
                 Width="80" 
                 Height="40" 
@@ -57,14 +57,25 @@
                    Margin="10" 
                    Grid.Row="0"/>
 
-        <!-- User Data Grid -->
+        <!-- User Data Grid with manually defined columns -->
         <Grid Grid.Row="1" Margin="15">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <DataGrid x:Name="UserDataGrid"
-                          AutoGenerateColumns="True"
+                          AutoGenerateColumns="False"
                           IsReadOnly="True"
                           SelectionMode="Single"
-                          Margin="10"/>
+                          Margin="10">
+                    <!-- Manually define columns -->
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="UID" Binding="{Binding UID}" />
+                        <DataGridTextColumn Header="Password" Binding="{Binding Password}" />
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
+                        <DataGridTextColumn Header="DeviceID" Binding="{Binding DeviceID}" />
+                        <DataGridTextColumn Header="SecondDeviceAllowed" Binding="{Binding SecondDeviceAllowed}" />
+                        <DataGridTextColumn Header="SecondDeviceID" Binding="{Binding SecondDeviceID}" />
+                        <DataGridTextColumn Header="CreatedAt" Binding="{Binding CreatedAt}" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </ScrollViewer>
         </Grid>
     </Grid>

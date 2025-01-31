@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +22,7 @@ namespace Loto_App
             InitializeComponent();
             LoadUsers();
         }
+
         private void Back_Button_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToAdminPage();
@@ -35,7 +35,7 @@ namespace Loto_App
                 using (HttpClient client = new HttpClient())
                 {
                     // Make a GET request to retrieve the list of users
-                    string apiUrl = $"{ApiUrl}/api/users"; // Replace with your actual API URL
+                    string apiUrl = $"{ApiUrl}/get_users.php"; // Replace with your actual API URL
 
                     HttpResponseMessage response = await client.GetAsync(apiUrl);
 
@@ -49,24 +49,24 @@ namespace Loto_App
                         {
                             if (parsed.TryGetProperty("data", out JsonElement dataElement) && dataElement.ValueKind == JsonValueKind.Array)
                             {
-                                List<Dictionary<string, object>> users = new List<Dictionary<string, object>>();
+                                List<User> users = new List<User>();
                                 foreach (JsonElement userElement in dataElement.EnumerateArray())
                                 {
-                                    var user = new Dictionary<string, object>
+                                    var user = new User
                                     {
-                                        { "UID", userElement.GetProperty("UID").GetInt32() },
-                                        { "Password", userElement.GetProperty("Password").GetString()! },
-                                        { "Email", userElement.GetProperty("Email").GetString()! },
-                                        { "DeviceID", userElement.GetProperty("DeviceID").GetString()! },
-                                        { "SecondDeviceAllowed", userElement.GetProperty("SecondDeviceAllowed").GetInt32() },
-                                        { "SecondDeviceID", userElement.GetProperty("SecondDeviceID").GetString()! },
-                                        { "CreatedAt", userElement.GetProperty("CreatedAt").GetString()! }
+                                        UID = userElement.GetProperty("UID").GetString()!,
+                                        Password = userElement.GetProperty("Password").GetString()!,
+                                        Email = userElement.GetProperty("Email").GetString()!,
+                                        DeviceID = userElement.GetProperty("DeviceID").GetString()!,
+                                        SecondDeviceAllowed = userElement.GetProperty("SecondDeviceAllowed").GetString()!,
+                                        SecondDeviceID = userElement.GetProperty("SecondDeviceID").GetString()!,
+                                        CreatedAt = userElement.GetProperty("CreatedAt").GetString()!
                                     };
 
                                     users.Add(user);
                                 }
 
-                                UserDataGrid.ItemsSource = users;
+                                UserDataGrid.ItemsSource = users; // Binding the list of User objects to the DataGrid
                             }
                             else
                             {
@@ -100,6 +100,15 @@ namespace Loto_App
             }
         }
 
-
+        public class User
+        {
+            public string UID { get; set; }
+            public string Password { get; set; }
+            public string Email { get; set; }
+            public string DeviceID { get; set; }
+            public string SecondDeviceAllowed { get; set; }
+            public string SecondDeviceID { get; set; }
+            public string CreatedAt { get; set; }
+        }
     }
 }

@@ -53,10 +53,10 @@
         <Button Content="LISTA KORISNIKA" 
                 Width="150" 
                 Height="40" 
-                HorizontalAlignment="Left" 
+                HorizontalAlignment="Right" 
                 VerticalAlignment="Center" 
                 Click="OpenUserListPage_Click" 
-                Margin="640,10,10,10"
+                Margin="10"
                 Background="#373737"
                 Foreground="White" 
                 FontWeight="Bold"/>
