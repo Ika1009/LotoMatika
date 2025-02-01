@@ -32,6 +32,14 @@ namespace Loto_App
             MainFrame.Navigate(new AdminPage(this));
         }
 
+        public void LenghtenWindowWidth()
+        {
+            this.Width += 60;
+        }
+        public void ShortenWindowWidth()
+        {
+            this.Width -= 60;
+        }
         public void LenghtenWindowHeight()
         {
             this.Height += 50;

@@ -20,11 +20,17 @@ namespace Loto_App
         {
             _mainWindow = mainWindow;
             InitializeComponent();
+            _mainWindow.LenghtenWindowWidth();
+            _mainWindow.LenghtenWindowHeight();
+            _mainWindow.LenghtenWindowHeight();
             LoadUsers();
         }
 
         private void Back_Button_Click(object sender, RoutedEventArgs e)
         {
+            _mainWindow.ShortenWindowWidth();
+            _mainWindow.ShortenWindowHeight();
+            _mainWindow.ShortenWindowHeight();
             _mainWindow.NavigateToAdminPage();
         }
 
@@ -34,15 +40,13 @@ namespace Loto_App
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    // Make a GET request to retrieve the list of users
-                    string apiUrl = $"{ApiUrl}/get_users.php"; // Replace with your actual API URL
+                    string apiUrl = $"{ApiUrl}/get_users.php"; // API endpoint
 
                     HttpResponseMessage response = await client.GetAsync(apiUrl);
 
                     if (response.IsSuccessStatusCode)
                     {
                         string responseData = await response.Content.ReadAsStringAsync();
-
                         JsonElement parsed = JsonSerializer.Deserialize<JsonElement>(responseData);
 
                         if (parsed.TryGetProperty("success", out JsonElement successProp) && successProp.GetBoolean())
@@ -50,6 +54,7 @@ namespace Loto_App
                             if (parsed.TryGetProperty("data", out JsonElement dataElement) && dataElement.ValueKind == JsonValueKind.Array)
                             {
                                 List<User> users = new List<User>();
+
                                 foreach (JsonElement userElement in dataElement.EnumerateArray())
                                 {
                                     var user = new User
@@ -58,7 +63,7 @@ namespace Loto_App
                                         Password = userElement.GetProperty("Password").GetString()!,
                                         Email = userElement.GetProperty("Email").GetString()!,
                                         DeviceID = userElement.GetProperty("DeviceID").GetString()!,
-                                        SecondDeviceAllowed = userElement.GetProperty("SecondDeviceAllowed").GetString()!,
+                                        SecondDeviceAllowed = userElement.GetProperty("SecondDeviceAllowed").GetString() == "1" ? "odobren" : "neodobren",
                                         SecondDeviceID = userElement.GetProperty("SecondDeviceID").GetString()!,
                                         CreatedAt = userElement.GetProperty("CreatedAt").GetString()!
                                     };
@@ -66,7 +71,7 @@ namespace Loto_App
                                     users.Add(user);
                                 }
 
-                                UserDataGrid.ItemsSource = users; // Binding the list of User objects to the DataGrid
+                                UserDataGrid.ItemsSource = users;
                             }
                             else
                             {
@@ -75,7 +80,6 @@ namespace Loto_App
                         }
                         else
                         {
-                            // Handle failure response
                             string message = parsed.TryGetProperty("message", out JsonElement messageProp) ? messageProp.GetString()! : "No message provided.";
                             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
@@ -86,19 +90,12 @@ namespace Loto_App
                     }
                 }
             }
-            catch (JsonException jsonEx)
-            {
-                MessageBox.Show($"Error parsing the data: {jsonEx.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (HttpRequestException httpEx)
-            {
-                MessageBox.Show($"Error with the server connection: {httpEx.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         public class User
         {
