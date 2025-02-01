@@ -61,7 +61,7 @@
                 Foreground="White" 
                 FontWeight="Bold"/>
 
-        <TextBlock Text="Administrativni Panel" 
+        <TextBlock Text="ADMINISTRATIVNO SUČELJE" 
                    HorizontalAlignment="Center" 
                    FontSize="24" 
                    FontWeight="Bold" 
@@ -86,7 +86,7 @@
                 <TextBox x:Name="EmailInput" Width="250" Margin="0,0,0,10"/>
 
                 <TextBlock x:Name="EmailErrorMessage" Foreground="Red" FontSize="12" Margin="0,0,0,10"/>
-                <Button Content="Generiši korisnika" 
+                <Button Content="Dodaj Korisnika" 
                         Click="GenerateUser_Click" 
                         Width="200" 
                         Height="40" 
@@ -114,7 +114,7 @@
                 <TextBox x:Name="UserPasswordInput" 
                          Width="250" 
                          Margin="0,0,0,10"/>
-                <Button Content="Resetuj uređaj" 
+                <Button Content="Resetuj Uređaj Korisniku" 
                         Click="ResetDevice_Click" 
                         Width="200" 
                         Height="40" 
@@ -122,7 +122,7 @@
                         Foreground="White" 
                         FontWeight="Bold"/>
 
-                <Button Content="Odobri 2 Uređaja" 
+                <Button Content="Dodaj Drugi Uređaj" 
                         Click="ApproveTwoDevicesButton_Click" 
                         Width="200" 
                         Height="40" 
