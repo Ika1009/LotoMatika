@@ -130,11 +130,21 @@
                         Foreground="White" 
                         FontWeight="Bold"
                         Margin="10"/>
+                
+                <Button Content="Skloni Drugi Uređaj" 
+                        Click="RemoveTwoDevicesButton_Click" 
+                        Width="200" 
+                        Height="40" 
+                        Background="#e80000" 
+                        Foreground="White" 
+                        FontWeight="Bold"
+                        />
                 <TextBlock x:Name="ResetStatusMessage" 
                            FontSize="16" 
                            FontWeight="DemiBold" 
                            Foreground="#373737"
-                           Text=""/>
+                           Text=""
+                           Margin="5"/>
             </StackPanel>
         </Grid>
     </Grid>

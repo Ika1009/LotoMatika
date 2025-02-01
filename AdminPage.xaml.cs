@@ -182,10 +182,59 @@ namespace Loto_App
             return result == MessageBoxResult.Yes;
         }
 
+        private async void RemoveTwoDevicesButton_Click(object sender, RoutedEventArgs e)
+        {
+            string userPassword = UserPasswordInput.Text;
+
+            if (string.IsNullOrEmpty(userPassword))
+            {
+                ResetStatusMessage.Text = "Unesite šifru korisnika!";
+                return;
+            }
+
+            if (!ShowConfirmationDialog("Da li ste sigurni da želite da uklonite dva uređaja korisniku?"))
+                return;
+
+            var payload = new { password = userPassword };
+            string json = JsonSerializer.Serialize(payload);
+
+            try
+            {
+                var response = await httpClient.PostAsync(
+                    ApiUrl + "/remove_two_devices.php",  // Adjusted API endpoint to remove devices.
+                    new StringContent(json, Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    var parsed = JsonSerializer.Deserialize<JsonElement>(responseData);
+
+                    bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
+                    string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString() : "Nema poruke.";
+
+                    if (success)
+                    {
+                        ResetStatusMessage.Text = "Korisniku su uklonjena dva uređaja.";
+                    }
+                    else
+                    {
+                        ResetStatusMessage.Text = message ?? "Greška u uklanjanju dva uređaja.";
+                    }
+                }
+                else
+                {
+                    ResetStatusMessage.Text = "Greška u komunikaciji sa serverom.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ResetStatusMessage.Text = $"Greška: {ex.Message}";
+            }
+        }
 
         private async void ApproveTwoDevicesButton_Click(object sender, RoutedEventArgs e)
         {
-            string userPassword = UserPasswordInput.Text;  // Assuming this TextBox contains the user password.
+            string userPassword = UserPasswordInput.Text;
 
             if (string.IsNullOrEmpty(userPassword))
             {
