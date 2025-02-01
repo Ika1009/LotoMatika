@@ -57,7 +57,7 @@
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   AutoGenerateColumns="False"
                   Focusable="False"
-                  SelectionUnit="FullRow">
+                  SelectionUnit="Cell">
 
             <DataGrid.Resources>
                 <Style TargetType="DataGridCell">
