@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace Loto_App
 {
@@ -32,21 +33,21 @@ namespace Loto_App
             MainFrame.Navigate(new AdminPage(this));
         }
 
-        public void LenghtenWindowWidth()
+        public void LenghtenWindowWidth(int width)
         {
-            this.Width += 60;
+            this.Width += width;
         }
-        public void ShortenWindowWidth()
+        public void ShortenWindowWidth(int width)
         {
-            this.Width -= 60;
+            this.Width -= width;
         }
-        public void LenghtenWindowHeight()
+        public void LenghtenWindowHeight(int height)
         {
-            this.Height += 50;
+            this.Height += height;
         }
-        public void ShortenWindowHeight()
+        public void ShortenWindowHeight(int height)
         {
-            this.Height -= 50;
+            this.Height -= height;
         }
         public void NavigateToUserListPage()
         {

@@ -13,12 +13,13 @@ namespace Loto_App
         private static readonly HttpClient httpClient = new HttpClient();
         private static readonly string ApiUrl = "https://tvojluksuz.rs/";
         private readonly MainWindow _mainWindow;
+        int heightAddOn = 90;
 
         public AdminPage(MainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-            _mainWindow.LenghtenWindowHeight();
+            _mainWindow.LenghtenWindowHeight(heightAddOn);
         }
 
         private async void GenerateUser_Click(object sender, RoutedEventArgs e)
@@ -96,6 +97,12 @@ namespace Loto_App
             }
         }
 
+        private async void SetStatusMessage(string message)
+        {
+            ResetStatusMessage.Text = message;
+            await Task.Delay(5000);
+            ResetStatusMessage.Text = string.Empty;
+        }
 
         private string GenerateRandomPassword()
         {
@@ -115,7 +122,7 @@ namespace Loto_App
 
             if (string.IsNullOrEmpty(userPassword))
             {
-                ResetStatusMessage.Text = "Unesite šifru korisnika!";
+                SetStatusMessage("Unesite šifru korisnika!");
                 return;
             }
 
@@ -141,21 +148,21 @@ namespace Loto_App
 
                     if (success)
                     {
-                        ResetStatusMessage.Text = "Uređaj je uspešno resetovan.";
+                        SetStatusMessage("Uređaj je uspešno resetovan.");
                     }
                     else
                     {
-                        ResetStatusMessage.Text = message ?? "Korisnik sa unetom šifrom ne postoji.";
+                        SetStatusMessage(message ?? "Korisnik sa unetom šifrom ne postoji.");
                     }
                 }
                 else
                 {
-                    ResetStatusMessage.Text = "Greška u komunikaciji sa serverom.";
+                    SetStatusMessage("Greška u komunikaciji sa serverom.");
                 }
             }
             catch (Exception ex)
             {
-                ResetStatusMessage.Text = $"Greška: {ex.Message}";
+                SetStatusMessage($"Greška: {ex.Message}");
             }
         }
         private void CopyPassword_Click(object sender, RoutedEventArgs e)
@@ -169,12 +176,12 @@ namespace Loto_App
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToLoginPage();
-            _mainWindow.ShortenWindowHeight();
+            _mainWindow.ShortenWindowHeight(heightAddOn);
         }
         private void OpenUserListPage_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.NavigateToUserListPage();
-            _mainWindow.ShortenWindowHeight();
+            _mainWindow.ShortenWindowHeight(heightAddOn);
         }
         private bool ShowConfirmationDialog(string message)
         {
@@ -188,7 +195,7 @@ namespace Loto_App
 
             if (string.IsNullOrEmpty(userPassword))
             {
-                ResetStatusMessage.Text = "Unesite šifru korisnika!";
+                SetStatusMessage("Unesite šifru korisnika!");
                 return;
             }
 
@@ -214,21 +221,21 @@ namespace Loto_App
 
                     if (success)
                     {
-                        ResetStatusMessage.Text = "Korisniku su uklonjena dva uređaja.";
+                        SetStatusMessage("Korisniku su uklonjena dva uređaja.");
                     }
                     else
                     {
-                        ResetStatusMessage.Text = message ?? "Greška u uklanjanju dva uređaja.";
+                        SetStatusMessage(message ?? "Greška u uklanjanju dva uređaja.");
                     }
                 }
                 else
                 {
-                    ResetStatusMessage.Text = "Greška u komunikaciji sa serverom.";
+                    SetStatusMessage("Greška u komunikaciji sa serverom.");
                 }
             }
             catch (Exception ex)
             {
-                ResetStatusMessage.Text = $"Greška: {ex.Message}";
+                SetStatusMessage($"Greška: {ex.Message}");
             }
         }
 
@@ -238,7 +245,7 @@ namespace Loto_App
 
             if (string.IsNullOrEmpty(userPassword))
             {
-                ResetStatusMessage.Text = "Unesite šifru korisnika!";
+                SetStatusMessage("Unesite šifru korisnika!");
                 return;
             }
 
@@ -264,21 +271,21 @@ namespace Loto_App
 
                     if (success)
                     {
-                        ResetStatusMessage.Text = "Korisniku je dozvoljeno korišćenje dva uređaja.";
+                        SetStatusMessage("Korisniku je dozvoljeno korišćenje dva uređaja.");
                     }
                     else
                     {
-                        ResetStatusMessage.Text = message ?? "Greška u odobravanju dva uređaja.";
+                        SetStatusMessage(message ?? "Greška u odobravanju dva uređaja.");
                     }
                 }
                 else
                 {
-                    ResetStatusMessage.Text = "Greška u komunikaciji sa serverom.";
+                    SetStatusMessage("Greška u komunikaciji sa serverom.");
                 }
             }
             catch (Exception ex)
             {
-                ResetStatusMessage.Text = $"Greška: {ex.Message}";
+                SetStatusMessage($"Greška: {ex.Message}");
             }
         }
 

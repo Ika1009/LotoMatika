@@ -20,17 +20,15 @@ namespace Loto_App
         {
             _mainWindow = mainWindow;
             InitializeComponent();
-            _mainWindow.LenghtenWindowWidth();
-            _mainWindow.LenghtenWindowHeight();
-            _mainWindow.LenghtenWindowHeight();
+            _mainWindow.LenghtenWindowWidth(60);
+            _mainWindow.LenghtenWindowHeight(100);
             LoadUsers();
         }
 
         private void Back_Button_Click(object sender, RoutedEventArgs e)
         {
-            _mainWindow.ShortenWindowWidth();
-            _mainWindow.ShortenWindowHeight();
-            _mainWindow.ShortenWindowHeight();
+            _mainWindow.ShortenWindowWidth(60);
+            _mainWindow.ShortenWindowHeight(100);
             _mainWindow.NavigateToAdminPage();
         }
 

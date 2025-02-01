@@ -30,12 +30,12 @@ if ($result->num_rows > 0) {
         $updateStmt->execute();
 
         if ($updateStmt->affected_rows > 0) {
-            echo json_encode(['success' => true, 'message' => 'User\'s second device has been removed.']);
+            echo json_encode(['success' => true, 'message' => 'Korisniku je uklonjena mogućnost za dva korisnika.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'No changes were made, user might not have a second device assigned.']);
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'User is not allowed to use two devices.']);
+        echo json_encode(['success' => false, 'message' => 'Korisniku već nije dozvoljeno da koristi 2 uređaja.']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid password.']);
