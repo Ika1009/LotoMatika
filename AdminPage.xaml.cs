@@ -22,6 +22,20 @@ namespace Loto_App
             _mainWindow.LenghtenWindowHeight(heightAddOn);
         }
 
+
+        private async void SetEmailErrorMessage(string message)
+        {
+            EmailErrorMessage.Text = message;
+            await Task.Delay(4000);
+            EmailErrorMessage.Text = string.Empty;
+        }
+        private async void SetGeneratedPasswordMessage(string message)
+        {
+            GeneratedPassword.Text = message;
+            await Task.Delay(4000);
+            GeneratedPassword.Text = string.Empty;
+        }
+
         private async void GenerateUser_Click(object sender, RoutedEventArgs e)
         {
             string email = EmailInput.Text.Trim();
@@ -29,13 +43,13 @@ namespace Loto_App
             // Email Validation
             if (string.IsNullOrEmpty(email))
             {
-                EmailErrorMessage.Text = "Email je obavezan!";
+                SetEmailErrorMessage("Email je obavezan!");
                 return;
             }
 
             if (!IsValidEmail(email))
             {
-                EmailErrorMessage.Text = "Unesite validan email!";
+                SetEmailErrorMessage("Unesite validan email!");
                 return;
             }
 
@@ -65,21 +79,21 @@ namespace Loto_App
 
                     if (success)
                     {
-                        GeneratedPassword.Text = $"Nova šifra: {newPassword}";
+                        SetGeneratedPasswordMessage($"Nova šifra: {newPassword}");
                     }
                     else
                     {
-                        GeneratedPassword.Text = message ?? "Kreiranje korisnika nije uspelo.";
+                        SetGeneratedPasswordMessage(message ?? "Kreiranje korisnika nije uspelo.");
                     }
                 }
                 else
                 {
-                    GeneratedPassword.Text = "Greška u komunikaciji sa serverom.";
+                    SetGeneratedPasswordMessage("Greška u komunikaciji sa serverom.");
                 }
             }
             catch (Exception ex)
             {
-                GeneratedPassword.Text = $"Greška: {ex.Message}";
+                SetGeneratedPasswordMessage($"Greška: {ex.Message}");
             }
         }
 
@@ -100,7 +114,7 @@ namespace Loto_App
         private async void SetStatusMessage(string message)
         {
             ResetStatusMessage.Text = message;
-            await Task.Delay(5000);
+            await Task.Delay(4000);
             ResetStatusMessage.Text = string.Empty;
         }
 
