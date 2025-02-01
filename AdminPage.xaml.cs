@@ -25,6 +25,9 @@ namespace Loto_App
         {
             string email = EmailInput.Text.Trim();
 
+            if (!ShowConfirmationDialog("Da li ste sigurni da želite da kreirate novog korisnika?"))
+                return;
+
             // Email Validation
             if (string.IsNullOrEmpty(email))
             {
@@ -116,6 +119,9 @@ namespace Loto_App
                 return;
             }
 
+            if (!ShowConfirmationDialog("Da li ste sigurni da želite da resetujete uređaj korisniku?"))
+                return;
+
             var payload = new { password = userPassword };
             string json = JsonSerializer.Serialize(payload);
 
@@ -170,6 +176,12 @@ namespace Loto_App
             _mainWindow.NavigateToUserListPage();
             _mainWindow.ShortenWindowHeight();
         }
+        private bool ShowConfirmationDialog(string message)
+        {
+            MessageBoxResult result = MessageBox.Show(message, "Potvrda", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return result == MessageBoxResult.Yes;
+        }
+
 
         private async void ApproveTwoDevicesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -180,6 +192,9 @@ namespace Loto_App
                 ResetStatusMessage.Text = "Unesite šifru korisnika!";
                 return;
             }
+
+            if (!ShowConfirmationDialog("Da li ste sigurni da želite da odobrite drugi uređaj korisniku?"))
+                return;
 
             var payload = new { password = userPassword };
             string json = JsonSerializer.Serialize(payload);
