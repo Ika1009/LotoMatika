@@ -25,9 +25,6 @@ namespace Loto_App
         {
             string email = EmailInput.Text.Trim();
 
-            if (!ShowConfirmationDialog("Da li ste sigurni da želite da kreirate novog korisnika?"))
-                return;
-
             // Email Validation
             if (string.IsNullOrEmpty(email))
             {
@@ -40,6 +37,9 @@ namespace Loto_App
                 EmailErrorMessage.Text = "Unesite validan email!";
                 return;
             }
+
+            if (!ShowConfirmationDialog("Da li ste sigurni da želite da kreirate novog korisnika?"))
+                return;
 
             // Clear error message if valid email
             EmailErrorMessage.Text = string.Empty;
