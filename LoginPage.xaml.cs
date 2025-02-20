@@ -13,7 +13,7 @@ namespace Loto_App
     public partial class LoginPage : Page
     {
         private readonly MainWindow _mainWindow;
-        private static readonly string ApiUrl = "https://tvojluksuz.rs/";
+        private static readonly string ApiUrl = "http://lotomatika.com/app/";
         public LoginPage(MainWindow mainWindow)
         {
             InitializeComponent();

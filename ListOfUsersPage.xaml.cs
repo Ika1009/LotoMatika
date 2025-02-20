@@ -13,7 +13,7 @@ namespace Loto_App
     /// </summary>
     public partial class ListOfUsersPage : Page
     {
-        private static readonly string ApiUrl = "https://tvojluksuz.rs/"; // Replace with actual API URL
+        private static readonly string ApiUrl = "http://lotomatika.com/app/"; // Replace with actual API URL
         private readonly MainWindow _mainWindow;
 
         public ListOfUsersPage(MainWindow mainWindow)
