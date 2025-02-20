@@ -8,7 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $result = $conn->query($query);
 
     if ($result) {
-        $users = $result->fetch_all(MYSQLI_ASSOC);
+        $users = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $users[] = $row;
+        }
 
         echo json_encode(["success" => true, "data" => $users]);
     } else {

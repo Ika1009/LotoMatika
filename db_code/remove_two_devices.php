@@ -1,6 +1,7 @@
 ﻿<?php
 include('db_conn.php');
 
+ob_start(); // Start output buffering to prevent "headers already sent"
 header('Content-Type: application/json');
 
 // Get the data sent via POST
@@ -12,17 +13,16 @@ if (empty($password)) {
     exit;
 }
 
-$query = "SELECT * FROM Users WHERE Password = ?";
+$query = "SELECT UID, SecondDeviceAllowed, SecondDeviceID FROM Users WHERE Password = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('s', $password);
 $stmt->execute();
-$result = $stmt->get_result();
+$stmt->bind_result($UID, $SecondDeviceAllowed, $SecondDeviceID);
+$stmt->fetch();
+$stmt->close();
 
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-
-    // Check if the user is allowed to use two devices before proceeding
-    if ($user['SecondDeviceAllowed'] == 1) {
+if (isset($UID)) {
+    if ($SecondDeviceAllowed == 1) {
         // Update the SecondDevice field to NULL and remove the second device allowance
         $updateQuery = "UPDATE Users SET SecondDeviceAllowed = 0, SecondDeviceID = NULL WHERE Password = ?";
         $updateStmt = $conn->prepare($updateQuery);
@@ -34,6 +34,7 @@ if ($result->num_rows > 0) {
         } else {
             echo json_encode(['success' => false, 'message' => 'No changes were made, user might not have a second device assigned.']);
         }
+        $updateStmt->close();
     } else {
         echo json_encode(['success' => false, 'message' => 'Korisniku već nije dozvoljeno da koristi 2 uređaja.']);
     }
@@ -42,4 +43,5 @@ if ($result->num_rows > 0) {
 }
 
 $conn->close();
+ob_end_flush(); // End output buffering and send output
 ?>

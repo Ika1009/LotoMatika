@@ -1,6 +1,7 @@
 ﻿<?php
 include 'db_conn.php';
 
+ob_start(); // Start output buffering to prevent "headers already sent"
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare($query);
 
     if ($stmt) {
-        // Bind the parameters for the prepared statement (password, email)
         $stmt->bind_param("ss", $password, $email);
 
         if ($stmt->execute()) {
@@ -28,9 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt->close();
     } else {
-        echo json_encode(["success" => false, "message" => "Database error"]);
+        echo json_encode(["success" => false, "message" => "Database error: " . $conn->error]);
     }
-
-    $conn->close();
 }
+
+$conn->close();
+ob_end_flush(); // End output buffering and send output
 ?>
