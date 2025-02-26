@@ -32,7 +32,7 @@ namespace Loto_App
         private async void SetGeneratedPasswordMessage(string message)
         {
             GeneratedPassword.Text = message;
-            await Task.Delay(4000);
+            await Task.Delay(10000);
             GeneratedPassword.Text = string.Empty;
         }
 
