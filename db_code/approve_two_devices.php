@@ -37,7 +37,7 @@ if ($stmt->fetch()) {
     // Update SecondDeviceAllowed to 1 (enable two devices)
     $updateQuery = "UPDATE Users SET SecondDeviceAllowed = 1 WHERE UID = ?";
     $updateStmt = $conn->prepare($updateQuery);
-
+ 
     if (!$updateStmt) {
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $conn->error]);
         exit;
