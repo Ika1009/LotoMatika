@@ -32,7 +32,7 @@ namespace Loto_App
         private async void SetGeneratedPasswordMessage(string message)
         {
             GeneratedPassword.Text = message;
-            await Task.Delay(4000);
+            await Task.Delay(10000);
             GeneratedPassword.Text = string.Empty;
         }
 
@@ -213,7 +213,7 @@ namespace Loto_App
                 return;
             }
 
-            if (!ShowConfirmationDialog("Da li ste sigurni da želite da uklonite dva uređaja korisniku?"))
+            if (!ShowConfirmationDialog("Da li ste sigurni da želite da uklonite drugi uređaj korisniku?"))
                 return;
 
             var payload = new { password = userPassword };
