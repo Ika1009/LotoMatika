@@ -205,7 +205,7 @@ namespace Loto_App
                 // Remove spaces from the cleaned name
                 string cleanedButtonName = buttonName.Replace(" ", "");
 
-                string executablePath = AppDomain.CurrentDomain.BaseDirectory;
+                string executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "arhiva");
 
                 // Search for CSV files that start with the cleaned button name
                 string[] files = Directory.GetFiles(executablePath, cleanedButtonName + "*.csv");
