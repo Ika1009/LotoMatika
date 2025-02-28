@@ -1,0 +1,89 @@
+﻿<Page x:Class="Loto_App.ListOfUsersPage" 
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Loto_App"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Lista Korisnika">
+
+    <Page.Background>
+        <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute" Viewbox="0,0,100,100" ViewboxUnits="Absolute">
+            <VisualBrush.Visual>
+                <Rectangle Width="100" Height="100" Fill="#EEEEEE"/>
+            </VisualBrush.Visual>
+        </VisualBrush>
+    </Page.Background>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="NAZAD" 
+                Width="80" 
+                Height="40" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                Click="Back_Button_Click" 
+                Margin="10"
+                Background="#373737"
+                Foreground="White" 
+                FontWeight="Bold"/>
+
+        <TextBlock Text="Lista Korisnika" 
+                   HorizontalAlignment="Center" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   Margin="10" 
+                   Grid.Row="0"/>
+
+        <!-- DataGrid directly inside Grid for proper scrolling -->
+        <DataGrid x:Name="UserDataGrid"
+                  Margin="10"
+                  Grid.Row="1"
+                  IsReadOnly="True"
+                  IsHitTestVisible="True"
+                  Background="White"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="None"
+                  CanUserResizeColumns="False"
+                  CanUserSortColumns="False"
+                  CanUserReorderColumns="False"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  AutoGenerateColumns="False"
+                  Focusable="False"
+                  SelectionUnit="Cell">
+
+            <DataGrid.Resources>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="10"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#4CAF50"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding UID}" Width="50"/>
+                <DataGridTextColumn Header="Lozinka" Binding="{Binding Password}" Width="100"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="150"/>
+                <DataGridTextColumn Header="ID Uređaja" Binding="{Binding DeviceID}" Width="130"/>
+                <DataGridTextColumn Header="Uređaj 2" Binding="{Binding SecondDeviceAllowed}" Width="80"/>
+                <DataGridTextColumn Header="ID Uređaja 2" Binding="{Binding SecondDeviceID}" Width="130"/>
+                <DataGridTextColumn Header="Kreirano" Binding="{Binding CreatedAt}" Width="150"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+    </Grid>
+</Page>
