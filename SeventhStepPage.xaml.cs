@@ -68,7 +68,11 @@ namespace Loto_App
             try
             {
                 // Get the base directory where the executable is located
-                string executablePath = AppDomain.CurrentDomain.BaseDirectory;
+                string executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "arhiva");
+                if (!Directory.Exists(executablePath))
+                {
+                    Directory.CreateDirectory(executablePath);
+                }
 
                 // Determine the base file name based on max_number and combination_length
                 string baseFileName = (max_number, combination_length) switch

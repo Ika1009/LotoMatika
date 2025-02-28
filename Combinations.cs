@@ -525,7 +525,6 @@ namespace Loto_App
             return red;
         }
 
-
         static void _resi_100_kombinacija(int[][] brojevi, int[] sume_kombinacija, int[] razlike_kombinacija, int pocetak, int kraj, int duzina_kombinacije, int broj_loptica, int granica_malih, int suma_min, int suma_max, int razlika_min, int razlika_max, int[] broj_parnih_brojeva_kombinacija, int[] broj_malih_brojeva_kombinacija, int velicina_skupa, bool[] petoskupovna_kombinacija, bool[] sa_susednima_kombinacija, bool[] sa_zadnjim_ciframa_kombinacija, int[] omiljeni_brojevi, int broj_omiljenih_brojeva)
         {
             Random random = new Random();
@@ -1424,6 +1423,7 @@ namespace Loto_App
                 brojac_razlika++;
             }
         }
+        
         static void _prepravka(int[][] brojevi, int duzina_kombinacije, int broj_loptica, int granica_malih, int[] broj_parnih_brojeva_kombinacija, int[] broj_malih_brojeva_kombinacija, int velicina_skupa, bool[] petoskupovna_kombinacija, bool[] sa_susednima_kombinacija, bool[] sa_zadnjim_ciframa_kombinacija, int[] omiljeni_brojevi, int[] zabranjeni_brojevi, int[] broj_ponavljanja_brojeva, int broj_kombinacija, int[] sume_kombinacija, int[] razlike_kombinacija, int suma_min, int suma_max, int razlika_min, int razlika_max)
         {
             Random random = new Random();
@@ -4112,7 +4112,7 @@ namespace Loto_App
                 int broj_omiljenih_brojeva = 2;
                 int procenat_pojavljivanja_omiljenih_brojeva = 100;
 
-                _neke_kombinacije1(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, omiljeni_brojevi, procenat_pojavljivanja_omiljenih_brojeva);
+                _neke_kombinacije(broj_loptica, duzina_kombinacije, broj_kombinacija, zabranjeni_brojevi, omiljeni_brojevi, procenat_pojavljivanja_omiljenih_brojeva);
             }
             else if (biranje_moda == "sve")
             {
