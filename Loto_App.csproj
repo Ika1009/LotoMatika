@@ -1,25 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<ApplicationIcon>Assets\Images\logo.ico</ApplicationIcon>
 
-  <ItemGroup>
-    <None Remove="Assets\Images\logo.png" />
-  </ItemGroup>
+		<!-- Add this section for Obfuscar -->
+		<PostBuildEvent>
+			if "$(ConfigurationName)" == "Release" (
+			"$(NuGetPackageRoot)\obfuscar\2.2.41\tools\Obfuscar.Console.exe" "$(ProjectDir)obfuscar.xml"
+			xcopy /y /d "$(ProjectDir)bin\$(ConfigurationName)\Obfuscated\*.*" "$(ProjectDir)bin\$(ConfigurationName)\"
+			)
+		</PostBuildEvent>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Management" Version="9.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Assets\Images\logo.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Assets\Images\logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Simplified Obfuscar reference -->
+		<PackageReference Include="Obfuscar" Version="2.2.41" />
+		<PackageReference Include="System.Management" Version="9.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Assets\Images\logo.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+	</ItemGroup>
 
 </Project>
