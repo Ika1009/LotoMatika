@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Obfuscator>
+  <Var name="InPath" value="$(ProjectDir)bin\$(ConfigurationName)" />
+  <Var name="OutPath" value="$(ProjectDir)bin\$(ConfigurationName)\Obfuscated" />
+  <Var name="ReuseNames" value="false" />
+  <Var name="SuppressIldasm" value="true" />
+  <Var name="OptimizeMethods" value="true" />
+  <Var name="ControlFlow" value="true" />
+  <Var name="EncryptStrings" value="true" />
+  <Var name="RenameProperties" value="true" />
+  <Var name="RenameFields" value="true" />
+  <Var name="UseUnicodeNames" value="true" />
+  <Var name="KeepPublicApi" value="true" /> <!-- Preserves public members -->
+  <Var name="MarkedOnly" value="false" />
+
+  <!-- Main assembly -->
+  <Module file="$(InPath)\Loto_App.exe">
+    <!-- Preserve XAML-related classes and entry points -->
+    <SkipNamespace name="Properties" />
+    
+    <!-- Keep XAML pages intact -->
+    <SkipType name="AdminPage" />
+    <SkipType name="AthivaPage" />
+    <SkipType name="App" />
+    <SkipType name="MainWindow" />
+    <SkipType name="StartPage" />
+    <SkipType name="LoginPage" />
+    <SkipType name="ListOfUsersPage" />
+    <SkipType name="*Page" /> <!-- All pages ending with "Page" -->
+    
+    <!-- Preserve entry points -->
+    <SkipMethod type="App" name="InitializeComponent" />
+    <SkipMethod type="App" name="Main" />
+    
+    <!-- Preserve XAML-bindable members -->
+    <SkipField type="*" name="*" attribute="bindable" />
+    <SkipProperty type="*" name="*" attribute="bindable" />
+    
+    <!-- Keep serialization members -->
+    <SkipMethod type="*" name="*.get_*" /> 
+    <SkipMethod type="*" name="*.set_*" />
+    
+    <!-- Optional: Keep specific business logic classes -->
+    <!-- <SkipType name="Combinations" /> -->
+  </Module>
+</Obfuscator>
