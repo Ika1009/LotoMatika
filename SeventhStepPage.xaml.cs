@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
+using System.Windows.Input;
 
 namespace Loto_App
 {
@@ -39,8 +40,12 @@ namespace Loto_App
                 combinationsText.AppendLine(string.Join("    ", combination));
             }
 
-            CombinationsTextBlock.Text = combinationsText.ToString();
-            CombinationsTextBlock.Visibility = Visibility.Visible;
+            CombinationsListBox.Items.Clear();
+            foreach (var combination in allCombinations)
+            {
+                CombinationsListBox.Items.Add(string.Join("    ", combination));
+            }
+            CombinationsListBox.Visibility = Visibility.Visible;
 
             // Show additional options after displaying combinations
             ShowCombinationsButton.Visibility = Visibility.Collapsed;
@@ -212,5 +217,47 @@ namespace Loto_App
             LoadingRotateTransform.BeginAnimation(RotateTransform.AngleProperty, null);
             LoadingIndicator.Visibility = Visibility.Hidden;
         }
+
+        private void CombinationsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CopyCombinationsButton.Visibility = CombinationsListBox.SelectedItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void CopyCombinationsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CombinationsListBox.SelectedItems.Count > 0)
+            {
+                StringBuilder copiedText = new StringBuilder();
+                foreach (var item in CombinationsListBox.SelectedItems)
+                {
+                    copiedText.AppendLine(item.ToString());
+                }
+                Clipboard.SetText(copiedText.ToString());
+                MessageBox.Show("Izabrane kombinacije su kopirane!", "Kopirano", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void Page_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.A && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                SelectAllOrDeselect();
+            }
+        }
+
+        private void SelectAllOrDeselect()
+        {
+            if (CombinationsListBox.SelectedItems.Count == CombinationsListBox.Items.Count)
+            {
+                CombinationsListBox.SelectedItems.Clear(); // If all are selected, deselect
+            }
+            else
+            {
+                CombinationsListBox.SelectAll(); // If not all are selected, select all
+            }
+        }
+
+
     }
+
 }
