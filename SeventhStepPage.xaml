@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:Loto_App"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Završni Korak">
+      Title="Završni Korak"
+      PreviewKeyDown="Page_PreviewKeyDown">
     <Page.Background>
         <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute" Viewbox="0,0,100,100" ViewboxUnits="Absolute">
             <VisualBrush.Visual>
@@ -73,129 +74,26 @@
             <!-- Options Panel -->
             <StackPanel x:Name="OptionsPanel" Orientation="Vertical" Width="344" Margin="0,40,0,0" Visibility="Collapsed" Height="320">
                 <Button Content="SPREMI KOMBINACIJE NA RAČUNALU" Click="SaveCombinationsButton_Click"
-                        Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" 
-                                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                                BorderThickness="2"
-                                                CornerRadius="0">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                    <Button.Effect>
-                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
-                    </Button.Effect>
-                </Button>
-
+                        Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}"/>
                 <Button Content="POVRATAK NA PRETHODNI KORAK" Click="PreviousStepButton_Click"
-                        Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" 
-                                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                                BorderThickness="2"
-                                                CornerRadius="0">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                    <Button.Effect>
-                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
-                    </Button.Effect>
-                </Button>
-
+                        Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}"/>
                 <Button Content="NOVI IZRAČUN" Click="NewCalculationButton_Click"
-                        Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" 
-                                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                                BorderThickness="2"
-                                                CornerRadius="0">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                    <Button.Effect>
-                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
-                    </Button.Effect>
-                </Button>
-
+                        Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}"/>
                 <Button Content="IZAĐI IZ APLIKACIJE" Click="ExitButton_Click"
-                        Width="300" Height="50" Background="#e80000" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" 
-                                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                                BorderThickness="2"
-                                                CornerRadius="0">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                    <Button.Effect>
-                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
-                    </Button.Effect>
-                </Button>
+                        Width="300" Height="50" Background="#e80000" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource CustomFont}"/>
                 <Button Content="ARHIVA" Click="Archive_Click"
-        Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" Margin="0,50,0,0" FontWeight="Bold" FontFamily="{StaticResource CustomFont}">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="2"
-                                CornerRadius="0">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                    <Button.Effect>
-                        <DropShadowEffect BlurRadius="8" ShadowDepth="6" Direction="320" Color="#888888"/>
-                    </Button.Effect>
-                </Button>
+                        Width="300" Height="50" Background="#373737" Foreground="White" FontSize="16" Margin="0,50,0,0" FontWeight="Bold" FontFamily="{StaticResource CustomFont}"/>
             </StackPanel>
         </StackPanel>
 
         <!-- Loading Indicator -->
         <Path x:Name="LoadingIndicator"
-            Stroke="Cyan"
-            StrokeThickness="5"
-            Visibility="Hidden"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Data="M 25,0 A 25,25 90 1 1 0,25">
+              Stroke="Cyan"
+              StrokeThickness="5"
+              Visibility="Hidden"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Data="M 25,0 A 25,25 90 1 1 0,25">
             <Path.RenderTransform>
                 <RotateTransform x:Name="LoadingRotateTransform" Angle="0" CenterX="25" CenterY="25"/>
             </Path.RenderTransform>
@@ -204,8 +102,28 @@
         <!-- Display Combinations -->
         <Border Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" Margin="20" Padding="10">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <TextBlock x:Name="CombinationsTextBlock" Text="" TextWrapping="Wrap" FontSize="16"/>
+                <ListBox x:Name="CombinationsListBox" 
+         SelectionMode="Multiple" 
+         FontSize="16" 
+         SelectionChanged="CombinationsListBox_SelectionChanged" 
+         Focusable="True"/>
             </ScrollViewer>
         </Border>
+
+        <!-- Copy Selected Combinations Button -->
+        <Button x:Name="CopyCombinationsButton" 
+                Content="KOPIRAJ KOMBINACIJE" 
+                Click="CopyCombinationsButton_Click" 
+                Width="185" 
+                Height="50" 
+                Background="#0078d4" 
+                Foreground="White" 
+                FontSize="16" 
+                FontWeight="Bold" 
+                FontFamily="{StaticResource CustomFont}" 
+                Visibility="Collapsed" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Bottom" 
+                Margin="20,0,0,20"/>
     </Grid>
 </Page>

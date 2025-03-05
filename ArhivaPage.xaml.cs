@@ -16,7 +16,6 @@ namespace Loto_App
     {
         private readonly MainWindow _mainWindow;
         string FilePath;
-        int broj_loptica;
         private List<int> pogodjeni = new List<int> { 0, 0, 0, 0, 0, 0, 0 }; // Lista pogodjenih brojeva
         private int bonus; // Bonus broj
         private int[] greenCounts = new int[8]; // Broj kombinacija sa 0 do 7 zelenih brojeva
@@ -555,7 +554,7 @@ namespace Loto_App
                 else
                 {
                     // Prikaži Delete dugme za ostale tekstove
-                    DeleteButton.Visibility = Visibility.Visible;
+                    //DeleteButton.Visibility = Visibility.Visible;
                 }
             }
         }
