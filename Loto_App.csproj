@@ -15,6 +15,7 @@
 			xcopy /y /d "$(ProjectDir)bin\$(ConfigurationName)\Obfuscated\*.*" "$(ProjectDir)bin\$(ConfigurationName)\"
 			)
 		</PostBuildEvent>
+		<AssemblyName>Lotomatika</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
