@@ -291,7 +291,7 @@ namespace Loto_App
                         }
                         else
                         {
-                            if (((i < (DetermineMaxNumber(FilePath) + 1)) && !((DetermineNumberOfBalls(FilePath) == 39 && DetermineMaxNumber(FilePath) == 7)
+                            if (((i < (DetermineMaxNumber(FilePath))) && !((DetermineNumberOfBalls(FilePath) == 39 && DetermineMaxNumber(FilePath) == 7)
                             || (DetermineNumberOfBalls(FilePath) == 37 && DetermineMaxNumber(FilePath) == 7))) || ((i < DetermineMaxNumber(FilePath)) && ((DetermineNumberOfBalls(FilePath) == 39 && DetermineMaxNumber(FilePath) == 7)
                             || (DetermineNumberOfBalls(FilePath) == 37 && DetermineMaxNumber(FilePath) == 7))))
                             {
@@ -417,17 +417,17 @@ namespace Loto_App
                         {
                             InlineUIContainer wrappedNumber = null;
 
-                            if (pogodjeni.Contains(number))
-                            {
-                                // Kreiraj zaokružen zeleni broj
-                                wrappedNumber = CreateRoundedNumber(number.ToString(), Brushes.Green, Brushes.White);
-                                broj_zelenih++; // Broji zelene brojeve
-                            }
-                            else if (number == bonus) // Bonus broj
+                            if (number == bonus) // Bonus broj
                             {
                                 // Kreiraj zaokružen crveni broj
                                 wrappedNumber = CreateRoundedNumber(number.ToString(), Brushes.Red, Brushes.White);
                                 ima_crvenih = true; // Označava da ima crvenih brojeva
+                            }
+                            else if (pogodjeni.Contains(number))
+                            {
+                                // Kreiraj zaokružen zeleni broj
+                                wrappedNumber = CreateRoundedNumber(number.ToString(), Brushes.Green, Brushes.White);
+                                broj_zelenih++; // Broji zelene brojeve
                             }
 
                             if (wrappedNumber != null)
