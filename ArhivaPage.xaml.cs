@@ -716,60 +716,60 @@ namespace Loto_App
 
             if (FilePath.Contains("7od35"))
             {
-                text += $"7: {greenCounts[7]} \n";
+                text += $"7: {greenCounts[7] + greenRedCounts[7]} \n";
                 text += $"6 + 1: {greenRedCounts[6]} \n";
-                text += $"6: {greenCounts[6]} \n";
+                text += $"6: {greenCounts[6] + greenRedCounts[6]} \n";
                 text += $"5 + 1: {greenRedCounts[5]} \n";
-                text += $"5: {greenCounts[5]} \n";
+                text += $"5: {greenCounts[5] + greenRedCounts[5]} \n";
                 text += $"4 + 1: {greenRedCounts[4]} \n";
-                text += $"4: {greenCounts[4]} \n";
+                text += $"4: {greenCounts[4] + greenRedCounts[4]} \n";
                 text += $"3 + 1: {greenRedCounts[3]} \n";
                 text += $"0 + 1: {greenRedCounts[0]}";
 
             }
             else if (FilePath.Contains("6od45"))
             {
-                text += $"6: {greenCounts[6]} \n";
+                text += $"6: {greenCounts[6] + greenRedCounts[6]} \n";
                 text += $"5 + 1: {greenRedCounts[5]} \n";
-                text += $"5: {greenCounts[5]} \n";
-                text += $"4: {greenCounts[4]} \n";
-                text += $"3: {greenCounts[3]}";
+                text += $"5: {greenCounts[5] + greenRedCounts[5]} \n";
+                text += $"4: {greenCounts[4] + greenRedCounts[4]} \n";
+                text += $"3: {greenCounts[3] + greenRedCounts[3]}";
             }
             else if (FilePath.Contains("7od39"))
             {
-                text += $"7: {greenCounts[7]} \n";
-                text += $"6: {greenCounts[6]} \n";
-                text += $"5: {greenCounts[5]} \n";
-                text += $"4: {greenCounts[4]} \n";
-                text += $"3: {greenCounts[3]}";
+                text += $"7: {greenCounts[7] + greenRedCounts[7]} \n";
+                text += $"6: {greenCounts[6] + greenRedCounts[6]} \n";
+                text += $"5: {greenCounts[5] + greenRedCounts[5]} \n";
+                text += $"4: {greenCounts[4] + greenRedCounts[4]} \n";
+                text += $"3: {greenCounts[3] + greenRedCounts[3]}";
             }
             else if (FilePath.Contains("6od44"))
             {
-                text += $"6: {greenCounts[6]} \n";
+                text += $"6: {greenCounts[6] + greenRedCounts[6]} \n";
                 text += $"5 + 1: {greenRedCounts[5]} \n";
-                text += $"5: {greenCounts[5]} \n";
+                text += $"5: {greenCounts[5] + greenRedCounts[5]} \n";
                 text += $"4 + 1: {greenRedCounts[4]} \n";
-                text += $"4: {greenCounts[4]} \n";
+                text += $"4: {greenCounts[4] + greenRedCounts[4]} \n";
                 text += $"3 + 1: {greenRedCounts[3]} \n";
-                text += $"3: {greenCounts[3]} \n";
+                text += $"3: {greenCounts[3] + greenRedCounts[3]} \n";
                 text += $"0 + 1: {greenRedCounts[0]}";
             }
             else if (FilePath.Contains("6od39"))
             {
-                text += $"6: {greenCounts[6]} \n";
+                text += $"6: {greenCounts[6] + greenRedCounts[6]} \n";
                 text += $"5 + 1: {greenRedCounts[5]} \n";
-                text += $"5: {greenCounts[5]} \n";
+                text += $"5: {greenCounts[5] + greenRedCounts[5]} \n";
                 text += $"4 + 1: {greenRedCounts[4]} \n";
-                text += $"4: {greenCounts[4]} \n";
+                text += $"4: {greenCounts[4] + greenRedCounts[4]} \n";
                 text += $"3 + 1: {greenRedCounts[3]} \n";
-                text += $"3: {greenCounts[3]} \n";
+                text += $"3: {greenCounts[3] + greenRedCounts[3]} \n";
             }
             else if (FilePath.Contains("7od37"))
             {
-                text += $"7: {greenCounts[7]} \n";
-                text += $"6: {greenCounts[6]} \n";
-                text += $"5: {greenCounts[5]} \n";
-                text += $"4: {greenCounts[4]}";
+                text += $"7: {greenCounts[7] + greenRedCounts[7]} \n";
+                text += $"6: {greenCounts[6] + greenRedCounts[6]} \n";
+                text += $"5: {greenCounts[5] + greenRedCounts[5]} \n";
+                text += $"4: {greenCounts[4] + greenRedCounts[4]}";
             }
 
             return text;
