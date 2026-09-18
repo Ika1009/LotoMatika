@@ -61,20 +61,28 @@ namespace Loto_App
 
                         if (success)
                         {
-                            if (secondDeviceAllowed && !string.IsNullOrEmpty(secondDeviceId) && secondDeviceId != deviceId)
-                            {
-                                MessageBox.Show("Ovaj uređaj nije dozvoljen za prijavu.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
-                                return;
-                            }
-
+                            // Admin users should always be allowed to access the admin page regardless of device checks
                             if (isAdmin)
                             {
                                 _mainWindow.NavigateToAdminPage();
+                                return;
                             }
-                            else
+
+                            // For non-admin users validate device access:
+                            // If the server has a primary device id and it doesn't match the current device,
+                            // allow only if a second device is configured and matches the current device.
+                            if (!string.IsNullOrEmpty(deviceIdFromServer) && deviceIdFromServer != deviceId)
                             {
-                                _mainWindow.NavigateToStartPage();
+                                bool allowedAsSecond = secondDeviceAllowed && !string.IsNullOrEmpty(secondDeviceId) && secondDeviceId == deviceId;
+                                if (!allowedAsSecond)
+                                {
+                                    MessageBox.Show("Ovaj uređaj nije dozvoljen za prijavu.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    return;
+                                }
                             }
+
+                            // Passed device checks for regular user
+                            _mainWindow.NavigateToStartPage();
                         }
                         else
                         {
@@ -100,7 +108,6 @@ namespace Loto_App
                 MessageBox.Show($"Greška: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
 
         private static string GetDeviceSerialNumber()
         {
