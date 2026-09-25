@@ -26,22 +26,18 @@ $response = ['success' => false, 'message' => 'Pogrešna šifra.'];
 if ($stmt->fetch()) {
     $uid = (int)$uid;
     $secondDeviceAllowed = (int)$secondDeviceAllowed;
-
     $isAdmin = ($uid === 1);
-
-    // Base response
-    $response = [
-        'success' => true,
-        'message' => 'Login successful.',
-        'isAdmin' => $isAdmin,
-        'deviceId' => $deviceID,
-        'secondDeviceAllowed' => ($secondDeviceAllowed === 1),
-        'secondDeviceId' => $secondDeviceID
-    ];
 
     // ADMIN: bypass device checks entirely
     if ($isAdmin) {
-        echo json_encode($response);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Login successful.',
+            'isAdmin' => true,
+            'deviceId' => $deviceID,
+            'secondDeviceAllowed' => ($secondDeviceAllowed === 1),
+            'secondDeviceId' => $secondDeviceID
+        ]);
         $stmt->close();
         $conn->close();
         exit;
@@ -56,8 +52,8 @@ if ($stmt->fetch()) {
         $updateStmt->execute();
         $updateStmt->close();
 
-        $response['deviceId'] = $deviceId;
-        $response['success'] = true;
+        $deviceID = $deviceId;
+        $success = true;
     } elseif ($deviceID !== $deviceId) {
         if ($secondDeviceAllowed === 1) {
             if (is_null($secondDeviceID) || $secondDeviceID === '') {
@@ -68,25 +64,34 @@ if ($stmt->fetch()) {
                 $updateStmt->execute();
                 $updateStmt->close();
 
-                $response['secondDeviceId'] = $deviceId;
-                $response['success'] = true;
+                $secondDeviceID = $deviceId;
+                $success = true;
             } elseif ($secondDeviceID !== $deviceId) {
                 // Device doesn't match either DeviceID or SecondDeviceID
-                $response['success'] = false;
-                $response['message'] = 'Ovom uređaju nije odobren pristup.';
+                $success = false;
+                $message = 'Ovom uređaju nije odobren pristup.';
             } else {
                 // matches second device
-                $response['success'] = true;
+                $success = true;
             }
         } else {
             // SecondDeviceAllowed is not enabled
-            $response['success'] = false;
-            $response['message'] = 'Ovom uređaju nije odobren pristup.';
+            $success = false;
+            $message = 'Ovom uređaju nije odobren pristup.';
         }
     } else {
         // matches primary device
-        $response['success'] = true;
+        $success = true;
     }
+
+    $response = [
+        'success' => $success,
+        'message' => $message ?? 'Login successful.',
+        'isAdmin' => false,
+        'deviceId' => $deviceID,
+        'secondDeviceAllowed' => ($secondDeviceAllowed === 1),
+        'secondDeviceId' => $secondDeviceID
+    ];
 }
 
 echo json_encode($response);

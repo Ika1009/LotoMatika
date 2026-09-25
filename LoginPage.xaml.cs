@@ -45,18 +45,18 @@ namespace Loto_App
                     string jsonPayload = JsonSerializer.Serialize(payload);
                     StringContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync(ApiUrl + "/login.php", content);
+                    HttpResponseMessage response = await client.PostAsync(ApiUrl + "login.php", content);
 
                     if (response.IsSuccessStatusCode)
                     {
                         string responseData = await response.Content.ReadAsStringAsync();
                         var parsed = JsonSerializer.Deserialize<JsonElement>(responseData);
 
-                        bool success = parsed.TryGetProperty("success", out var successProp) && successProp.GetBoolean();
-                        bool isAdmin = parsed.TryGetProperty("isAdmin", out var isAdminProp) && isAdminProp.GetBoolean();
+                        bool success = GetBoolean(parsed, "success");
+                        bool isAdmin = GetBoolean(parsed, "isAdmin");
                         string message = parsed.TryGetProperty("message", out var messageProp) ? messageProp.GetString()! : "Nema poruke.";
                         string? deviceIdFromServer = parsed.TryGetProperty("deviceId", out var deviceIdProp) ? deviceIdProp.GetString() : null;
-                        bool secondDeviceAllowed = parsed.TryGetProperty("secondDeviceAllowed", out var secondDeviceAllowedProp) && secondDeviceAllowedProp.GetBoolean();
+                        bool secondDeviceAllowed = GetBoolean(parsed, "secondDeviceAllowed");
                         string? secondDeviceId = parsed.TryGetProperty("secondDeviceId", out var secondDeviceIdProp) ? secondDeviceIdProp.GetString() : null;
 
                         if (success)
@@ -107,6 +107,21 @@ namespace Loto_App
             {
                 MessageBox.Show($"Greška: {ex.Message}", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private static bool GetBoolean(JsonElement element, string propertyName)
+        {
+            if (!element.TryGetProperty(propertyName, out var property))
+                return false;
+
+            return property.ValueKind switch
+            {
+                JsonValueKind.True => true,
+                JsonValueKind.False => false,
+                JsonValueKind.Number => property.GetInt32() != 0,
+                JsonValueKind.String => bool.TryParse(property.GetString(), out bool result) && result,
+                _ => false
+            };
         }
 
         private static string GetDeviceSerialNumber()
